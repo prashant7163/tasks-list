@@ -81,10 +81,24 @@ class SessionSecurityTest {
         signup();
         Csrf csrf = csrf();
         String anonymousSessionId = csrf.sessionCookie().getValue();
+        String anonymousServerSessionId = sessionId(csrf.sessionCookie());
 
         MvcResult login = login(csrf);
 
         assertThat(requireCookie(login, "SESSION").getValue()).isNotEqualTo(anonymousSessionId);
+        assertThat(findSession(anonymousServerSessionId)).isNull();
+    }
+
+    @Test
+    void unknownSessionIdentifierCannotReachCurrentUser() throws Exception {
+        Cookie unknownSession = new Cookie(
+            "SESSION",
+            Base64.getEncoder().encodeToString("unknown-session-id".getBytes(StandardCharsets.UTF_8))
+        );
+
+        mvc.perform(get("/api/auth/me").cookie(unknownSession))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.error", is("Authentication required")));
     }
 
     @Test

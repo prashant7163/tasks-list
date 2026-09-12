@@ -1,5 +1,6 @@
 package com.taskslist.auth;
 
+import com.taskslist.auth.validation.Utf8ByteLength;
 import com.taskslist.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -131,7 +132,7 @@ public class AuthController {
     record SignupRequest(
         @NotBlank @Size(max = 100) String displayName,
         @NotBlank @Size(max = 254) String email,
-        @NotBlank @Size(max = 1024) String password
+        @NotBlank @Utf8ByteLength(max = 72) String password
     ) {
         @Override
         public String toString() {
@@ -141,7 +142,7 @@ public class AuthController {
 
     record LoginRequest(
         @NotBlank @Size(max = 254) String email,
-        @NotBlank @Size(max = 1024) String password
+        @NotBlank @Utf8ByteLength(max = 72) String password
     ) {
         @Override
         public String toString() {

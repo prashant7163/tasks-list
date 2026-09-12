@@ -78,6 +78,21 @@ class AuthIntegrationTest {
     }
 
     @Test
+    void registrationEnforcesTheBcryptUtf8ByteBoundary() throws Exception {
+        String ascii72Bytes = "a".repeat(72);
+        String ascii73Bytes = "a".repeat(73);
+        String multibyte72Bytes = "é".repeat(36);
+        String multibyte73Bytes = multibyte72Bytes + "a";
+
+        signup("ASCII boundary", "ascii@example.com", ascii72Bytes);
+        signup("Multibyte boundary", "multibyte@example.com", multibyte72Bytes);
+        registrationPasswordError("ascii-over@example.com", ascii73Bytes);
+        registrationPasswordError("multibyte-over@example.com", multibyte73Bytes);
+
+        assertThat(users.count()).isEqualTo(2);
+    }
+
+    @Test
     void registrationNormalizesEmailAndRejectsCaseInsensitiveDuplicates() throws Exception {
         signup("Ada", "  Ada@Example.COM ", "correct horse battery staple");
         Csrf csrf = csrf();
@@ -142,6 +157,21 @@ class AuthIntegrationTest {
     }
 
     @Test
+    void loginEnforcesTheSameBcryptUtf8ByteBoundary() throws Exception {
+        String ascii72Bytes = "a".repeat(72);
+        String ascii73Bytes = "a".repeat(73);
+        String multibyte72Bytes = "é".repeat(36);
+        String multibyte73Bytes = multibyte72Bytes + "a";
+        signup("ASCII boundary", "ascii@example.com", ascii72Bytes);
+        signup("Multibyte boundary", "multibyte@example.com", multibyte72Bytes);
+
+        login("ascii@example.com", ascii72Bytes);
+        login("multibyte@example.com", multibyte72Bytes);
+        loginPasswordError("ascii@example.com", ascii73Bytes);
+        loginPasswordError("multibyte@example.com", multibyte73Bytes);
+    }
+
+    @Test
     void validLoginExposesOnlyTheCurrentUsersRequiredIdentity() throws Exception {
         signup("Ada Lovelace", " ADA@example.com ", "correct horse battery staple");
         MvcResult login = login("ada@example.com", "correct horse battery staple");
@@ -183,6 +213,36 @@ class AuthIntegrationTest {
                     """.formatted(email, password)))
             .andExpect(status().isOk())
             .andReturn();
+    }
+
+    private void registrationPasswordError(String email, String password) throws Exception {
+        Csrf csrf = csrf();
+        mvc.perform(post("/api/auth/signup")
+                .cookie(csrf.sessionCookie())
+                .header(csrf.headerName(), csrf.token())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"displayName":"Boundary user","email":"%s","password":"%s"}
+                    """.formatted(email, password)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.errors.password", is("Invalid value")))
+            .andExpect(jsonPath("$.error").doesNotExist())
+            .andExpect(jsonPath("$.trace").doesNotExist());
+    }
+
+    private void loginPasswordError(String email, String password) throws Exception {
+        Csrf csrf = csrf();
+        mvc.perform(post("/api/auth/login")
+                .cookie(csrf.sessionCookie())
+                .header(csrf.headerName(), csrf.token())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"email":"%s","password":"%s"}
+                    """.formatted(email, password)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.errors.password", is("Invalid value")))
+            .andExpect(jsonPath("$.error").doesNotExist())
+            .andExpect(jsonPath("$.trace").doesNotExist());
     }
 
     private String loginError(String email, String password) throws Exception {
