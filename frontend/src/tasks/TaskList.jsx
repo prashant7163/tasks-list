@@ -27,7 +27,7 @@ export default function TaskList({ status, tasks, pendingId, onEdit, onDelete, o
               {status === 'ACTIVE' ? (
                 <>
                   <button className="text-button" type="button" onClick={() => onEdit(task)} disabled={pending}>Edit <span className="sr-only">{task.title}</span></button>
-                  <button className="text-button destructive" type="button" onClick={() => onDelete(task)} disabled={pending}>Delete <span className="sr-only">{task.title}</span></button>
+                  <button className="text-button destructive" type="button" onClick={(event) => onDelete(task, event.currentTarget)} disabled={pending}>Delete <span className="sr-only">{task.title}</span></button>
                 </>
               ) : (
                 <button className="secondary" type="button" onClick={() => onReactivate(task)} disabled={pending}>Reactivate</button>

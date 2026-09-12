@@ -19,6 +19,9 @@ export default function TaskPage({ api, onSessionEnded }) {
   const [deleteTask, setDeleteTask] = useState(null)
   const [pending, setPending] = useState(null)
   const retryRef = useRef(null)
+  const tabsRef = useRef(null)
+  const newTaskRef = useRef(null)
+  const deleteReturnFocusRef = useRef(null)
 
   const load = useCallback(async (announce = true) => {
     setLoading(true)
@@ -58,7 +61,13 @@ export default function TaskPage({ api, onSessionEnded }) {
     return 'The task action could not be completed. Please try again.'
   }
 
-  async function mutate(task, pendingText, successText, operation, close) {
+  function restoreDeleteFocus() {
+    const target = deleteReturnFocusRef.current
+    setDeleteTask(null)
+    queueMicrotask(() => target?.focus())
+  }
+
+  async function mutate(task, pendingText, successText, operation, close, afterReconcile, closeOnFailure = false) {
     if (pending) return
     setPending({ id: task?.id ?? 'new', text: pendingText })
     setAnnouncement(pendingText)
@@ -66,16 +75,23 @@ export default function TaskPage({ api, onSessionEnded }) {
     try {
       await operation()
       close?.()
-      await load(false)
-      setAnnouncement(successText)
+      const reconciled = await load(false)
+      if (reconciled) {
+        setAnnouncement(successText)
+        afterReconcile?.()
+      }
+      else {
+        setAnnouncement('The change was saved, but task refresh failed.')
+        setError('The change was saved, but the latest tasks could not be loaded. Retry to reconcile.')
+      }
     } catch (requestError) {
+      if (closeOnFailure) close?.()
       setError(explainFailure(requestError))
     } finally {
       setPending(null)
     }
   }
 
-  const currentTasks = lists[selected]
   const heading = selected === 'ACTIVE' ? 'Active tasks' : 'Completed tasks'
 
   return (
@@ -87,38 +103,39 @@ export default function TaskPage({ api, onSessionEnded }) {
           <button ref={retryRef} className="secondary" type="button" onClick={() => load(true)}>Retry</button>
         </div>
       )}
-      <TaskTabs selected={selected} counts={counts} onSelect={(status) => { setSelected(status); setFormOpen(false); setDeleteTask(null) }} />
+      <TaskTabs ref={tabsRef} selected={selected} counts={counts} onSelect={(status) => { setSelected(status); setFormOpen(false); setDeleteTask(null) }} />
       <div className="task-heading">
         <div><p className="eyebrow">Private workspace</p><h1 id="task-view-title">{heading}</h1></div>
-        {selected === 'ACTIVE' && !formOpen && <button className="primary compact" type="button" onClick={() => { setFormTask(undefined); setFormOpen(true) }}>New task</button>}
+        {selected === 'ACTIVE' && !formOpen && <button ref={newTaskRef} className="primary compact" type="button" onClick={() => { setFormTask(undefined); setFormOpen(true) }}>New task</button>}
       </div>
       {formOpen && (
         <TaskForm
+          key={formTask?.id ?? 'new'}
           task={formTask}
           pending={Boolean(pending)}
           onCancel={() => setFormOpen(false)}
           onSubmit={(values) => mutate(formTask, formTask ? 'Updating task…' : 'Creating task…', formTask ? 'Task updated.' : 'Task created.', () => formTask ? api.edit(formTask.id, values) : api.create(values), () => setFormOpen(false))}
         />
       )}
-      {loading ? <p className="status" role="status">Loading tasks…</p> : (
-        <div id="task-panel" role="tabpanel" aria-labelledby="task-view-title">
+      {loading ? <p className="status" role="status">Loading tasks…</p> : ['ACTIVE', 'COMPLETED'].map((status) => (
+        <div key={status} id={`task-panel-${status.toLowerCase()}`} role="tabpanel" aria-labelledby={`task-tab-${status.toLowerCase()}`} tabIndex="0" hidden={selected !== status}>
           <TaskList
-            status={selected}
-            tasks={currentTasks}
+            status={status}
+            tasks={lists[status]}
             pendingId={pending?.id}
             onEdit={(task) => { setFormTask(task); setFormOpen(true) }}
-            onDelete={setDeleteTask}
-            onComplete={(task) => mutate(task, 'Completing task…', 'Task completed.', () => api.complete(task.id))}
-            onReactivate={(task) => mutate(task, 'Reactivating task…', 'Task reactivated.', () => api.reactivate(task.id))}
+            onDelete={(task, trigger) => { deleteReturnFocusRef.current = trigger; setDeleteTask(task) }}
+            onComplete={(task) => mutate(task, 'Completing task…', 'Task completed.', () => api.complete(task.id), undefined, () => tabsRef.current?.focus(selected))}
+            onReactivate={(task) => mutate(task, 'Reactivating task…', 'Task reactivated.', () => api.reactivate(task.id), undefined, () => tabsRef.current?.focus(selected))}
           />
         </div>
-      )}
+      ))}
       {deleteTask && (
         <DeleteTaskDialog
           task={deleteTask}
           pending={Boolean(pending)}
-          onCancel={() => setDeleteTask(null)}
-          onConfirm={() => mutate(deleteTask, 'Deleting task…', 'Task deleted.', () => api.delete(deleteTask.id), () => setDeleteTask(null))}
+          onCancel={restoreDeleteFocus}
+          onConfirm={() => mutate(deleteTask, 'Deleting task…', 'Task deleted.', () => api.delete(deleteTask.id), () => setDeleteTask(null), () => newTaskRef.current?.focus(), true)}
         />
       )}
     </section>
