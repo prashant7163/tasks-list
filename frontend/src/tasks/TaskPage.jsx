@@ -24,11 +24,20 @@ export default function TaskPage({ api, onSessionEnded }) {
   const deleteReturnFocusRef = useRef(null)
   const editingTaskIdRef = useRef(null)
   const postRenderFocusRef = useRef(null)
+  const selectedRef = useRef(selected)
+  selectedRef.current = selected
 
   function closeTaskForm() {
     editingTaskIdRef.current = null
     setFormTask(undefined)
     setFormOpen(false)
+  }
+
+  function scheduleStableTaskFocus() {
+    postRenderFocusRef.current = () => {
+      if (newTaskRef.current) newTaskRef.current.focus()
+      else tabsRef.current?.focus(selectedRef.current)
+    }
   }
 
   const load = useCallback(async (announce = true) => {
@@ -40,7 +49,10 @@ export default function TaskPage({ api, onSessionEnded }) {
       ])
       setLists({ ACTIVE: active.tasks, COMPLETED: completed.tasks })
       setCounts(nextCounts)
-      if (editingTaskIdRef.current && !active.tasks.some((task) => task.id === editingTaskIdRef.current)) closeTaskForm()
+      if (editingTaskIdRef.current && !active.tasks.some((task) => task.id === editingTaskIdRef.current)) {
+        closeTaskForm()
+        scheduleStableTaskFocus()
+      }
       if (announce) setAnnouncement('Tasks loaded.')
       return true
     } catch (requestError) {
@@ -150,7 +162,7 @@ export default function TaskPage({ api, onSessionEnded }) {
           task={deleteTask}
           pending={Boolean(pending)}
           onCancel={restoreDeleteFocus}
-          onConfirm={() => mutate(deleteTask, 'Deleting task…', 'Task deleted.', () => api.delete(deleteTask.id), () => setDeleteTask(null), () => { postRenderFocusRef.current = () => newTaskRef.current?.focus() }, true, true)}
+          onConfirm={() => mutate(deleteTask, 'Deleting task…', 'Task deleted.', () => api.delete(deleteTask.id), () => setDeleteTask(null), scheduleStableTaskFocus, true, true)}
         />
       )}
     </section>

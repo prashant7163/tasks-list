@@ -379,6 +379,48 @@ it('closes the matching edit form and focuses New task after deleting that task'
   expect(screen.getByRole('button', { name: 'New task' })).toHaveFocus()
 })
 
+it.each([404, 409])('restores focus after authoritative retry removes a stale edit form (%s)', async (status) => {
+  const active = task()
+  queue(...initial([active]), csrf(), response(status, { error: 'Task is stale' }))
+  const user = userEvent.setup()
+  render(<App />)
+
+  await user.click(await screen.findByRole('button', { name: `Edit ${active.title}` }))
+  await user.click(screen.getByRole('button', { name: 'Save changes' }))
+  expect(await screen.findByRole('button', { name: 'Retry' })).toHaveFocus()
+
+  fetch
+    .mockResolvedValueOnce(response(200, { tasks: [], count: 0 }))
+    .mockResolvedValueOnce(response(200, { tasks: [], count: 0 }))
+    .mockResolvedValueOnce(response(200, { active: 0, completed: 0 }))
+  await user.click(screen.getByRole('button', { name: 'Retry' }))
+
+  await waitFor(() => expect(screen.queryByRole('form', { name: `Edit ${active.title}` })).not.toBeInTheDocument())
+  expect(screen.getByRole('button', { name: 'New task' })).toHaveFocus()
+})
+
+it('focuses the selected tab after deleting another task while an edit form remains open', async () => {
+  const editing = task()
+  const deleted = task({ id: 2, title: 'Review invoices', description: 'Check the September invoices.', priority: 2 })
+  queue(
+    ...initial([editing, deleted]),
+    csrf(), response(204),
+    response(200, { tasks: [editing], count: 1 }),
+    response(200, { tasks: [], count: 0 }),
+    response(200, { active: 1, completed: 0 }),
+  )
+  const user = userEvent.setup()
+  render(<App />)
+
+  await user.click(await screen.findByRole('button', { name: `Edit ${editing.title}` }))
+  await user.click(screen.getByRole('button', { name: `Delete ${deleted.title}` }))
+  await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Delete task' }))
+
+  expect(await screen.findByRole('status')).toHaveTextContent('Task deleted.')
+  expect(screen.getByRole('form', { name: `Edit ${editing.title}` })).toBeInTheDocument()
+  expect(screen.getByRole('tab', { name: 'Active (1)' })).toHaveFocus()
+})
+
 it('shows a safe stale-state message, refreshes, and keeps retry available', async () => {
   const active = task()
   queue(...initial([active]), csrf(), response(409, { error: 'Invalid task transition' }))
