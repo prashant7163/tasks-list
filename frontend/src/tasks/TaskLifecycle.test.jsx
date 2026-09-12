@@ -335,6 +335,50 @@ it('completes and reactivates with pending controls and updated counts', async (
   expect(screen.getByRole('tab', { name: 'Completed (0)' })).toHaveFocus()
 })
 
+it('closes the matching edit form and focuses Active after completing that task', async () => {
+  const active = task()
+  const completed = task({ status: 'COMPLETED', priority: null, completedAt: '2026-09-12T20:00:00Z' })
+  queue(
+    ...initial([active]),
+    csrf(), response(200, completed),
+    response(200, { tasks: [], count: 0 }),
+    response(200, { tasks: [completed], count: 1 }),
+    response(200, { active: 0, completed: 1 }),
+  )
+  const user = userEvent.setup()
+  render(<App />)
+
+  await user.click(await screen.findByRole('button', { name: `Edit ${active.title}` }))
+  expect(screen.getByRole('form', { name: `Edit ${active.title}` })).toBeInTheDocument()
+  await user.click(screen.getByRole('checkbox', { name: `Complete ${active.title}` }))
+
+  expect(await screen.findByRole('status')).toHaveTextContent('Task completed.')
+  expect(screen.queryByRole('form', { name: `Edit ${active.title}` })).not.toBeInTheDocument()
+  expect(screen.getByRole('tab', { name: 'Active (0)' })).toHaveFocus()
+})
+
+it('closes the matching edit form and focuses New task after deleting that task', async () => {
+  const active = task()
+  queue(
+    ...initial([active]),
+    csrf(), response(204),
+    response(200, { tasks: [], count: 0 }),
+    response(200, { tasks: [], count: 0 }),
+    response(200, { active: 0, completed: 0 }),
+  )
+  const user = userEvent.setup()
+  render(<App />)
+
+  await user.click(await screen.findByRole('button', { name: `Edit ${active.title}` }))
+  expect(screen.getByRole('form', { name: `Edit ${active.title}` })).toBeInTheDocument()
+  await user.click(screen.getByRole('button', { name: `Delete ${active.title}` }))
+  await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Delete task' }))
+
+  expect(await screen.findByRole('status')).toHaveTextContent('Task deleted.')
+  expect(screen.queryByRole('form', { name: `Edit ${active.title}` })).not.toBeInTheDocument()
+  expect(screen.getByRole('button', { name: 'New task' })).toHaveFocus()
+})
+
 it('shows a safe stale-state message, refreshes, and keeps retry available', async () => {
   const active = task()
   queue(...initial([active]), csrf(), response(409, { error: 'Invalid task transition' }))

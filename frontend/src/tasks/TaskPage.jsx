@@ -22,6 +22,14 @@ export default function TaskPage({ api, onSessionEnded }) {
   const tabsRef = useRef(null)
   const newTaskRef = useRef(null)
   const deleteReturnFocusRef = useRef(null)
+  const editingTaskIdRef = useRef(null)
+  const postRenderFocusRef = useRef(null)
+
+  function closeTaskForm() {
+    editingTaskIdRef.current = null
+    setFormTask(undefined)
+    setFormOpen(false)
+  }
 
   const load = useCallback(async (announce = true) => {
     setLoading(true)
@@ -32,6 +40,7 @@ export default function TaskPage({ api, onSessionEnded }) {
       ])
       setLists({ ACTIVE: active.tasks, COMPLETED: completed.tasks })
       setCounts(nextCounts)
+      if (editingTaskIdRef.current && !active.tasks.some((task) => task.id === editingTaskIdRef.current)) closeTaskForm()
       if (announce) setAnnouncement('Tasks loaded.')
       return true
     } catch (requestError) {
@@ -50,6 +59,11 @@ export default function TaskPage({ api, onSessionEnded }) {
   useEffect(() => {
     if (error) retryRef.current?.focus()
   }, [error])
+  useEffect(() => {
+    const focus = postRenderFocusRef.current
+    postRenderFocusRef.current = null
+    focus?.()
+  })
 
   function explainFailure(requestError) {
     if (requestError instanceof ApiError && requestError.status === 401) {
@@ -67,13 +81,14 @@ export default function TaskPage({ api, onSessionEnded }) {
     queueMicrotask(() => target?.focus())
   }
 
-  async function mutate(task, pendingText, successText, operation, close, afterReconcile, closeOnFailure = false) {
+  async function mutate(task, pendingText, successText, operation, close, afterReconcile, closeOnFailure = false, closeMatchingEdit = false) {
     if (pending) return
     setPending({ id: task?.id ?? 'new', text: pendingText })
     setAnnouncement(pendingText)
     setError('')
     try {
       await operation()
+      if (closeMatchingEdit && editingTaskIdRef.current === task?.id) closeTaskForm()
       close?.()
       const reconciled = await load(false)
       if (reconciled) {
@@ -103,18 +118,18 @@ export default function TaskPage({ api, onSessionEnded }) {
           <button ref={retryRef} className="secondary" type="button" onClick={() => load(true)}>Retry</button>
         </div>
       )}
-      <TaskTabs ref={tabsRef} selected={selected} counts={counts} onSelect={(status) => { setSelected(status); setFormOpen(false); setDeleteTask(null) }} />
+      <TaskTabs ref={tabsRef} selected={selected} counts={counts} onSelect={(status) => { setSelected(status); closeTaskForm(); setDeleteTask(null) }} />
       <div className="task-heading">
         <div><p className="eyebrow">Private workspace</p><h1 id="task-view-title">{heading}</h1></div>
-        {selected === 'ACTIVE' && !formOpen && <button ref={newTaskRef} className="primary compact" type="button" onClick={() => { setFormTask(undefined); setFormOpen(true) }}>New task</button>}
+        {selected === 'ACTIVE' && !formOpen && <button ref={newTaskRef} className="primary compact" type="button" onClick={() => { editingTaskIdRef.current = null; setFormTask(undefined); setFormOpen(true) }}>New task</button>}
       </div>
       {formOpen && (
         <TaskForm
           key={formTask?.id ?? 'new'}
           task={formTask}
           pending={Boolean(pending)}
-          onCancel={() => setFormOpen(false)}
-          onSubmit={(values) => mutate(formTask, formTask ? 'Updating task…' : 'Creating task…', formTask ? 'Task updated.' : 'Task created.', () => formTask ? api.edit(formTask.id, values) : api.create(values), () => setFormOpen(false))}
+          onCancel={closeTaskForm}
+          onSubmit={(values) => mutate(formTask, formTask ? 'Updating task…' : 'Creating task…', formTask ? 'Task updated.' : 'Task created.', () => formTask ? api.edit(formTask.id, values) : api.create(values), closeTaskForm)}
         />
       )}
       {loading ? <p className="status" role="status">Loading tasks…</p> : ['ACTIVE', 'COMPLETED'].map((status) => (
@@ -123,9 +138,9 @@ export default function TaskPage({ api, onSessionEnded }) {
             status={status}
             tasks={lists[status]}
             pendingId={pending?.id}
-            onEdit={(task) => { setFormTask(task); setFormOpen(true) }}
+            onEdit={(task) => { editingTaskIdRef.current = task.id; setFormTask(task); setFormOpen(true) }}
             onDelete={(task, trigger) => { deleteReturnFocusRef.current = trigger; setDeleteTask(task) }}
-            onComplete={(task) => mutate(task, 'Completing task…', 'Task completed.', () => api.complete(task.id), undefined, () => tabsRef.current?.focus(selected))}
+            onComplete={(task) => mutate(task, 'Completing task…', 'Task completed.', () => api.complete(task.id), undefined, () => tabsRef.current?.focus(selected), false, true)}
             onReactivate={(task) => mutate(task, 'Reactivating task…', 'Task reactivated.', () => api.reactivate(task.id), undefined, () => tabsRef.current?.focus(selected))}
           />
         </div>
@@ -135,7 +150,7 @@ export default function TaskPage({ api, onSessionEnded }) {
           task={deleteTask}
           pending={Boolean(pending)}
           onCancel={restoreDeleteFocus}
-          onConfirm={() => mutate(deleteTask, 'Deleting task…', 'Task deleted.', () => api.delete(deleteTask.id), () => setDeleteTask(null), () => newTaskRef.current?.focus(), true)}
+          onConfirm={() => mutate(deleteTask, 'Deleting task…', 'Task deleted.', () => api.delete(deleteTask.id), () => setDeleteTask(null), () => { postRenderFocusRef.current = () => newTaskRef.current?.focus() }, true, true)}
         />
       )}
     </section>
