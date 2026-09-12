@@ -1,0 +1,33 @@
+schema_version: 1.0.0
+profile_id: studio-engineering-baseline
+rules:
+  - rule_id: secrets-redaction
+    tier: studio
+    statement: Redact secrets and sensitive values before persistence or outbound use.
+    source: Studio Engineering Baseline
+    non_negotiable: false
+    affected_roles: [orchestrator-tech-lead, architect, frontend-engineer, backend-engineer, mobile-developer, code-reviewer, build-manager, quality-engineer, independent-auditor]
+  - rule_id: human-approval
+    tier: studio
+    statement: Only exact explicit human approval may cross a required approval boundary.
+    source: Studio Engineering Baseline
+    non_negotiable: true
+    affected_roles: [orchestrator-tech-lead]
+  - rule_id: exact-snapshot-evidence
+    tier: studio
+    statement: Verification and assurance evidence must bind the exact candidate snapshot.
+    source: Studio Engineering Baseline
+    non_negotiable: false
+    affected_roles: [code-reviewer, build-manager, quality-engineer, independent-auditor]
+  - rule_id: meaningful-tests
+    tier: studio
+    statement: Tests cover changed behavior and risk; percentages alone do not prove quality.
+    source: Studio Engineering Baseline
+    non_negotiable: false
+    affected_roles: [frontend-engineer, backend-engineer, mobile-developer, code-reviewer, quality-engineer]
+  - rule_id: least-privilege
+    tier: studio
+    statement: Grant only task-required paths, tools, data, network, time, and budget.
+    source: Studio Engineering Baseline
+    non_negotiable: true
+    affected_roles: [orchestrator-tech-lead, architect, build-manager]

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "m1-ux-flow-reference",
+  "milestone_id": "secure-local-foundation",
+  "source": {
+    "locator": "docs/project/ux-flow.md",
+    "sha256": "f5844504edef7d757a7c136027eb8debe2f02b9d69802e0fa9f173032285c614"
+  },
+  "applicable_sections": ["1", "2", "3", "6", "7"],
+  "decision": "applicable"
+}

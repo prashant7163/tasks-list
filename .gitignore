@@ -1,0 +1,11 @@
+.studio/runs/
+.studio/context/
+.studio/security/
+.studio/journal/
+.studio/projection/
+.studio/runtime/
+.superpowers/
+workspaces/
+.DS_Store
+conformance.json
+conformance.md

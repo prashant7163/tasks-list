@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "m1-effective-standards",
+  "milestone_id": "secure-local-foundation",
+  "decision": "applicable",
+  "applicable_standard_ids": [
+    "secrets-redaction",
+    "human-approval",
+    "exact-snapshot-evidence",
+    "meaningful-tests",
+    "least-privilege"
+  ],
+  "exception_ids": [],
+  "sources": [
+    {
+      "locator": "shared/standards/baseline.yaml",
+      "sha256": "e3db607ad77e34ac529c639c08ebf5f347f13e68c9053f074ef5b2f9b2a8a887"
+    },
+    {
+      "locator": "shared/policies/quality-gates.yaml",
+      "sha256": "9a17377dddd603b69b5ae588dd74380f13b92c0c86fbaacf7c7822aff1d84f20"
+    },
+    {
+      "locator": "shared/policies/workflow.yaml",
+      "sha256": "76f9c9c0d52e87b6a9f748c57f66bd601b380c807fd5a67ec686d202869f7792"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "m1-integration-test-plan",
+  "milestone_id": "secure-local-foundation",
+  "decision": "applicable",
+  "integration_point_ids": [
+    "github-delivery-records",
+    "frontend-session-api",
+    "backend-postgresql-flyway",
+    "compose-service-network",
+    "browser-session-csrf"
+  ],
+  "scenarios": [
+    "Read back the three GitHub milestones and seven scoped implementation issues without exposing private runtime data.",
+    "Start frontend, backend, and PostgreSQL with Docker Compose from an empty database and verify Flyway applies exactly once.",
+    "Register through the UI, verify registration does not create a session, log in, load current user, expire and log out the session.",
+    "Reject missing or invalid CSRF state on protected mutations and return generic authentication errors.",
+    "Recreate containers while preserving the account in the named PostgreSQL volume."
+  ],
+  "commands": [
+    "./mvnw -f backend/pom.xml test",
+    "npm --prefix frontend test -- --run",
+    "npm --prefix frontend run build",
+    "docker compose config",
+    "docker compose up --build"
+  ]
+}

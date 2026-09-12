@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "context_pack_id": "m1-minimum-context-pack",
+  "milestone_id": "secure-local-foundation",
+  "authoritative_references": [
+    {
+      "artifact_id": "tasks-list",
+      "locator": "docs/project/specification.json",
+      "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"
+    },
+    {
+      "artifact_id": "tasks-list-v1-plan",
+      "locator": "docs/project/plan.json",
+      "sha256": "b6e7b2e312b3a8b66565913923d6c647473977d5e2ddfb2df7c24d8b53d57b0a"
+    },
+    {
+      "artifact_id": "tasks-list-threat-model",
+      "locator": "docs/project/threat-model.json",
+      "sha256": "6329a519ab2506cf2a1549f05db1275b87c398234243e9584a594d6f1ac14817"
+    },
+    {
+      "artifact_id": "m1-ux-flow-reference",
+      "locator": "docs/project/evidence/m1-ux-flow-reference.json",
+      "sha256": "4ce8e7556a6dfac12944c9e7116f6f490c39a4f4955a8ffe62345bf0c8cacf31"
+    }
+  ],
+  "constraints": [
+    "Use GPT-5.6 Sol with medium reasoning for every spawned subagent.",
+    "Use repository role identities and persona-first task names.",
+    "Keep implementation, Code Review, and Independent Audit identities distinct.",
+    "Use test-first implementation and bind all gates to the exact candidate.",
+    "Do not persist secrets or private runtime values."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "lock": {
+    "file": "studio-codex.uv.lock",
+    "sha256": "3b49f0efbbed29907f61a3a140d7241375a57bd874d1461e0cdfd106e38d6a41"
+  },
+  "python": "==3.12.*",
+  "schema_version": "1.0.0",
+  "studio_version": "0.1.0",
+  "uv_minimum": "0.12.0",
+  "wheel": {
+    "file": "agentic_development_studio-0.1.0-py3-none-any.whl",
+    "sha256": "56cf07cc0336bd887debee58e8ecd79d1e3e98dc6d33cbc921cd8ab7716d9a69"
+  }
+}

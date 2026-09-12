@@ -1,0 +1,16 @@
+schema_version: 1.0.0
+template_id: bounded-model-request
+required_sections:
+  - objective
+  - authoritative_context
+  - scope_and_permissions
+  - constraints_and_safety
+  - expected_output
+  - verification_evidence
+  - completion_condition
+prohibited_content:
+  - credentials
+  - unrestricted-conversation-history
+  - hidden-chain-of-thought-request
+  - decorative-persona-filler
+completion_condition: Return one schema-valid result or one structured blocker.

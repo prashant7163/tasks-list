@@ -1,0 +1,8 @@
+[studio]
+runtime = "codex"
+control_command = "studioctl"
+canonical_state = ".studio"
+
+[collaboration]
+root_role = "orchestrator-tech-lead"
+audit_recipient = "orchestrator-tech-lead"

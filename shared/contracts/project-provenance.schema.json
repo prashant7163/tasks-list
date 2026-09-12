@@ -1,0 +1,69 @@
+{
+  "$id": "https://schemas.agentic-studio.local/v1/project-provenance.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "adapter_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Adapter Id",
+      "type": "string"
+    },
+    "baseline_version": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Baseline Version",
+      "type": "string"
+    },
+    "contract_schema_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Contract Schema Digest",
+      "type": "string"
+    },
+    "provenance_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Provenance Id",
+      "type": "string"
+    },
+    "role_profile_versions": {
+      "patternProperties": {
+        "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$": {
+          "type": "string"
+        }
+      },
+      "title": "Role Profile Versions",
+      "type": "object"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "skill_versions": {
+      "patternProperties": {
+        "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$": {
+          "type": "string"
+        }
+      },
+      "title": "Skill Versions",
+      "type": "object"
+    },
+    "studio_release": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Studio Release",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "provenance_id",
+    "studio_release",
+    "contract_schema_digest",
+    "adapter_id",
+    "role_profile_versions",
+    "skill_versions",
+    "baseline_version"
+  ],
+  "title": "ProjectProvenance",
+  "type": "object"
+}

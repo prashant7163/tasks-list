@@ -1,0 +1,92 @@
+{
+  "$defs": {
+    "EngineeringRule": {
+      "additionalProperties": true,
+      "properties": {
+        "affected_roles": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Affected Roles",
+          "type": "array"
+        },
+        "non_negotiable": {
+          "default": false,
+          "title": "Non Negotiable",
+          "type": "boolean"
+        },
+        "rule_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "source": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "statement": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "tier": {
+          "$ref": "#/$defs/RuleTier"
+        }
+      },
+      "required": [
+        "rule_id",
+        "tier",
+        "statement",
+        "source",
+        "affected_roles"
+      ],
+      "title": "EngineeringRule",
+      "type": "object"
+    },
+    "RuleTier": {
+      "enum": [
+        "obligation",
+        "human",
+        "project",
+        "studio",
+        "role_skill"
+      ],
+      "title": "RuleTier",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/standards-profile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "profile_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/$defs/EngineeringRule"
+      },
+      "minItems": 1,
+      "title": "Rules",
+      "type": "array"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "profile_id",
+    "rules"
+  ],
+  "title": "StandardsProfile",
+  "type": "object"
+}

@@ -1,0 +1,99 @@
+{
+  "$defs": {
+    "RoleDefinition": {
+      "additionalProperties": true,
+      "properties": {
+        "authority": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Authority",
+          "type": "array"
+        },
+        "boundaries": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Boundaries",
+          "type": "array"
+        },
+        "description": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "independent_from": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Independent From",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "required_outputs": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Required Outputs",
+          "type": "array"
+        },
+        "role_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Role Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role_id",
+        "name",
+        "description",
+        "authority",
+        "boundaries",
+        "required_outputs",
+        "independent_from"
+      ],
+      "title": "RoleDefinition",
+      "type": "object"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/role-catalog.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "catalog_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Catalog Id",
+      "type": "string"
+    },
+    "roles": {
+      "items": {
+        "$ref": "#/$defs/RoleDefinition"
+      },
+      "minItems": 1,
+      "title": "Roles",
+      "type": "array"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "catalog_id",
+    "roles"
+  ],
+  "title": "RoleCatalog",
+  "type": "object"
+}

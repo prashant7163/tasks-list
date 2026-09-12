@@ -1,0 +1,228 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "AuthorityTier": {
+      "enum": [
+        "authoritative",
+        "structural",
+        "supporting",
+        "recent"
+      ],
+      "title": "AuthorityTier",
+      "type": "string"
+    },
+    "FreshnessStatus": {
+      "enum": [
+        "current",
+        "stale",
+        "unknown"
+      ],
+      "title": "FreshnessStatus",
+      "type": "string"
+    },
+    "SensitivityClass": {
+      "enum": [
+        "public",
+        "internal",
+        "confidential",
+        "restricted"
+      ],
+      "title": "SensitivityClass",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/context-hit.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "artifact_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "authority_tier": {
+      "$ref": "#/$defs/AuthorityTier"
+    },
+    "content": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Content"
+    },
+    "content_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Hash",
+      "type": "string"
+    },
+    "freshness": {
+      "$ref": "#/$defs/FreshnessStatus"
+    },
+    "hit_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Hit Id",
+      "type": "string"
+    },
+    "index_revision": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Index Revision",
+      "type": "string"
+    },
+    "language": {
+      "anyOf": [
+        {
+          "maxLength": 80,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Language"
+    },
+    "line_end": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Line End"
+    },
+    "line_start": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Line Start"
+    },
+    "path": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Path",
+      "type": "string"
+    },
+    "provider": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Provider",
+      "type": "string"
+    },
+    "retrieval_method": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Retrieval Method",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "score_components": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Score Components",
+      "type": "object"
+    },
+    "sensitivity": {
+      "$ref": "#/$defs/SensitivityClass"
+    },
+    "source_commit": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "title": "Source Commit",
+      "type": "string"
+    },
+    "symbol": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Symbol"
+    },
+    "working_tree_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Working Tree Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "hit_id",
+    "path",
+    "content",
+    "artifact_reference",
+    "source_commit",
+    "working_tree_digest",
+    "content_hash",
+    "index_revision",
+    "provider",
+    "retrieval_method",
+    "authority_tier",
+    "freshness",
+    "sensitivity",
+    "score_components"
+  ],
+  "title": "ContextHit",
+  "type": "object"
+}

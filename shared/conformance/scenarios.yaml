@@ -1,0 +1,13 @@
+schema_version: 1.0.0
+scenarios:
+  - scenario_id: cli-behavioral-surface
+    purpose: Prove the public CLI executes governed behavior instead of static stubs.
+    required_operations:
+      - run.initialize
+      - status
+      - history
+      - explain
+      - progress
+      - control.inspect
+      - trust.inspect
+      - incident.inspect

@@ -1,0 +1,169 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "LeaseState": {
+      "enum": [
+        "active",
+        "expired",
+        "released",
+        "revoked"
+      ],
+      "title": "LeaseState",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/worker-lease.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "agent_envelope_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Agent Envelope Digest",
+      "type": "string"
+    },
+    "agent_instance_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Agent Instance Id",
+      "type": "string"
+    },
+    "attempt_number": {
+      "minimum": 1,
+      "title": "Attempt Number",
+      "type": "integer"
+    },
+    "claimed_at": {
+      "format": "date-time",
+      "title": "Claimed At",
+      "type": "string"
+    },
+    "generation": {
+      "minimum": 1,
+      "title": "Generation",
+      "type": "integer"
+    },
+    "handoff_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "heartbeat_deadline": {
+      "format": "date-time",
+      "title": "Heartbeat Deadline",
+      "type": "string"
+    },
+    "last_heartbeat_at": {
+      "format": "date-time",
+      "title": "Last Heartbeat At",
+      "type": "string"
+    },
+    "lease_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Lease Id",
+      "type": "string"
+    },
+    "role": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Role",
+      "type": "string"
+    },
+    "safe_resume_marker_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "specialization_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Specialization Id",
+      "type": "string"
+    },
+    "state": {
+      "$ref": "#/$defs/LeaseState"
+    },
+    "task_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "worker_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Worker Id",
+      "type": "string"
+    },
+    "workspace": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Workspace",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "lease_id",
+    "task_id",
+    "attempt_number",
+    "agent_instance_id",
+    "agent_envelope_digest",
+    "worker_id",
+    "role",
+    "specialization_id",
+    "workspace",
+    "claimed_at",
+    "heartbeat_deadline",
+    "last_heartbeat_at",
+    "generation",
+    "state",
+    "handoff_reference",
+    "safe_resume_marker_reference"
+  ],
+  "title": "WorkerLease",
+  "type": "object"
+}

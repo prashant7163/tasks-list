@@ -1,0 +1,130 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "ResumeSafety": {
+      "enum": [
+        "safe",
+        "conditional",
+        "invalid"
+      ],
+      "title": "ResumeSafety",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/resume-marker.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "checkpoint_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "classification": {
+      "$ref": "#/$defs/ResumeSafety"
+    },
+    "completed_work": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Completed Work",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "explanation": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Explanation",
+      "type": "string"
+    },
+    "marker_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Marker Id",
+      "type": "string"
+    },
+    "next_operation": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Next Operation",
+      "type": "string"
+    },
+    "reason_code": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "remaining_work": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Remaining Work",
+      "type": "array"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "user_confirmation_required": {
+      "title": "User Confirmation Required",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "marker_id",
+    "checkpoint_reference",
+    "classification",
+    "reason_code",
+    "explanation",
+    "completed_work",
+    "remaining_work",
+    "next_operation",
+    "user_confirmation_required",
+    "created_at"
+  ],
+  "title": "ResumeMarker",
+  "type": "object"
+}

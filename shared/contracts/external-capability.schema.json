@@ -1,0 +1,178 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "CapabilityStatus": {
+      "enum": [
+        "active",
+        "revoked",
+        "quarantined"
+      ],
+      "title": "CapabilityStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/external-capability.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "approval_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "capability_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Capability Id",
+      "type": "string"
+    },
+    "capability_type": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Capability Type",
+      "type": "string"
+    },
+    "consuming_roles": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Consuming Roles",
+      "type": "array"
+    },
+    "data_classifications": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Data Classifications",
+      "type": "array"
+    },
+    "digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Digest",
+      "type": "string"
+    },
+    "integrity_verification": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Integrity Verification",
+      "type": "string"
+    },
+    "license": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "License",
+      "type": "string"
+    },
+    "minimum_permissions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Minimum Permissions",
+      "type": "array"
+    },
+    "network_endpoints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Network Endpoints",
+      "type": "array"
+    },
+    "purpose": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Purpose",
+      "type": "string"
+    },
+    "review_trigger": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Review Trigger",
+      "type": "string"
+    },
+    "rollback": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Rollback",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Source",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/CapabilityStatus"
+    },
+    "version": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "capability_id",
+    "capability_type",
+    "purpose",
+    "source",
+    "version",
+    "digest",
+    "license",
+    "minimum_permissions",
+    "network_endpoints",
+    "data_classifications",
+    "consuming_roles",
+    "integrity_verification",
+    "approval_reference",
+    "status",
+    "rollback",
+    "review_trigger"
+  ],
+  "title": "ExternalCapability",
+  "type": "object"
+}

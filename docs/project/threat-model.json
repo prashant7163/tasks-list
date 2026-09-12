@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0.0",
+  "threat_model_id": "tasks-list-v1",
+  "assets": [
+    "A-01 Authentication secrets: plaintext passwords while submitted, adaptive password hashes at rest, and database credentials supplied through local configuration.",
+    "A-02 Session security state: server-side session records, session identifiers carried by cookies, CSRF tokens, and authenticated-principal binding.",
+    "A-03 Account identity data: display names and normalized case-insensitive email identifiers.",
+    "A-04 Private task data: titles, descriptions, owner identifiers, status, priority, and creation or completion timestamps.",
+    "A-05 Authorization and lifecycle integrity: per-user isolation, indistinguishable absent-or-foreign task behavior, allowed state transitions, and backend-authoritative timestamps.",
+    "A-06 Active-priority integrity: each user's active tasks have unique contiguous positions and reorder operations are atomic.",
+    "A-07 Local persistence and schema integrity: PostgreSQL records, the named data volume, and ordered Flyway migrations across ordinary container recreation.",
+    "A-08 Operational confidentiality and availability: required local configuration, redacted bounded logs, generic errors, and a startable Compose stack.",
+    "A-09 Delivery metadata integrity: canonical repository mapping, actionable GitHub issues and milestones, and non-secret implementation and evidence links."
+  ],
+  "actors": [
+    "ACT-01 A registered personal-task user who is authorized only for that user's own identity and tasks.",
+    "ACT-02 A local application operator trusted with host, Docker, configuration, log, and PostgreSQL-volume access.",
+    "ACT-03 An unauthenticated browser or scripted client able to reach public authentication endpoints and attempt protected requests.",
+    "ACT-04 An authenticated but malicious registered user attempting to discover, read, or mutate another user's tasks or corrupt shared invariants.",
+    "ACT-05 An untrusted local process or person with some host or network reach but without authorized application or operator access.",
+    "ACT-06 An authorized delivery operator who maps the project and maintains GitHub issues and milestones without publishing secrets or private task data.",
+    "ACT-07 A compromised or malicious dependency, image, migration, or repository contributor attempting to alter executable code, schema, or delivery evidence."
+  ],
+  "trust_boundaries": [
+    "TB-01 Browser-to-backend boundary: all browser state and REST inputs are untrusted; the Spring backend authenticates the server-side session and enforces CSRF, validation, and business rules for every protected or state-changing capability.",
+    "TB-02 Authentication boundary: public registration and login inputs cross into credential processing; plaintext passwords may exist only for request processing and must not enter persistence, logs, errors, or delivery records.",
+    "TB-03 User-ownership boundary inside the backend: the authenticated principal crosses into task lookup and mutation only through owner-scoped operations; client-supplied owner identity is never authoritative.",
+    "TB-04 Backend-to-PostgreSQL boundary: only the backend and its migration process may use database credentials to read or mutate account, session, task, and priority state.",
+    "TB-05 Container-to-local-host boundary: Compose services, configuration, rolling-log storage, and the named PostgreSQL volume are protected only to the extent of the local operator's host and Docker controls.",
+    "TB-06 Application-to-persistent-volume boundary: Flyway and transactional application writes cross from replaceable containers into durable schema and data whose ordinary persistence depends on the correctly mounted named volume.",
+    "TB-07 Local-repository-to-GitHub boundary: only authorized, redacted source, delivery metadata, and evidence references may leave the local workspace for the canonical external repository; application credentials and private runtime data do not cross this boundary."
+  ],
+  "abuse_cases": [
+    "AC-01 An attacker submits known or guessed email/password pairs repeatedly and uses response differences to enumerate registered emails or compromise an account.",
+    "AC-02 An attacker fixes, steals, or replays a session identifier and continues using it after login, logout, or expiry to reach protected content.",
+    "AC-03 A malicious site causes an authenticated browser to submit create, edit, delete, complete, reactivate, reorder, or logout requests without the user's intent.",
+    "AC-04 A user changes a task identifier, owner field, status, priority, sort value, or reorder payload to read or mutate a foreign task or infer that it exists.",
+    "AC-05 A crafted reorder omits, duplicates, mixes, or races task identifiers so that another user's tasks are touched or active priorities become duplicated, gapped, or partially committed.",
+    "AC-06 A caller edits or deletes a completed task, completes an already completed task, reactivates an active task, or supplies timestamps and lifecycle fields that should be backend-controlled.",
+    "AC-07 A crafted sort key or direction reaches dynamic query construction and alters a query or bypasses the allowed status-specific ordering rules.",
+    "AC-08 Oversized, malformed, or script-bearing identity or task text is used to exhaust local resources, trigger unsafe rendering, or inject active content into another browser context.",
+    "AC-09 Credentials, session identifiers, database configuration, stack traces, normalized emails, or private task content are written to rolling logs, user-visible errors, Studio state, commits, issues, or evidence links.",
+    "AC-10 An unauthenticated or expired-session client uses cached frontend state or calls REST endpoints directly and obtains protected identity, counts, or task data.",
+    "AC-11 A compromised dependency, container image, source change, or Flyway migration exfiltrates secrets, weakens authorization, corrupts the schema, or makes exact-candidate evidence misleading.",
+    "AC-12 A local process reaches an unnecessarily exposed PostgreSQL service, reads environment configuration, tampers with logs, or accesses the named volume outside application authorization.",
+    "AC-13 An operator or destructive host action removes the named volume, applies an incompatible migration, or consumes disk through data or logs, causing data loss or local unavailability.",
+    "AC-14 An unauthorized GitHub actor or over-privileged credential changes repository mapping, issue or milestone state, decision records, or evidence links, or publishes private runtime data."
+  ],
+  "controls": [
+    "C-01 Normalize email for lookup and uniqueness; store only a Spring Security adaptive password hash; use a generic invalid-credentials response; never log or persist plaintext passwords.",
+    "C-02 Use Spring Security server-side sessions with an HTTP-only cookie, appropriate same-site settings, no remember-me behavior, session rotation on authentication, server-side invalidation on logout, and rejection of expired or unknown sessions.",
+    "C-03 Enforce Spring Security CSRF protection on every state-changing request, including logout, and make the frontend obtain and return the server-issued CSRF value through the selected conventional Spring mechanism.",
+    "C-04 Require authentication on identity and task capabilities; derive the owner solely from the authenticated principal; perform every list, lookup, transition, delete, and reorder through owner-scoped backend operations; return identical not-found behavior for absent and foreign task IDs.",
+    "C-05 Accept capability-specific request fields rather than binding persisted entities; enforce required and bounded text, allowed states and transitions, immutable creation and ownership fields, and backend-assigned timestamps and priorities.",
+    "C-06 Map only enumerated status-specific sort keys and directions to typed backend sort definitions; reject all unsupported values without interpolating request text into queries.",
+    "C-07 Validate an entire reorder against the authenticated user's current active-task set, rejecting foreign, completed, missing, duplicated, or stale entries; apply create, delete, complete, reactivate, and reorder changes transactionally with an implementation-selected database constraint or locking strategy that preserves unique contiguous priority.",
+    "C-08 Render user text as text through normal React escaping, avoid raw HTML insertion, mirror validation only for immediate feedback, and replace unexpected backend failures with generic retry messages while preserving authoritative server state.",
+    "C-09 Redact passwords, session identifiers, CSRF values, database credentials, private task content, and unnecessary identity data from application logs and outbound delivery records; keep errors free of stack traces and use rolling log files.",
+    "C-10 Keep secrets outside the repository and Studio state; grant Compose services only required configuration, storage, and network access; do not expose PostgreSQL beyond what the local stack requires.",
+    "C-11 Apply version-controlled Flyway migrations automatically at backend startup, fail closed on migration failure, mount PostgreSQL's data directory to the named volume, and verify persistence across ordinary container recreation without claiming protection from explicit volume deletion.",
+    "C-12 Select stable mutually compatible dependencies and images, pin them in normal build manifests or lockable configuration, and bind build, review, test, and audit evidence to the exact implementation candidate before delivery approval.",
+    "C-13 Verify security behavior with two-user tests across every task read and mutation capability, unauthenticated and invalid-session tests, CSRF tests for state changes, input and sort allowlist tests, safe error/log tests, and transactional contention or rollback tests for priority mutations.",
+    "C-14 Restrict GitHub operations to authorized delivery operators with least privilege; publish only scoped non-secret delivery metadata and links; keep canonical mapping, issue and milestone state, and evidence traceable through governed review."
+  ],
+  "residual_risks": [
+    "RR-01 The approved scope defines generic login errors and adaptive hashing but no rate-limit, lockout, MFA, or recovery capability; online guessing and credential reuse remain possible on any reachable local endpoint.",
+    "RR-02 HTTP-only and same-site cookies reduce script access and cross-site submission risk but do not eliminate session theft through a compromised browser, host, dependency, or unprotected local transport; transport protection is deployment-context dependent and not specified as a hosted TLS boundary.",
+    "RR-03 Stored task text remains private only while backend authorization, safe rendering, dependencies, and the local host remain uncompromised; the application provides no encryption-at-rest requirement beyond host and PostgreSQL controls.",
+    "RR-04 Transactional validation and a constraint or locking strategy reduce priority corruption, but contention can still reject a legitimate concurrent mutation and require a user retry.",
+    "RR-05 The named volume protects ordinary container recreation, not operator deletion, host failure, disk corruption, or ransomware; backup, restore, and disaster-recovery capabilities are outside the approved scope.",
+    "RR-06 A local operator or process with Docker, filesystem, database, or browser-profile access can bypass application-level isolation; host hardening and privileged-user trust remain operational responsibilities.",
+    "RR-07 Defensive input bounds and rolling logs limit resource consumption but the draft sets no capacity or availability target, so sustained local request, data, or disk exhaustion can still make the application unavailable.",
+    "RR-08 Supply-chain pinning and exact-candidate gates reduce but cannot eliminate malicious or newly vulnerable dependencies, images, build tooling, or migrations.",
+    "RR-09 GitHub account or token compromise can corrupt delivery metadata or expose material intentionally published there; GitHub availability and account security remain outside the local application boundary."
+  ],
+  "owner_roles": [
+    "architect",
+    "frontend-engineer",
+    "backend-engineer",
+    "build-manager",
+    "quality-engineer",
+    "orchestrator-tech-lead"
+  ],
+  "evidence_references": [
+    {
+      "artifact_id": "draft-specification",
+      "locator": "docs/project/specification.json",
+      "schema_version": "1.0.0",
+      "sha256": "cb0579adb88a89f6e90555b840578196a1835539f2c5de3950bf6d80081f5946"
+    },
+    {
+      "artifact_id": "engineering-baseline",
+      "locator": "shared/standards/baseline.yaml",
+      "schema_version": "1.0.0",
+      "sha256": "e3db607ad77e34ac529c639c08ebf5f347f13e68c9053f074ef5b2f9b2a8a887"
+    },
+    {
+      "artifact_id": "role-catalog",
+      "locator": "shared/roles/catalog.yaml",
+      "schema_version": "1.0.0",
+      "sha256": "a3c55baaf7d9bb16ecbfd2f4c53857f3d51cba612cca477020eb9bbb35432be9"
+    },
+    {
+      "artifact_id": "role-capabilities",
+      "locator": "shared/roles/capabilities.yaml",
+      "schema_version": "1.0.0",
+      "sha256": "80409194edd1a6e39c4b2f2c60f3d76fd22c4e76708fa30d69985b960cc3aabd"
+    }
+  ]
+}

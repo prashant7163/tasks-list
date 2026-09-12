@@ -1,0 +1,325 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "m1-agent-envelopes",
+  "milestone_id": "secure-local-foundation",
+  "approval_state": "approved",
+  "instances": [
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "orchestrator-tech-lead",
+      "specialization": {
+        "specialization_id": "delivery-tracking",
+        "parameters": ["prashant7163/tasks-list", "milestones", "issues", "digest-links"]
+      },
+      "scope": "Execute only the approved Milestone 1 delivery-tracking task, coordinate its governed handoffs, and create the approved GitHub milestones and issues after capability activation.",
+      "deliverable": "Canonical GitHub repository mapping, three delivery milestones, seven scoped task issues, exact read-back evidence, and governed task/gate records.",
+      "ownership_boundary": "Own github/prashant7163/tasks-list planning records and Orchestrator lifecycle artifacts; do not author backend or frontend implementation or independent assurance verdicts.",
+      "overlap_check": "No file ownership overlaps; GitHub planning records are disjoint from backend, frontend, and assurance evidence locators.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {
+        "data_allowlist": ["approved specification", "approved milestone plan", "GitHub repository metadata", "Milestone 1 readiness evidence"],
+        "tool_allowlist": ["studioctl", "git read-only", "gh repo read", "gh milestone read-write", "gh issue read-write"]
+      },
+      "workspace": {
+        "isolation_kind": "git-worktree",
+        "locator": "workspaces/m1-delivery-tracking"
+      },
+      "provider_model": {
+        "provider_allowlist": ["openai"],
+        "model_allowlist": ["gpt-5.6-sol"]
+      },
+      "budget": {
+        "max_concurrency": 1,
+        "max_cost_units": 100,
+        "max_duration_minutes": 180
+      },
+      "lease": {
+        "lifetime_minutes": 180,
+        "handoff_condition": "Return exact GitHub read-back evidence and governed delivery-tracking result to the root Orchestrator.",
+        "cleanup_condition": "Stop at task completion, capability quarantine, approval withdrawal, or lease expiry; preserve reversible evidence."
+      },
+      "reason_trigger": "Milestone 1 requires traceable GitHub milestones and issues before backend implementation begins.",
+      "dependency_references": [
+        {"artifact_id": "tasks-list", "locator": "docs/project/specification.json", "schema_version": "1.0.0", "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"},
+        {"artifact_id": "tasks-list-v1-plan", "locator": "docs/project/plan.json", "schema_version": "1.0.0", "sha256": "b6e7b2e312b3a8b66565913923d6c647473977d5e2ddfb2df7c24d8b53d57b0a"},
+        {"artifact_id": "m1-github-access", "locator": "docs/project/evidence/m1-github-access.json", "schema_version": "1.0.0", "sha256": "2150d7780e9448dc4e1b040ce4d6be724db06b1acb2d3dbd651e5e7670b0efc0"}
+      ],
+      "contract_references": [
+        {"artifact_id": "m1-interface-contracts", "locator": "docs/project/evidence/m1-interface-contracts.json", "schema_version": "1.0.0", "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"}
+      ],
+      "work_package_references": [
+        {"artifact_id": "m1-delivery-tracking", "locator": "docs/project/evidence/m1-work-packages.json", "schema_version": "1.0.0", "sha256": "3ae1f386a6e461239e34cf736d6cb47eb0df88fe2c06471128f120a25c1f4cab"}
+      ],
+      "minimum_context_pack_reference": {"artifact_id": "m1-minimum-context-pack", "locator": "docs/project/evidence/m1-context-pack.json", "schema_version": "1.0.0", "sha256": "e8e1de1356654c906edb5ef35e7ecb376a06f1cf9aa912a39a7142f74021d3d7"},
+      "agent_instance_id": "orchestrator-tech-lead-delivery",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-orchestrator-delivery-m1",
+        "subject_type": "agent_instance",
+        "subject_id": "orchestrator-tech-lead-delivery",
+        "subject_digest": "d6d61bf79915d546dec847321c57b0ab97fd2fb4b5d8fecc18b8fde90a7b9660",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-12T15:49:57Z",
+        "comment": "Approved in the application owner's seven-envelope yes/no batch."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "backend-engineer",
+      "specialization": {
+        "specialization_id": "spring-auth-session",
+        "parameters": ["java", "spring-boot", "spring-security", "postgresql", "flyway", "docker-compose"]
+      },
+      "scope": "Implement only the Milestone 1 backend platform, registration, session security, persistence baseline, backend tests, and backend-owned Compose boundary using test-first development.",
+      "deliverable": "Passing backend authentication/session integration tests, minimal Spring Boot implementation, V1 migration, and backend-owned Compose configuration.",
+      "ownership_boundary": "Own backend/** and compose.yaml only; do not modify frontend/**, GitHub delivery records, or assurance evidence.",
+      "overlap_check": "compose.yaml is assigned exclusively here; frontend-engineer-auth owns frontend/** and consumes the declared Compose/session interfaces.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {
+        "data_allowlist": ["approved authentication requirements", "threat controls C-01 through C-05 and C-09 through C-13", "session interface contract", "backend and Compose files"],
+        "tool_allowlist": ["apply_patch", "git scoped commit", "maven wrapper", "docker compose", "local filesystem tests"]
+      },
+      "workspace": {"isolation_kind": "git-worktree", "locator": "workspaces/m1-backend-auth"},
+      "provider_model": {"provider_allowlist": ["openai"], "model_allowlist": ["gpt-5.6-sol"]},
+      "budget": {"max_concurrency": 1, "max_cost_units": 240, "max_duration_minutes": 360},
+      "lease": {
+        "lifetime_minutes": 360,
+        "handoff_condition": "Return committed test-first backend candidate and exact red/green/build evidence to the Orchestrator.",
+        "cleanup_condition": "Stop at scoped task completion, unresolved security boundary, lease expiry, or Orchestrator revocation; preserve the worktree and evidence."
+      },
+      "reason_trigger": "Delivery tracking is complete and the approved Milestone 1 backend authentication work package is ready.",
+      "dependency_references": [
+        {"artifact_id": "tasks-list", "locator": "docs/project/specification.json", "schema_version": "1.0.0", "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"},
+        {"artifact_id": "tasks-list-v1-plan", "locator": "docs/project/plan.json", "schema_version": "1.0.0", "sha256": "b6e7b2e312b3a8b66565913923d6c647473977d5e2ddfb2df7c24d8b53d57b0a"},
+        {"artifact_id": "tasks-list-threat-model", "locator": "docs/project/threat-model.json", "schema_version": "1.0.0", "sha256": "6329a519ab2506cf2a1549f05db1275b87c398234243e9584a594d6f1ac14817"}
+      ],
+      "contract_references": [
+        {"artifact_id": "m1-interface-contracts", "locator": "docs/project/evidence/m1-interface-contracts.json", "schema_version": "1.0.0", "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"}
+      ],
+      "work_package_references": [
+        {"artifact_id": "m1-backend-auth", "locator": "docs/project/evidence/m1-work-packages.json", "schema_version": "1.0.0", "sha256": "3ae1f386a6e461239e34cf736d6cb47eb0df88fe2c06471128f120a25c1f4cab"}
+      ],
+      "minimum_context_pack_reference": {"artifact_id": "m1-minimum-context-pack", "locator": "docs/project/evidence/m1-context-pack.json", "schema_version": "1.0.0", "sha256": "e8e1de1356654c906edb5ef35e7ecb376a06f1cf9aa912a39a7142f74021d3d7"},
+      "agent_instance_id": "backend-engineer-auth",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-backend-auth-m1",
+        "subject_type": "agent_instance",
+        "subject_id": "backend-engineer-auth",
+        "subject_digest": "342512d9f2d43b31efbfa0b2665f9272041492f465c45a8c7a699e4033c063b1",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-12T15:49:57Z",
+        "comment": "Approved in the application owner's seven-envelope yes/no batch."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "frontend-engineer",
+      "specialization": {
+        "specialization_id": "react-auth-ui",
+        "parameters": ["react", "vite", "session-api", "csrf", "accessibility", "responsive-css"]
+      },
+      "scope": "Implement only the Milestone 1 responsive registration/login UI, credentialed session client, route guards, frontend tests, and frontend build using test-first development.",
+      "deliverable": "Passing authentication-flow component tests and production frontend build against the approved backend session contract.",
+      "ownership_boundary": "Own frontend/** only; consume but do not edit backend/** or compose.yaml, and do not author independent assurance evidence.",
+      "overlap_check": "frontend/** is disjoint from backend/** and compose.yaml; cross-boundary behavior is governed by m1-interface-contracts.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {
+        "data_allowlist": ["approved authentication journeys", "UX flow sections 1 through 3, 6, and 7", "session interface contract", "frontend files"],
+        "tool_allowlist": ["apply_patch", "git scoped commit", "npm", "vite", "vitest", "local browser tests"]
+      },
+      "workspace": {"isolation_kind": "git-worktree", "locator": "workspaces/m1-frontend-auth"},
+      "provider_model": {"provider_allowlist": ["openai"], "model_allowlist": ["gpt-5.6-sol"]},
+      "budget": {"max_concurrency": 1, "max_cost_units": 200, "max_duration_minutes": 300},
+      "lease": {
+        "lifetime_minutes": 300,
+        "handoff_condition": "Return committed test-first frontend candidate and exact red/green/build evidence to the Orchestrator.",
+        "cleanup_condition": "Stop at scoped task completion, material API ambiguity, lease expiry, or Orchestrator revocation; preserve the worktree and evidence."
+      },
+      "reason_trigger": "The approved backend session contract is complete and the Milestone 1 frontend authentication work package is ready.",
+      "dependency_references": [
+        {"artifact_id": "tasks-list", "locator": "docs/project/specification.json", "schema_version": "1.0.0", "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"},
+        {"artifact_id": "tasks-list-v1-plan", "locator": "docs/project/plan.json", "schema_version": "1.0.0", "sha256": "b6e7b2e312b3a8b66565913923d6c647473977d5e2ddfb2df7c24d8b53d57b0a"},
+        {"artifact_id": "m1-ux-flow-reference", "locator": "docs/project/evidence/m1-ux-flow-reference.json", "schema_version": "1.0.0", "sha256": "4ce8e7556a6dfac12944c9e7116f6f490c39a4f4955a8ffe62345bf0c8cacf31"}
+      ],
+      "contract_references": [
+        {"artifact_id": "m1-interface-contracts", "locator": "docs/project/evidence/m1-interface-contracts.json", "schema_version": "1.0.0", "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"}
+      ],
+      "work_package_references": [
+        {"artifact_id": "m1-frontend-auth", "locator": "docs/project/evidence/m1-work-packages.json", "schema_version": "1.0.0", "sha256": "3ae1f386a6e461239e34cf736d6cb47eb0df88fe2c06471128f120a25c1f4cab"}
+      ],
+      "minimum_context_pack_reference": {"artifact_id": "m1-minimum-context-pack", "locator": "docs/project/evidence/m1-context-pack.json", "schema_version": "1.0.0", "sha256": "e8e1de1356654c906edb5ef35e7ecb376a06f1cf9aa912a39a7142f74021d3d7"},
+      "agent_instance_id": "frontend-engineer-auth",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-frontend-auth-m1",
+        "subject_type": "agent_instance",
+        "subject_id": "frontend-engineer-auth",
+        "subject_digest": "1aa69be7b30737bca875c7d66c3f9b1b1a283998063e21cb40a4818664ead7b2",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-12T15:49:57Z",
+        "comment": "Approved in the application owner's seven-envelope yes/no batch."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "code-reviewer",
+      "specialization": {"specialization_id": "m1-exact-candidate-review", "parameters": ["correctness", "security", "maintainability", "test-quality"]},
+      "scope": "Independently review each exact Milestone 1 candidate and its tests after implementation without editing the reviewed candidate.",
+      "deliverable": "Digest-bound code or documentation review with both specification-compliance and quality verdicts plus evidenced findings.",
+      "ownership_boundary": "Read candidates and write only docs/project/evidence/m1/code-review; do not implement, remediate, build-manage, or audit the candidate.",
+      "overlap_check": "Read-only candidate access; evidence locator is distinct from implementation and other assurance outputs.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {"data_allowlist": ["exact candidate diff", "task brief", "implementation report", "approved specification and contracts"], "tool_allowlist": ["git read-only", "test evidence read-only", "review report write"]},
+      "workspace": {"isolation_kind": "git-worktree", "locator": "workspaces/m1-code-review"},
+      "provider_model": {"provider_allowlist": ["openai"], "model_allowlist": ["gpt-5.6-sol"]},
+      "budget": {"max_concurrency": 1, "max_cost_units": 140, "max_duration_minutes": 240},
+      "lease": {"lifetime_minutes": 240, "handoff_condition": "Return findings and both verdicts to the Orchestrator.", "cleanup_condition": "Stop after the scoped review or re-review, lease expiry, or Orchestrator revocation; do not change candidate files."},
+      "reason_trigger": "A Milestone 1 task has a successful exact candidate result ready for independent review.",
+      "dependency_references": [
+        {"artifact_id": "tasks-list", "locator": "docs/project/specification.json", "schema_version": "1.0.0", "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"},
+        {"artifact_id": "tasks-list-v1-plan", "locator": "docs/project/plan.json", "schema_version": "1.0.0", "sha256": "b6e7b2e312b3a8b66565913923d6c647473977d5e2ddfb2df7c24d8b53d57b0a"}
+      ],
+      "contract_references": [{"artifact_id": "m1-interface-contracts", "locator": "docs/project/evidence/m1-interface-contracts.json", "schema_version": "1.0.0", "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"}],
+      "work_package_references": [{"artifact_id": "m1-code-review", "locator": "docs/project/evidence/m1-work-packages.json", "schema_version": "1.0.0", "sha256": "3ae1f386a6e461239e34cf736d6cb47eb0df88fe2c06471128f120a25c1f4cab"}],
+      "minimum_context_pack_reference": {"artifact_id": "m1-minimum-context-pack", "locator": "docs/project/evidence/m1-context-pack.json", "schema_version": "1.0.0", "sha256": "e8e1de1356654c906edb5ef35e7ecb376a06f1cf9aa912a39a7142f74021d3d7"},
+      "agent_instance_id": "code-reviewer-m1",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-code-reviewer-m1",
+        "subject_type": "agent_instance",
+        "subject_id": "code-reviewer-m1",
+        "subject_digest": "d0541bd8d0fd4c9d85b99cf5957440f5c965f1f53eecb73b2c6e581605e38b34",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-12T15:49:57Z",
+        "comment": "Approved in the application owner's seven-envelope yes/no batch."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "build-manager",
+      "specialization": {"specialization_id": "m1-reproducible-build", "parameters": ["maven", "npm", "flyway", "docker-compose", "dependency-integrity"]},
+      "scope": "Verify the exact reviewed Milestone 1 candidate builds reproducibly and its dependency, migration, and Compose surfaces are trusted.",
+      "deliverable": "Digest-bound build and supply-chain status for backend, frontend, migrations, and Compose.",
+      "ownership_boundary": "Read the candidate and write only docs/project/evidence/m1/build; diagnose but do not remediate without explicit Orchestrator assignment.",
+      "overlap_check": "Evidence locator is distinct; candidate access is verification-only and follows Code Review.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {"data_allowlist": ["exact reviewed candidate", "lockfiles and build manifests", "build logs", "migration and Compose configuration"], "tool_allowlist": ["git read-only", "maven wrapper", "npm", "docker compose", "build report write"]},
+      "workspace": {"isolation_kind": "git-worktree", "locator": "workspaces/m1-build"},
+      "provider_model": {"provider_allowlist": ["openai"], "model_allowlist": ["gpt-5.6-sol"]},
+      "budget": {"max_concurrency": 1, "max_cost_units": 120, "max_duration_minutes": 240},
+      "lease": {"lifetime_minutes": 240, "handoff_condition": "Return exact commands, outputs, dependency observations, and candidate digest to the Orchestrator.", "cleanup_condition": "Stop after build status, lease expiry, or Orchestrator revocation; do not change the candidate unless separately assigned."},
+      "reason_trigger": "Independent Code Review has passed for the exact candidate requiring build verification.",
+      "dependency_references": [
+        {"artifact_id": "tasks-list-v1-plan", "locator": "docs/project/plan.json", "schema_version": "1.0.0", "sha256": "b6e7b2e312b3a8b66565913923d6c647473977d5e2ddfb2df7c24d8b53d57b0a"},
+        {"artifact_id": "m1-integration-test-plan", "locator": "docs/project/evidence/m1-integration-test-plan.json", "schema_version": "1.0.0", "sha256": "241799b5f74c978089b1f70fb56873fc3508059bc68dfca566ba9cb3220b4a89"}
+      ],
+      "contract_references": [{"artifact_id": "m1-interface-contracts", "locator": "docs/project/evidence/m1-interface-contracts.json", "schema_version": "1.0.0", "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"}],
+      "work_package_references": [{"artifact_id": "m1-build-verification", "locator": "docs/project/evidence/m1-work-packages.json", "schema_version": "1.0.0", "sha256": "3ae1f386a6e461239e34cf736d6cb47eb0df88fe2c06471128f120a25c1f4cab"}],
+      "minimum_context_pack_reference": {"artifact_id": "m1-minimum-context-pack", "locator": "docs/project/evidence/m1-context-pack.json", "schema_version": "1.0.0", "sha256": "e8e1de1356654c906edb5ef35e7ecb376a06f1cf9aa912a39a7142f74021d3d7"},
+      "agent_instance_id": "build-manager-m1",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-build-manager-m1",
+        "subject_type": "agent_instance",
+        "subject_id": "build-manager-m1",
+        "subject_digest": "29457cc0929bc8c03b114c06606ce6433f18315d8aff0e3778002bd166532e51",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-12T15:49:57Z",
+        "comment": "Approved in the application owner's seven-envelope yes/no batch."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "quality-engineer",
+      "specialization": {"specialization_id": "m1-supported-blast-radius", "parameters": ["functional", "security", "accessibility", "responsive", "persistence"]},
+      "scope": "Test the build-verified Milestone 1 candidate across the approved authentication, session, accessibility, responsive, Compose, and persistence blast radius.",
+      "deliverable": "Digest-bound quality report covering every declared integration point, affected touchpoint, and acceptance outcome.",
+      "ownership_boundary": "Read the exact build-verified candidate and write only docs/project/evidence/m1/quality; do not declare user approval or modify implementation.",
+      "overlap_check": "Evidence locator is distinct and testing follows Build Verification on the same candidate digest.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {"data_allowlist": ["exact build-verified candidate", "approved acceptance criteria", "integration test plan", "test and runtime logs"], "tool_allowlist": ["git read-only", "maven wrapper", "npm", "docker compose", "browser automation", "quality report write"]},
+      "workspace": {"isolation_kind": "git-worktree", "locator": "workspaces/m1-quality"},
+      "provider_model": {"provider_allowlist": ["openai"], "model_allowlist": ["gpt-5.6-sol"]},
+      "budget": {"max_concurrency": 1, "max_cost_units": 160, "max_duration_minutes": 300},
+      "lease": {"lifetime_minutes": 300, "handoff_condition": "Return coverage, exact commands and outputs, touchpoint evidence, and findings to the Orchestrator.", "cleanup_condition": "Stop after the quality report, lease expiry, or Orchestrator revocation; preserve exact evidence and do not modify implementation."},
+      "reason_trigger": "Build Verification has passed for the exact candidate requiring supported-blast-radius testing.",
+      "dependency_references": [
+        {"artifact_id": "tasks-list", "locator": "docs/project/specification.json", "schema_version": "1.0.0", "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"},
+        {"artifact_id": "m1-integration-test-plan", "locator": "docs/project/evidence/m1-integration-test-plan.json", "schema_version": "1.0.0", "sha256": "241799b5f74c978089b1f70fb56873fc3508059bc68dfca566ba9cb3220b4a89"}
+      ],
+      "contract_references": [{"artifact_id": "m1-interface-contracts", "locator": "docs/project/evidence/m1-interface-contracts.json", "schema_version": "1.0.0", "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"}],
+      "work_package_references": [{"artifact_id": "m1-quality-review", "locator": "docs/project/evidence/m1-work-packages.json", "schema_version": "1.0.0", "sha256": "3ae1f386a6e461239e34cf736d6cb47eb0df88fe2c06471128f120a25c1f4cab"}],
+      "minimum_context_pack_reference": {"artifact_id": "m1-minimum-context-pack", "locator": "docs/project/evidence/m1-context-pack.json", "schema_version": "1.0.0", "sha256": "e8e1de1356654c906edb5ef35e7ecb376a06f1cf9aa912a39a7142f74021d3d7"},
+      "agent_instance_id": "quality-engineer-m1",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-quality-engineer-m1",
+        "subject_type": "agent_instance",
+        "subject_id": "quality-engineer-m1",
+        "subject_digest": "8c29b54d99ffc96f827cd37ae5b4f917e6d0f89c775230dac0b1ab79ec3b4701",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-12T15:49:57Z",
+        "comment": "Approved in the application owner's seven-envelope yes/no batch."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "independent-auditor",
+      "specialization": {"specialization_id": "m1-evidence-chain-audit", "parameters": ["requirements", "tasks", "gates", "findings", "dispositions", "exact-snapshots"]},
+      "scope": "Independently trace the complete Milestone 1 evidence chain after implementation, Code Review, Build Verification, and Quality Review.",
+      "deliverable": "Digest-bound independent audit reported only to the root Orchestrator with gaps and evidence references.",
+      "ownership_boundary": "Read the full governed evidence chain and write only docs/project/evidence/m1/audit; never implement, review own work, contact implementers, or assign remediation.",
+      "overlap_check": "Evidence locator and identity are distinct from implementation, Code Review, Build, and Quality; findings route only to the Orchestrator.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {"data_allowlist": ["approved specification and plan", "readiness and contract snapshot", "task/results", "code review", "build status", "quality report", "finding dispositions"], "tool_allowlist": ["studioctl read-only", "git read-only", "artifact read-only", "audit report write"]},
+      "workspace": {"isolation_kind": "git-worktree", "locator": "workspaces/m1-audit"},
+      "provider_model": {"provider_allowlist": ["openai"], "model_allowlist": ["gpt-5.6-sol"]},
+      "budget": {"max_concurrency": 1, "max_cost_units": 160, "max_duration_minutes": 300},
+      "lease": {"lifetime_minutes": 300, "handoff_condition": "Return the independent audit only to the root Orchestrator.", "cleanup_condition": "Stop after audit delivery, lease expiry, or Orchestrator revocation; preserve evidence and do not contact implementers."},
+      "reason_trigger": "All preceding Milestone 1 assurance evidence exists for the exact candidate and requires independent audit.",
+      "dependency_references": [
+        {"artifact_id": "tasks-list", "locator": "docs/project/specification.json", "schema_version": "1.0.0", "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"},
+        {"artifact_id": "tasks-list-v1-plan", "locator": "docs/project/plan.json", "schema_version": "1.0.0", "sha256": "b6e7b2e312b3a8b66565913923d6c647473977d5e2ddfb2df7c24d8b53d57b0a"}
+      ],
+      "contract_references": [
+        {"artifact_id": "m1-interface-contracts", "locator": "docs/project/evidence/m1-interface-contracts.json", "schema_version": "1.0.0", "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"},
+        {"artifact_id": "m1-integration-test-plan", "locator": "docs/project/evidence/m1-integration-test-plan.json", "schema_version": "1.0.0", "sha256": "241799b5f74c978089b1f70fb56873fc3508059bc68dfca566ba9cb3220b4a89"}
+      ],
+      "work_package_references": [{"artifact_id": "m1-independent-audit", "locator": "docs/project/evidence/m1-work-packages.json", "schema_version": "1.0.0", "sha256": "3ae1f386a6e461239e34cf736d6cb47eb0df88fe2c06471128f120a25c1f4cab"}],
+      "minimum_context_pack_reference": {"artifact_id": "m1-minimum-context-pack", "locator": "docs/project/evidence/m1-context-pack.json", "schema_version": "1.0.0", "sha256": "e8e1de1356654c906edb5ef35e7ecb376a06f1cf9aa912a39a7142f74021d3d7"},
+      "agent_instance_id": "independent-auditor-m1",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-independent-auditor-m1",
+        "subject_type": "agent_instance",
+        "subject_id": "independent-auditor-m1",
+        "subject_digest": "5485fbb252eb34a163c58de981a0ece50d10d7cb4ac4a060017be7634e6f579c",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-12T15:49:57Z",
+        "comment": "Approved in the application owner's seven-envelope yes/no batch."
+      },
+      "replacement_for_instance_id": null
+    }
+  ]
+}

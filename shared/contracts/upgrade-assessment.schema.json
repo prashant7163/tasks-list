@@ -1,0 +1,141 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/upgrade-assessment.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "approval_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "assessment_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Assessment Id",
+      "type": "string"
+    },
+    "backup_path": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Backup Path",
+      "type": "string"
+    },
+    "current_release": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Current Release",
+      "type": "string"
+    },
+    "customization_paths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Customization Paths",
+      "type": "array"
+    },
+    "dry_run_evidence_reference": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "material": {
+      "title": "Material",
+      "type": "boolean"
+    },
+    "ordered_migrations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Ordered Migrations",
+      "type": "array"
+    },
+    "rollback": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Rollback",
+      "type": "array"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Status",
+      "type": "string"
+    },
+    "target_release": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Target Release",
+      "type": "string"
+    },
+    "verification": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Verification",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "assessment_id",
+    "current_release",
+    "target_release",
+    "customization_paths",
+    "material",
+    "ordered_migrations",
+    "dry_run_evidence_reference",
+    "backup_path",
+    "verification",
+    "rollback",
+    "approval_reference",
+    "status"
+  ],
+  "title": "UpgradeAssessment",
+  "type": "object"
+}

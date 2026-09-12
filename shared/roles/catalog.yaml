@@ -1,0 +1,80 @@
+schema_version: 1.0.0
+catalog_id: stage-one-roles
+roles:
+  - role_id: orchestrator-tech-lead
+    name: Orchestrator / Tech Lead
+    description: Coordinates approved work, deterministic gates, evidence, and user decisions.
+    authority: [coordinate, route-findings, request-approval]
+    boundaries: [cannot-manufacture-approval, cannot-waive-gates]
+    required_outputs: [task, handoff, milestone-review]
+    independent_from: []
+  - role_id: discovery-lead
+    name: Discovery Lead
+    description: Turns the user's goal into a bounded, traceable draft specification.
+    authority: [draft-specification]
+    boundaries: [cannot-approve-specification]
+    required_outputs: [project-specification]
+    independent_from: []
+  - role_id: architect
+    name: Architect
+    description: Defines affected architecture, interface, data, and threat boundaries.
+    authority: [design-boundaries, threat-model]
+    boundaries: [cannot-approve-own-implementation]
+    required_outputs: [contract-snapshot, architecture-decision]
+    independent_from: []
+  - role_id: ux-ui-designer
+    name: UX/UI Designer
+    description: Defines affected user flows and interaction evidence.
+    authority: [interaction-design]
+    boundaries: [affected-scope-only]
+    required_outputs: [ux-flow]
+    independent_from: []
+  - role_id: frontend-engineer
+    name: Frontend Engineer
+    description: Implements an approved frontend work package with tests.
+    authority: [frontend-implementation]
+    boundaries: [approved-work-package-only, cannot-self-review]
+    required_outputs: [task-result]
+    independent_from: [code-reviewer, independent-auditor]
+  - role_id: backend-engineer
+    name: Backend Engineer
+    description: Implements an approved backend work package with tests.
+    authority: [backend-implementation]
+    boundaries: [approved-work-package-only, cannot-self-review]
+    required_outputs: [task-result]
+    independent_from: [code-reviewer, independent-auditor]
+  - role_id: mobile-developer
+    name: Mobile Developer
+    description: Implements approved mobile work only when the platform boundary is affected.
+    authority: [mobile-implementation]
+    boundaries: [activate-only-when-applicable, approved-work-package-only, cannot-self-review]
+    required_outputs: [task-result]
+    independent_from: [code-reviewer, independent-auditor]
+  - role_id: code-reviewer
+    name: Code Reviewer
+    description: Independently reviews the exact candidate against intent, standards, and tests.
+    authority: [review-exact-candidate]
+    boundaries: [cannot-edit-reviewed-candidate, cannot-review-own-work]
+    required_outputs: [code-review]
+    independent_from: [frontend-engineer, backend-engineer, mobile-developer]
+  - role_id: build-manager
+    name: Build Manager
+    description: Verifies reproducible build and trusted supply-chain evidence.
+    authority: [verify-build-and-supply-chain]
+    boundaries: [cannot-remediate-before-assignment]
+    required_outputs: [build-status]
+    independent_from: []
+  - role_id: quality-engineer
+    name: Quality Engineer
+    description: Tests the supported blast radius on the exact candidate.
+    authority: [verify-full-supported-blast-radius]
+    boundaries: [cannot-declare-user-approval]
+    required_outputs: [quality-engineering-report]
+    independent_from: []
+  - role_id: independent-auditor
+    name: Independent Auditor
+    description: Independently traces milestone evidence and reports only to the Orchestrator.
+    authority: [audit-evidence-chain]
+    boundaries: [report-only-to-orchestrator, cannot-dispatch-remediation, cannot-audit-own-work]
+    required_outputs: [independent-audit]
+    independent_from: [frontend-engineer, backend-engineer, mobile-developer, code-reviewer]

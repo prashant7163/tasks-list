@@ -1,0 +1,173 @@
+{
+  "$defs": {
+    "AuthorityTier": {
+      "enum": [
+        "authoritative",
+        "structural",
+        "supporting",
+        "recent"
+      ],
+      "title": "AuthorityTier",
+      "type": "string"
+    },
+    "RetrievalProvider": {
+      "enum": [
+        "structural",
+        "lexical",
+        "recent"
+      ],
+      "title": "RetrievalProvider",
+      "type": "string"
+    },
+    "SensitivityClass": {
+      "enum": [
+        "public",
+        "internal",
+        "confidential",
+        "restricted"
+      ],
+      "title": "SensitivityClass",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/context-query.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "agent_envelope_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Agent Envelope Digest",
+      "type": "string"
+    },
+    "agent_instance_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Agent Instance Id",
+      "type": "string"
+    },
+    "allowed_sensitivity": {
+      "items": {
+        "$ref": "#/$defs/SensitivityClass"
+      },
+      "minItems": 1,
+      "title": "Allowed Sensitivity",
+      "type": "array"
+    },
+    "authority_requirements": {
+      "items": {
+        "$ref": "#/$defs/AuthorityTier"
+      },
+      "title": "Authority Requirements",
+      "type": "array"
+    },
+    "byte_budget": {
+      "maximum": 1000000,
+      "minimum": 1,
+      "title": "Byte Budget",
+      "type": "integer"
+    },
+    "intent": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Intent",
+      "type": "string"
+    },
+    "project_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "provider_policy": {
+      "items": {
+        "$ref": "#/$defs/RetrievalProvider"
+      },
+      "minItems": 1,
+      "title": "Provider Policy",
+      "type": "array"
+    },
+    "query_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Query Id",
+      "type": "string"
+    },
+    "result_limit": {
+      "maximum": 100,
+      "minimum": 1,
+      "title": "Result Limit",
+      "type": "integer"
+    },
+    "role": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Role",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_revision": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "title": "Source Revision",
+      "type": "string"
+    },
+    "specialization_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Specialization Id"
+    },
+    "target_paths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Target Paths",
+      "type": "array"
+    },
+    "target_symbols": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Target Symbols",
+      "type": "array"
+    },
+    "task_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Task Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "query_id",
+    "project_id",
+    "run_id",
+    "task_id",
+    "agent_instance_id",
+    "agent_envelope_digest",
+    "role",
+    "specialization_id",
+    "intent",
+    "target_paths",
+    "target_symbols",
+    "authority_requirements",
+    "source_revision",
+    "allowed_sensitivity",
+    "provider_policy",
+    "result_limit",
+    "byte_budget"
+  ],
+  "title": "ContextQuery",
+  "type": "object"
+}

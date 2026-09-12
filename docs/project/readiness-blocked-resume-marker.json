@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "marker_id": "marker-readiness-blocked-github-auth",
+  "checkpoint_reference": {
+    "artifact_id": "readiness-blocked-github-auth",
+    "locator": ".studio/runs/tasks-list-discovery/checkpoints/00000000000000000010-readiness-blocked-github-auth.json",
+    "schema_version": "1.0.0",
+    "sha256": "dd265e7a933f376706489dc88203b3f8db25055a5fc949cb2dd9aa3770ecc106"
+  },
+  "classification": "safe",
+  "reason_code": "checkpoint_bindings_valid",
+  "explanation": "Specification and plan are accepted, readiness is durably blocked on invalid GitHub authentication, and no implementation or ambiguous external write occurred.",
+  "completed_work": [
+    "Accepted the approved specification and milestone plan.",
+    "Recorded the exact readiness blocker after a read-only GitHub authentication check.",
+    "Created a durable checkpoint with accepted specification, plan, and blocked-readiness references."
+  ],
+  "remaining_work": [
+    "Application owner re-authenticates gh for github.com account prashant7163.",
+    "Orchestrator verifies access and prepares fresh readiness evidence and exact approval envelopes.",
+    "No implementation begins until a distinct fresh readiness snapshot passes."
+  ],
+  "next_operation": "After GitHub re-authentication, resume from this marker and verify gh auth status before any external write.",
+  "user_confirmation_required": false,
+  "created_at": "2026-09-12T15:26:07Z"
+}

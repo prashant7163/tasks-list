@@ -1,0 +1,212 @@
+{
+  "$defs": {
+    "AuthorityTier": {
+      "enum": [
+        "authoritative",
+        "structural",
+        "supporting",
+        "recent"
+      ],
+      "title": "AuthorityTier",
+      "type": "string"
+    },
+    "ContextOmission": {
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "reason"
+      ],
+      "title": "ContextOmission",
+      "type": "object"
+    },
+    "ContextPackManifest": {
+      "additionalProperties": true,
+      "properties": {
+        "byte_budget": {
+          "minimum": 1,
+          "title": "Byte Budget",
+          "type": "integer"
+        },
+        "byte_count": {
+          "minimum": 0,
+          "title": "Byte Count",
+          "type": "integer"
+        },
+        "included_sources": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Included Sources",
+          "type": "array"
+        },
+        "index_revision": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Index Revision",
+          "type": "string"
+        },
+        "manifest_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Manifest Id",
+          "type": "string"
+        },
+        "omitted_sources": {
+          "items": {
+            "$ref": "#/$defs/ContextOmission"
+          },
+          "title": "Omitted Sources",
+          "type": "array"
+        },
+        "outbound_destination": {
+          "title": "Outbound Destination",
+          "type": "string"
+        },
+        "pack_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Pack Digest",
+          "type": "string"
+        },
+        "policy_decision": {
+          "title": "Policy Decision",
+          "type": "string"
+        },
+        "providers_attempted": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Providers Attempted",
+          "type": "array"
+        },
+        "providers_used": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Providers Used",
+          "type": "array"
+        },
+        "query_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Query Id",
+          "type": "string"
+        },
+        "redaction_count": {
+          "minimum": 0,
+          "title": "Redaction Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_revision": {
+          "pattern": "^[0-9a-f]{40,64}$",
+          "title": "Source Revision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "manifest_id",
+        "query_id",
+        "source_revision",
+        "index_revision",
+        "providers_attempted",
+        "providers_used",
+        "included_sources",
+        "omitted_sources",
+        "byte_budget",
+        "byte_count",
+        "redaction_count",
+        "outbound_destination",
+        "policy_decision",
+        "pack_digest"
+      ],
+      "title": "ContextPackManifest",
+      "type": "object"
+    },
+    "ContextPackSection": {
+      "additionalProperties": true,
+      "properties": {
+        "authority_tier": {
+          "$ref": "#/$defs/AuthorityTier"
+        },
+        "content": {
+          "title": "Content",
+          "type": "string"
+        },
+        "content_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "hit_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Hit Id",
+          "type": "string"
+        },
+        "path": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hit_id",
+        "path",
+        "content",
+        "content_hash",
+        "authority_tier"
+      ],
+      "title": "ContextPackSection",
+      "type": "object"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/context-pack.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "manifest": {
+      "$ref": "#/$defs/ContextPackManifest"
+    },
+    "pack_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Pack Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sections": {
+      "items": {
+        "$ref": "#/$defs/ContextPackSection"
+      },
+      "title": "Sections",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "pack_id",
+    "manifest",
+    "sections"
+  ],
+  "title": "ContextPack",
+  "type": "object"
+}

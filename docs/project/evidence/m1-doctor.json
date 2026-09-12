@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "m1-doctor-20260912t153932z",
+  "project_id": "tasks-list",
+  "recorded_at": "2026-09-12T15:39:32.007334Z",
+  "result_id": "preflight-current",
+  "snapshot_digest": "07784c3dbf0be0336582d90a0907f786882026952d2b80ff38d7fbc0963de345",
+  "redacted": true,
+  "checks": [
+    {
+      "check_id": "configuration",
+      "outcome": "pass",
+      "scope": "configuration",
+      "summary": "studio.yaml is valid."
+    },
+    {
+      "check_id": "runtime-pin",
+      "outcome": "pass",
+      "scope": "project-runtime",
+      "summary": "Project-local runtime matches its verified wheel and exact lock closure."
+    },
+    {
+      "check_id": "control-plane-integrity",
+      "outcome": "pass",
+      "scope": "control-plane-state",
+      "summary": "Journal identity, hash chain, and active artifact digests validate."
+    },
+    {
+      "check_id": "control-plane-projection",
+      "outcome": "pass",
+      "scope": "derived-state",
+      "summary": "Derived projection matches the authoritative journal sequence."
+    },
+    {
+      "check_id": "secret-references",
+      "outcome": "not_applicable",
+      "scope": "provider-access",
+      "summary": "No secret references are required."
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+schema_version: 1.0.0
+registry_id: stage-one-role-capabilities
+capabilities:
+  - capability_id: coordinate
+    kind: authority
+    definition: Coordinate approved work across active roles and lifecycle gates.
+    instruction: Coordinate only approved work and preserve role ownership and gate order.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [orchestrator-tech-lead]
+  - capability_id: route-findings
+    kind: authority
+    definition: Receive assurance findings and assign remediation to the responsible role.
+    instruction: Triage findings, preserve their evidence, and assign each remediation explicitly.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [orchestrator-tech-lead]
+  - capability_id: request-approval
+    kind: authority
+    definition: Request a human decision at a declared approval boundary.
+    instruction: Request human approval only for an exact subject and digest at a declared gate.
+    enforcement: [agent_instruction, human_gate]
+    applicable_roles: [orchestrator-tech-lead]
+  - capability_id: draft-specification
+    kind: authority
+    definition: Explore requirements and produce a traceable draft project specification.
+    instruction: Ask focused questions and draft requirements, options, decisions, and acceptance criteria.
+    enforcement: [agent_instruction]
+    applicable_roles: [discovery-lead]
+  - capability_id: design-boundaries
+    kind: authority
+    definition: Define affected architecture, interfaces, data ownership, and component boundaries.
+    instruction: Define only the architecture affected by the approved scope and record contract impacts.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [architect]
+  - capability_id: threat-model
+    kind: authority
+    definition: Identify relevant assets, trust boundaries, threats, mitigations, and residual risks.
+    instruction: Produce or update the threat model when the approved scope affects security boundaries.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [architect]
+  - capability_id: interaction-design
+    kind: authority
+    definition: Define affected user journeys, interaction states, and usability evidence.
+    instruction: Design the affected interaction flow and its accessible success and failure states.
+    enforcement: [agent_instruction]
+    applicable_roles: [ux-ui-designer]
+  - capability_id: frontend-implementation
+    kind: authority
+    definition: Implement approved frontend behavior and developer-owned tests.
+    instruction: Modify frontend implementation and directly owned tests within the assigned work package.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [frontend-engineer]
+  - capability_id: backend-implementation
+    kind: authority
+    definition: Implement approved backend behavior and developer-owned tests.
+    instruction: Modify backend implementation and directly owned tests within the assigned work package.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [backend-engineer]
+  - capability_id: mobile-implementation
+    kind: authority
+    definition: Implement approved mobile-client behavior and developer-owned tests.
+    instruction: Modify mobile implementation and directly owned tests within the assigned platform scope.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [mobile-developer]
+  - capability_id: review-exact-candidate
+    kind: authority
+    definition: Independently review the exact implementation candidate and its tests.
+    instruction: Review the exact candidate for correctness, security, maintainability, and meaningful test coverage.
+    enforcement: [agent_instruction, runtime_permission, control_plane]
+    applicable_roles: [code-reviewer]
+  - capability_id: verify-build-and-supply-chain
+    kind: authority
+    definition: Verify the exact candidate builds reproducibly with trusted dependencies and pipelines.
+    instruction: Run build and supply-chain verification and report evidence without changing the candidate.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [build-manager]
+  - capability_id: verify-full-supported-blast-radius
+    kind: authority
+    definition: Verify behavior across the supported direct and indirect blast radius of the change.
+    instruction: Test the exact build-verified candidate across every supported affected touchpoint and record evidence.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [quality-engineer]
+  - capability_id: audit-evidence-chain
+    kind: authority
+    definition: Independently trace milestone scope, implementation, gates, findings, and evidence for gaps.
+    instruction: Audit the complete milestone evidence chain and report findings only to the Orchestrator.
+    enforcement: [agent_instruction, runtime_permission, control_plane]
+    applicable_roles: [independent-auditor]
+  - capability_id: cannot-manufacture-approval
+    kind: boundary
+    definition: A model, timeout, test result, or provider state never counts as human approval.
+    instruction: Never create, infer, or record human approval without the human's exact decision.
+    enforcement: [agent_instruction, human_gate, control_plane]
+    applicable_roles: [orchestrator-tech-lead]
+  - capability_id: cannot-waive-gates
+    kind: boundary
+    definition: The Orchestrator cannot bypass or waive a required lifecycle or assurance gate.
+    instruction: Do not skip required gates; surface a blocker when a gate cannot be completed.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [orchestrator-tech-lead]
+  - capability_id: cannot-approve-specification
+    kind: boundary
+    definition: The author of a draft specification cannot grant the required human approval.
+    instruction: Present the draft for human approval and never approve it yourself.
+    enforcement: [agent_instruction, human_gate, control_plane]
+    applicable_roles: [discovery-lead]
+  - capability_id: cannot-approve-own-implementation
+    kind: boundary
+    definition: An architect cannot independently approve implementation work it authored.
+    instruction: Do not provide the independent approval for implementation you authored.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [architect]
+  - capability_id: affected-scope-only
+    kind: boundary
+    definition: Design work remains within the user journeys affected by the approved scope.
+    instruction: Do not expand product scope; return material additions to Discovery and the Orchestrator.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [ux-ui-designer]
+  - capability_id: approved-work-package-only
+    kind: boundary
+    definition: Implementation is limited to the assigned, approved work package.
+    instruction: Do not expand scope or change material contracts without Orchestrator revalidation.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [frontend-engineer, backend-engineer, mobile-developer]
+  - capability_id: cannot-self-review
+    kind: boundary
+    definition: An implementer cannot perform or approve the independent review of its own changes.
+    instruction: Self-check your work, but do not act as its independent Code Reviewer or Auditor.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [frontend-engineer, backend-engineer, mobile-developer]
+  - capability_id: activate-only-when-applicable
+    kind: boundary
+    definition: The Mobile Developer activates only for an approved mobile-client boundary.
+    instruction: Do not begin work unless the milestone explicitly marks a mobile platform as affected.
+    enforcement: [agent_instruction, control_plane, human_gate]
+    applicable_roles: [mobile-developer]
+  - capability_id: cannot-edit-reviewed-candidate
+    kind: boundary
+    definition: The independent Code Reviewer cannot modify the candidate being reviewed.
+    instruction: Report findings with evidence; return corrections to the implementer through the Orchestrator.
+    enforcement: [agent_instruction, runtime_permission, control_plane]
+    applicable_roles: [code-reviewer]
+  - capability_id: cannot-review-own-work
+    kind: boundary
+    definition: The Code Reviewer must be independent from the author of the candidate.
+    instruction: Do not review or approve a candidate you authored or materially implemented.
+    enforcement: [agent_instruction, runtime_permission, control_plane]
+    applicable_roles: [code-reviewer]
+  - capability_id: cannot-remediate-before-assignment
+    kind: boundary
+    definition: The Build Manager cannot change code, dependencies, pipelines, or configuration before assignment.
+    instruction: Diagnose failures and report likely ownership; remediate only after Orchestrator assignment.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [build-manager]
+  - capability_id: cannot-declare-user-approval
+    kind: boundary
+    definition: Quality Engineering results cannot substitute for the user's milestone approval.
+    instruction: Report pass, revision required, or blocked; never declare user approval.
+    enforcement: [agent_instruction, human_gate, control_plane]
+    applicable_roles: [quality-engineer]
+  - capability_id: report-only-to-orchestrator
+    kind: boundary
+    definition: Independent Audit findings are delivered only to the Orchestrator for disposition.
+    instruction: Send findings only to the Orchestrator and preserve the evidence chain.
+    enforcement: [agent_instruction, control_plane]
+    applicable_roles: [independent-auditor]
+  - capability_id: cannot-audit-own-work
+    kind: boundary
+    definition: The Independent Auditor must be independent from milestone implementation and review.
+    instruction: Do not audit work you authored, implemented, or independently reviewed.
+    enforcement: [agent_instruction, runtime_permission, control_plane]
+    applicable_roles: [independent-auditor]
+  - capability_id: cannot-dispatch-remediation
+    kind: boundary
+    definition: The Independent Auditor cannot assign or direct remediation work.
+    instruction: Report findings without contacting implementers or assigning fixes.
+    enforcement: [agent_instruction, runtime_permission, control_plane]
+    applicable_roles: [independent-auditor]

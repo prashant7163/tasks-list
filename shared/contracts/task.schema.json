@@ -1,0 +1,363 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "ChangeClass": {
+      "enum": [
+        "code_producing",
+        "executable_or_configuration",
+        "security_sensitive",
+        "documentation_only"
+      ],
+      "title": "ChangeClass",
+      "type": "string"
+    },
+    "TaskLifecycle": {
+      "enum": [
+        "planned",
+        "readiness_pending",
+        "ready",
+        "claimed",
+        "running",
+        "waiting",
+        "material_deviation",
+        "blocked",
+        "implementation_complete",
+        "code_review",
+        "build_verification",
+        "quality_review",
+        "independent_audit",
+        "audit_triage",
+        "documentation_review",
+        "awaiting_user_approval",
+        "approved",
+        "revision_required",
+        "failed",
+        "interrupted",
+        "cancelled"
+      ],
+      "title": "TaskLifecycle",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/task.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "acceptance_criterion_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Acceptance Criterion Ids",
+      "type": "array"
+    },
+    "agent_envelope_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Agent Envelope Digest",
+      "type": "string"
+    },
+    "allowed_paths": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Allowed Paths",
+      "type": "array"
+    },
+    "allowed_tools": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Tools",
+      "type": "array"
+    },
+    "assigned_agent_instance_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Assigned Agent Instance Id",
+      "type": "string"
+    },
+    "attempt_number": {
+      "minimum": 1,
+      "title": "Attempt Number",
+      "type": "integer"
+    },
+    "auditor_must_differ": {
+      "default": true,
+      "title": "Auditor Must Differ",
+      "type": "boolean"
+    },
+    "author_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Author Id",
+      "type": "string"
+    },
+    "change_class": {
+      "$ref": "#/$defs/ChangeClass"
+    },
+    "change_intent_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Change Intent References",
+      "type": "array"
+    },
+    "contract_snapshot": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "created_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Created At"
+    },
+    "declared_inputs": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Declared Inputs",
+      "type": "array"
+    },
+    "dependency_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Dependency Ids",
+      "type": "array"
+    },
+    "downstream_gates": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Downstream Gates",
+      "type": "array"
+    },
+    "gate_chain": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Gate Chain",
+      "type": "array"
+    },
+    "lifecycle": {
+      "$ref": "#/$defs/TaskLifecycle"
+    },
+    "max_attempts": {
+      "minimum": 1,
+      "title": "Max Attempts",
+      "type": "integer"
+    },
+    "milestone_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Milestone Id",
+      "type": "string"
+    },
+    "milestone_progress": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "milestone_readiness": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "network_policy": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Network Policy",
+      "type": "string"
+    },
+    "objective": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Objective",
+      "type": "string"
+    },
+    "owning_role": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Owning Role",
+      "type": "string"
+    },
+    "project_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "ready_dependency_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Ready Dependency Ids",
+      "type": "array"
+    },
+    "remediation_owner_role": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Remediation Owner Role",
+      "type": "string"
+    },
+    "required_approval_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Required Approval Ids",
+      "type": "array"
+    },
+    "required_outputs": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Required Outputs",
+      "type": "array"
+    },
+    "requirement_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Requirement Ids",
+      "type": "array"
+    },
+    "reviewer_must_differ": {
+      "default": true,
+      "title": "Reviewer Must Differ",
+      "type": "boolean"
+    },
+    "risk": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Risk",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "task_progress": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "verification_commands": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Verification Commands",
+      "type": "array"
+    },
+    "work_package": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "workspace": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Workspace",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_id",
+    "project_id",
+    "run_id",
+    "milestone_id",
+    "assigned_agent_instance_id",
+    "agent_envelope_digest",
+    "objective",
+    "owning_role",
+    "change_class",
+    "author_id",
+    "dependency_ids",
+    "ready_dependency_ids",
+    "requirement_ids",
+    "acceptance_criterion_ids",
+    "milestone_readiness",
+    "contract_snapshot",
+    "work_package",
+    "milestone_progress",
+    "change_intent_references",
+    "declared_inputs",
+    "required_outputs",
+    "allowed_paths",
+    "allowed_tools",
+    "network_policy",
+    "workspace",
+    "risk",
+    "required_approval_ids",
+    "gate_chain",
+    "remediation_owner_role",
+    "downstream_gates",
+    "max_attempts",
+    "attempt_number",
+    "lifecycle"
+  ],
+  "title": "Task",
+  "type": "object",
+  "x-agentic-studio-runtime-validation": {
+    "canonical_validator": "Task.validate_execution_envelope",
+    "required_rules": [
+      "all declared dependencies are ready before task release",
+      "non-documentation changes preserve mandatory gate order",
+      "paths remain repository-relative and retry budget is not exhausted"
+    ]
+  }
+}

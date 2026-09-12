@@ -1,0 +1,198 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "Finding": {
+      "additionalProperties": true,
+      "properties": {
+        "category": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Category",
+          "type": "string"
+        },
+        "disposition": {
+          "$ref": "#/$defs/FindingState",
+          "default": "open"
+        },
+        "evidence_reference": {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        "finding_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "recommendation": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Recommendation",
+          "type": "string"
+        },
+        "severity": {
+          "maxLength": 40,
+          "minLength": 1,
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "severity",
+        "locator",
+        "category",
+        "rationale",
+        "recommendation",
+        "evidence_reference"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "FindingState": {
+      "enum": [
+        "open",
+        "remediated",
+        "not_applicable_or_invalid"
+      ],
+      "title": "FindingState",
+      "type": "string"
+    },
+    "ReviewOutcome": {
+      "enum": [
+        "pass",
+        "revision_required"
+      ],
+      "title": "ReviewOutcome",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/code-review.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "attempt_number": {
+      "minimum": 1,
+      "title": "Attempt Number",
+      "type": "integer"
+    },
+    "author_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Author Id",
+      "type": "string"
+    },
+    "binding_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Binding References",
+      "type": "array"
+    },
+    "candidate_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Candidate Digest",
+      "type": "string"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "review_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Review Id",
+      "type": "string"
+    },
+    "reviewed_at": {
+      "format": "date-time",
+      "title": "Reviewed At",
+      "type": "string"
+    },
+    "reviewer_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Reviewer Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "unit_test_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Unit Test References",
+      "type": "array"
+    },
+    "verdict": {
+      "$ref": "#/$defs/ReviewOutcome"
+    }
+  },
+  "required": [
+    "schema_version",
+    "review_id",
+    "task_id",
+    "attempt_number",
+    "author_id",
+    "reviewer_id",
+    "candidate_digest",
+    "binding_references",
+    "unit_test_references",
+    "findings",
+    "verdict",
+    "reviewed_at"
+  ],
+  "title": "CodeReview",
+  "type": "object"
+}

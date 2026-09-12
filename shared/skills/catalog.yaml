@@ -1,0 +1,158 @@
+schema_version: 1.0.0
+registry_id: stage-one-skills
+skills:
+  - &base_skill
+    schema_version: 1.0.0
+    skill_id: context-provenance
+    version: 1.0.0
+    purpose: Retrieve minimum necessary context with current provenance.
+    triggers: [task-dispatch]
+    inputs: [context-query]
+    outputs: [context-pack]
+    compatible_roles: [orchestrator-tech-lead, discovery-lead, architect, ux-ui-designer, frontend-engineer, backend-engineer, mobile-developer, code-reviewer, build-manager, quality-engineer, independent-auditor]
+    tool_dependencies: []
+    data_dependencies: [repository-index]
+    permissions: [repository-read]
+    prohibited_uses: [unbounded-project-memory]
+    fallback: Use authoritative references only or block.
+    content_digest: "0000000000000000000000000000000000000000000000000000000000000000"
+    provenance: studio
+    license: internal
+    trust_status: trusted_active
+    evaluation_references: []
+  - <<: *base_skill
+    skill_id: redaction-data-handling
+    purpose: Redact sensitive content before persistence or outbound use.
+    triggers: [persistence, outbound-context]
+    outputs: [outbound-manifest]
+    data_dependencies: [classification-policy]
+  - <<: *base_skill
+    skill_id: progress-checkpoint-resume
+    purpose: Maintain durable bounded progress and safe recovery evidence.
+    triggers: [state-transition, session-boundary]
+    outputs: [checkpoint, resume-marker]
+    data_dependencies: [event-journal]
+  - <<: *base_skill
+    skill_id: verification-discipline
+    purpose: Bind meaningful verification to the exact candidate.
+    triggers: [task-completion]
+    outputs: [verification-evidence]
+    data_dependencies: [candidate-snapshot]
+  - <<: *base_skill
+    skill_id: test-driven-development
+    purpose: Establish changed behavior with failing then passing tests.
+    triggers: [feature, bugfix]
+    outputs: [unit-test-evidence]
+  - <<: *base_skill
+    skill_id: systematic-debugging
+    purpose: Diagnose unexpected behavior from evidence before remediation.
+    triggers: [test-failure, runtime-failure]
+    outputs: [diagnosis]
+  - <<: *base_skill
+    skill_id: isolated-workspace
+    purpose: Preserve independent work and deterministic integration boundaries.
+    triggers: [parallel-work, feature-work]
+    outputs: [workspace-allocation]
+  - <<: *base_skill
+    skill_id: code-review-practice
+    purpose: Review an exact candidate independently against intent and evidence.
+    triggers: [implementation-complete]
+    outputs: [code-review]
+  - <<: *base_skill
+    skill_id: independent-audit-practice
+    purpose: Trace the complete exact-snapshot evidence chain independently.
+    triggers: [quality-pass]
+    outputs: [independent-audit]
+  - <<: *base_skill
+    skill_id: discovery-brainstorming
+    purpose: Convert user goals into a reviewable specification.
+    triggers: [new-project]
+    outputs: [project-specification]
+  - <<: *base_skill
+    skill_id: implementation-planning
+    purpose: Create dependency-safe milestone work packages and gates.
+    triggers: [approved-specification]
+    outputs: [milestone-plan]
+  - <<: *base_skill
+    skill_id: evidence-capture
+    purpose: Capture concise durable exact-snapshot evidence.
+    triggers: [gate-completion]
+    outputs: [artifact-reference]
+profiles:
+  - schema_version: 1.0.0
+    profile_id: orchestrator-core
+    role_id: orchestrator-tech-lead
+    required_skill_ids: [context-provenance, redaction-data-handling, progress-checkpoint-resume, implementation-planning]
+    optional_skill_ids: [discovery-brainstorming]
+    prohibited_skill_ids: []
+    fallback: Block when a required control skill is unavailable.
+  - schema_version: 1.0.0
+    profile_id: implementer-core
+    role_id: backend-engineer
+    required_skill_ids: [context-provenance, redaction-data-handling, test-driven-development, verification-discipline]
+    optional_skill_ids: [systematic-debugging, isolated-workspace]
+    prohibited_skill_ids: [independent-audit-practice]
+    fallback: Return a structured blocker.
+  - schema_version: 1.0.0
+    profile_id: reviewer-core
+    role_id: code-reviewer
+    required_skill_ids: [context-provenance, code-review-practice, evidence-capture]
+    optional_skill_ids: [systematic-debugging]
+    prohibited_skill_ids: [test-driven-development]
+    fallback: Block review if required expertise is unavailable.
+  - schema_version: 1.0.0
+    profile_id: auditor-core
+    role_id: independent-auditor
+    required_skill_ids: [context-provenance, independent-audit-practice, evidence-capture]
+    optional_skill_ids: []
+    prohibited_skill_ids: [test-driven-development]
+    fallback: Return an inconclusive audit to the orchestrator.
+  - schema_version: 1.0.0
+    profile_id: discovery-core
+    role_id: discovery-lead
+    required_skill_ids: [context-provenance, redaction-data-handling, discovery-brainstorming]
+    optional_skill_ids: [evidence-capture]
+    prohibited_skill_ids: [independent-audit-practice]
+    fallback: Keep the specification in draft and return open questions.
+  - schema_version: 1.0.0
+    profile_id: architect-core
+    role_id: architect
+    required_skill_ids: [context-provenance, redaction-data-handling, implementation-planning]
+    optional_skill_ids: [systematic-debugging]
+    prohibited_skill_ids: []
+    fallback: Block the affected design boundary.
+  - schema_version: 1.0.0
+    profile_id: ux-core
+    role_id: ux-ui-designer
+    required_skill_ids: [context-provenance, redaction-data-handling, evidence-capture]
+    optional_skill_ids: [discovery-brainstorming]
+    prohibited_skill_ids: []
+    fallback: Record the missing interaction decision.
+  - schema_version: 1.0.0
+    profile_id: frontend-core
+    role_id: frontend-engineer
+    required_skill_ids: [context-provenance, redaction-data-handling, test-driven-development, verification-discipline]
+    optional_skill_ids: [systematic-debugging, isolated-workspace]
+    prohibited_skill_ids: [independent-audit-practice]
+    fallback: Return a structured blocker.
+  - schema_version: 1.0.0
+    profile_id: mobile-core
+    role_id: mobile-developer
+    required_skill_ids: [context-provenance, redaction-data-handling, test-driven-development, verification-discipline]
+    optional_skill_ids: [systematic-debugging, isolated-workspace]
+    prohibited_skill_ids: [independent-audit-practice]
+    fallback: Mark Mobile Developer not applicable or block for platform specialization.
+  - schema_version: 1.0.0
+    profile_id: build-core
+    role_id: build-manager
+    required_skill_ids: [context-provenance, verification-discipline, evidence-capture]
+    optional_skill_ids: [systematic-debugging]
+    prohibited_skill_ids: [test-driven-development]
+    fallback: Return a minimal build status to the orchestrator.
+  - schema_version: 1.0.0
+    profile_id: quality-core
+    role_id: quality-engineer
+    required_skill_ids: [context-provenance, verification-discipline, evidence-capture]
+    optional_skill_ids: [systematic-debugging]
+    prohibited_skill_ids: []
+    fallback: Return blocked_inconclusive with visible unknowns.

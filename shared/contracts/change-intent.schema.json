@@ -1,0 +1,172 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "ChangeAction": {
+      "enum": [
+        "add",
+        "change",
+        "remove"
+      ],
+      "title": "ChangeAction",
+      "type": "string"
+    },
+    "ChangeIntentStatus": {
+      "enum": [
+        "planned",
+        "in_progress",
+        "complete",
+        "diverged"
+      ],
+      "title": "ChangeIntentStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/change-intent.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "action": {
+      "$ref": "#/$defs/ChangeAction"
+    },
+    "affected_contracts": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Affected Contracts",
+      "type": "array"
+    },
+    "blast_radius_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "divergence_reason": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Divergence Reason"
+    },
+    "exemption_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "intent_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Intent Id",
+      "type": "string"
+    },
+    "locator": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Locator",
+      "type": "string"
+    },
+    "necessity": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Necessity",
+      "type": "string"
+    },
+    "protected": {
+      "default": false,
+      "title": "Protected",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/ChangeIntentStatus"
+    },
+    "target": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Target",
+      "type": "string"
+    },
+    "verification": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Verification",
+      "type": "array"
+    },
+    "why_here": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Why Here",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "intent_id",
+    "target",
+    "locator",
+    "action",
+    "necessity",
+    "why_here",
+    "affected_contracts",
+    "blast_radius_reference",
+    "exemption_reference",
+    "verification",
+    "status"
+  ],
+  "title": "ChangeIntent",
+  "type": "object"
+}

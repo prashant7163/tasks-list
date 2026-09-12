@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "milestone-plan-review-ready",
+  "project_id": "tasks-list",
+  "run_id": "tasks-list-discovery",
+  "task_id": null,
+  "journal_sequence": 7,
+  "previous_checkpoint_hash": "7613e00c8aae61d387dd782169d9cdfb07fa8479a253a10f93d2f4a29b3361ff",
+  "checkpoint_hash": null,
+  "source_revision": "bd23c8782c62e50f5d3cc83ae33b60d47aacecfa9c7f45bcc268838d90828c59",
+  "worktree_digest": "1f53630d5fa5f82b1a77061427d1c89e76f6a678d9d6f0aad29a169beb44d625",
+  "contract_version": "1.0.0",
+  "lease_generation": null,
+  "artifact_references": [
+    {
+      "artifact_id": "tasks-list",
+      "locator": "docs/project/specification.json",
+      "schema_version": "1.0.0",
+      "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"
+    }
+  ],
+  "current_action": "Schema-valid milestone plan is ready for the application owner's exact-digest review.",
+  "next_operation": "Obtain the application owner's explicit decision on canonical plan digest f6d6bbb42dd7676005aa4668fc9cd9c4f2bc445e2e6f469ee4542f0fd573b4de; do not submit readiness or implement without approval.",
+  "completed_work": [
+    "Recorded and submitted the application owner's exact approved specification decision.",
+    "Advanced Studio to specification_approved through governed specification submission.",
+    "Drafted three independently demonstrable milestones with seven scoped tasks and fifteen mandatory verification gates.",
+    "Verified complete coverage of all 16 approved requirements, dependency acyclicity, workspace uniqueness, reviewer independence, and exact embedded-specification binding.",
+    "Removed a non-contract draft label so human approval and Studio submission can bind the identical plan snapshot."
+  ],
+  "pending_work": [
+    "Application owner reviews and explicitly approves, requests changes, or rejects canonical plan digest f6d6bbb42dd7676005aa4668fc9cd9c4f2bc445e2e6f469ee4542f0fd573b4de.",
+    "Only after exact plan approval, submit docs/project/plan.json through Studio governance.",
+    "Prepare and register readiness evidence before any implementation task is dispatched."
+  ],
+  "idempotency_outcomes": {
+    "specification-approved-9ed869d4": "approved specification accepted; Studio phase advanced to specification_approved"
+  },
+  "created_at": "2026-09-12T15:22:39Z"
+}

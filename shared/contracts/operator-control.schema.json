@@ -1,0 +1,75 @@
+{
+  "$defs": {
+    "OperatorAction": {
+      "enum": [
+        "pause",
+        "cancel",
+        "revoke_lease",
+        "revoke_permission",
+        "quarantine_outbound",
+        "stop_all"
+      ],
+      "title": "OperatorAction",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/operator-control.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "action": {
+      "$ref": "#/$defs/OperatorAction"
+    },
+    "control_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Control Id",
+      "type": "string"
+    },
+    "graceful_timeout_seconds": {
+      "maximum": 3600,
+      "minimum": 0,
+      "title": "Graceful Timeout Seconds",
+      "type": "integer"
+    },
+    "issued_at": {
+      "format": "date-time",
+      "title": "Issued At",
+      "type": "string"
+    },
+    "issued_by": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Issued By",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scope": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Scope",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "control_id",
+    "action",
+    "issued_by",
+    "issued_at",
+    "scope",
+    "reason",
+    "graceful_timeout_seconds"
+  ],
+  "title": "OperatorControl",
+  "type": "object"
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "discovery-draft-ready",
+  "project_id": "tasks-list",
+  "run_id": "tasks-list-discovery",
+  "task_id": null,
+  "journal_sequence": 2,
+  "previous_checkpoint_hash": null,
+  "checkpoint_hash": null,
+  "source_revision": "bd23c8782c62e50f5d3cc83ae33b60d47aacecfa9c7f45bcc268838d90828c59",
+  "worktree_digest": "cb0579adb88a89f6e90555b840578196a1835539f2c5de3950bf6d80081f5946",
+  "contract_version": "1.0.0",
+  "lease_generation": null,
+  "artifact_references": [],
+  "current_action": "Draft specification validated and reviewed in discovery without submission or approval.",
+  "next_operation": "Obtain the required Architect threat model, update and revalidate the draft, then present its new exact approval digest to the application owner.",
+  "completed_work": [
+    "Drafted docs/project/specification.json from the application-owner discovery source.",
+    "Validated the draft with the canonical ProjectSpecification model.",
+    "Reviewed scope, assumptions, settled decisions, risks, specialists, open questions, and traceability against the discovery guide.",
+    "Confirmed there are no unresolved product questions and preserved draft status with null approval."
+  ],
+  "pending_work": [
+    "Have the materially affected Architect produce the required threat model artifact.",
+    "Add the exact threat-model reference to the draft and revalidate the resulting specification.",
+    "Ask the application owner to review and explicitly decide on the final exact approval digest.",
+    "Do not begin planning or implementation before governed specification approval."
+  ],
+  "idempotency_outcomes": {},
+  "created_at": "2026-09-12T14:50:00Z"
+}

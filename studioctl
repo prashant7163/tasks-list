@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+
+PROJECT_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+RUNTIME_PYTHON="$PROJECT_ROOT/.studio/runtime/bin/python"
+
+if [ "${1:-}" = "bootstrap" ]; then
+    shift
+    exec python3 "$PROJECT_ROOT/.studio/tools/bootstrap.py" --project-root "$PROJECT_ROOT" "$@"
+fi
+
+if [ ! -x "$RUNTIME_PYTHON" ]; then
+    printf '%s\n' '{"code":"policy_denied","summary":"Project-local Studio runtime is not bootstrapped.","next_action":"Run ./studioctl bootstrap."}'
+    exit 4
+fi
+
+exec "$RUNTIME_PYTHON" -c 'import sys; from agentic_studio.cli import studioctl_main; sys.exit(studioctl_main())' --project-root "$PROJECT_ROOT" "$@"

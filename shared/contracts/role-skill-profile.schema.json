@@ -1,0 +1,63 @@
+{
+  "$id": "https://schemas.agentic-studio.local/v1/role-skill-profile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "fallback": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Fallback",
+      "type": "string"
+    },
+    "optional_skill_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Optional Skill Ids",
+      "type": "array"
+    },
+    "profile_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "prohibited_skill_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Prohibited Skill Ids",
+      "type": "array"
+    },
+    "required_skill_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Required Skill Ids",
+      "type": "array"
+    },
+    "role_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Role Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "profile_id",
+    "role_id",
+    "required_skill_ids",
+    "optional_skill_ids",
+    "prohibited_skill_ids",
+    "fallback"
+  ],
+  "title": "RoleSkillProfile",
+  "type": "object"
+}

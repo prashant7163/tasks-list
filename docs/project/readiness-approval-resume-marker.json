@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "marker_id": "marker-m1-readiness-approval-boundary",
+  "checkpoint_reference": {
+    "artifact_id": "m1-readiness-approval-boundary",
+    "locator": ".studio/runs/tasks-list-discovery/checkpoints/00000000000000000027-m1-readiness-approval-boundary.json",
+    "schema_version": "1.0.0",
+    "sha256": "3da393a1196994658b38c137bbcc65dc3815d6f02e353f8cfdb0033ce55a70d8"
+  },
+  "classification": "conditional",
+  "reason_code": "exact_human_approval_pending",
+  "explanation": "GitHub access and readiness inputs are verified and registered; the write capability remains quarantined, all agent envelopes remain pending, and no implementation or GitHub write has begun.",
+  "completed_work": [
+    "Verified the GitHub identity and private repository permission with approved network access.",
+    "Registered redacted Milestone 1 readiness evidence and the quarantined capability proposal.",
+    "Prepared schema-valid least-privilege role envelopes using gpt-5.6-sol only."
+  ],
+  "remaining_work": [
+    "Obtain explicit yes/no decisions on the exact capability and envelope digests.",
+    "Obtain explicit yes/no authorization for the initial baseline commit on master required to create worktrees in the empty repository.",
+    "Activate only approved subjects and submit a distinct passing readiness snapshot before implementation."
+  ],
+  "next_operation": "Apply the application owner's exact decisions to the capability and agent envelopes, then validate and submit fresh readiness.",
+  "user_confirmation_required": true,
+  "created_at": "2026-09-12T15:48:30Z"
+}

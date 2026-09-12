@@ -1,0 +1,1112 @@
+{
+  "$defs": {
+    "AcceptanceCriterion": {
+      "additionalProperties": true,
+      "properties": {
+        "criterion_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Criterion Id",
+          "type": "string"
+        },
+        "statement": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "criterion_id",
+        "statement"
+      ],
+      "title": "AcceptanceCriterion",
+      "type": "object"
+    },
+    "Approval": {
+      "additionalProperties": true,
+      "properties": {
+        "approval_id": {
+          "pattern": "^apr-[a-z0-9][a-z0-9-]{2,63}$",
+          "title": "Approval Id",
+          "type": "string"
+        },
+        "comment": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comment"
+        },
+        "decided_at": {
+          "format": "date-time",
+          "title": "Decided At",
+          "type": "string"
+        },
+        "decided_by": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Decided By",
+          "type": "string"
+        },
+        "decision": {
+          "$ref": "#/$defs/ApprovalDecision"
+        },
+        "schema_version": {
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "subject_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Subject Digest",
+          "type": "string"
+        },
+        "subject_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Subject Id",
+          "type": "string"
+        },
+        "subject_type": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Subject Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "approval_id",
+        "subject_type",
+        "subject_id",
+        "subject_digest",
+        "decision",
+        "decided_by",
+        "decided_at"
+      ],
+      "title": "Approval",
+      "type": "object"
+    },
+    "ApprovalDecision": {
+      "enum": [
+        "approved",
+        "changes_requested",
+        "rejected"
+      ],
+      "title": "ApprovalDecision",
+      "type": "string"
+    },
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "ExternalSystem": {
+      "additionalProperties": true,
+      "properties": {
+        "data_classifications": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Data Classifications",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "purpose": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Purpose",
+          "type": "string"
+        },
+        "system_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "System Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system_id",
+        "name",
+        "purpose",
+        "data_classifications"
+      ],
+      "title": "ExternalSystem",
+      "type": "object"
+    },
+    "Goal": {
+      "additionalProperties": true,
+      "properties": {
+        "goal_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Goal Id",
+          "type": "string"
+        },
+        "statement": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "goal_id",
+        "statement"
+      ],
+      "title": "Goal",
+      "type": "object"
+    },
+    "Journey": {
+      "additionalProperties": true,
+      "properties": {
+        "journey_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Journey Id",
+          "type": "string"
+        },
+        "outcome": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Outcome",
+          "type": "string"
+        },
+        "persona_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "steps": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "journey_id",
+        "persona_id",
+        "outcome",
+        "steps"
+      ],
+      "title": "Journey",
+      "type": "object"
+    },
+    "MilestoneBoundary": {
+      "enum": [
+        "single_role",
+        "cross_boundary"
+      ],
+      "title": "MilestoneBoundary",
+      "type": "string"
+    },
+    "MilestoneDefinition": {
+      "additionalProperties": true,
+      "properties": {
+        "affected_roles": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Affected Roles",
+          "type": "array"
+        },
+        "boundary": {
+          "$ref": "#/$defs/MilestoneBoundary"
+        },
+        "exit_criteria": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Exit Criteria",
+          "type": "array"
+        },
+        "milestone_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Milestone Id",
+          "type": "string"
+        },
+        "objective": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Objective",
+          "type": "string"
+        },
+        "ordinal": {
+          "minimum": 1,
+          "title": "Ordinal",
+          "type": "integer"
+        },
+        "proposed_demo": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Proposed Demo",
+          "type": "string"
+        },
+        "requirement_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requirement Ids",
+          "type": "array"
+        },
+        "risk_level": {
+          "$ref": "#/$defs/RiskLevel"
+        },
+        "tasks": {
+          "items": {
+            "$ref": "#/$defs/PlannedTask"
+          },
+          "minItems": 1,
+          "title": "Tasks",
+          "type": "array"
+        },
+        "verification_steps": {
+          "items": {
+            "$ref": "#/$defs/VerificationStep"
+          },
+          "minItems": 1,
+          "title": "Verification Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "milestone_id",
+        "ordinal",
+        "objective",
+        "requirement_ids",
+        "exit_criteria",
+        "proposed_demo",
+        "risk_level",
+        "boundary",
+        "affected_roles",
+        "tasks",
+        "verification_steps"
+      ],
+      "title": "MilestoneDefinition",
+      "type": "object"
+    },
+    "NonFunctionalCategory": {
+      "enum": [
+        "security",
+        "privacy",
+        "accessibility",
+        "performance",
+        "reliability",
+        "operability",
+        "maintainability"
+      ],
+      "title": "NonFunctionalCategory",
+      "type": "string"
+    },
+    "NonFunctionalRequirement": {
+      "additionalProperties": true,
+      "properties": {
+        "acceptance_criteria": {
+          "items": {
+            "$ref": "#/$defs/AcceptanceCriterion"
+          },
+          "minItems": 1,
+          "title": "Acceptance Criteria",
+          "type": "array"
+        },
+        "category": {
+          "$ref": "#/$defs/NonFunctionalCategory"
+        },
+        "requirement_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Requirement Id",
+          "type": "string"
+        },
+        "statement": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "requirement_id",
+        "statement",
+        "acceptance_criteria",
+        "category"
+      ],
+      "title": "NonFunctionalRequirement",
+      "type": "object"
+    },
+    "Persona": {
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "needs": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Needs",
+          "type": "array"
+        },
+        "persona_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Persona Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "persona_id",
+        "name",
+        "needs"
+      ],
+      "title": "Persona",
+      "type": "object"
+    },
+    "PlannedTask": {
+      "additionalProperties": true,
+      "properties": {
+        "dependency_task_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Dependency Task Ids",
+          "type": "array"
+        },
+        "kind": {
+          "$ref": "#/$defs/TaskKind"
+        },
+        "owner_instance_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Owner Instance Id",
+          "type": "string"
+        },
+        "owner_role": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Owner Role",
+          "type": "string"
+        },
+        "requirement_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Requirement Ids",
+          "type": "array"
+        },
+        "task_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "workspace": {
+          "$ref": "#/$defs/WorkspaceAllocation"
+        }
+      },
+      "required": [
+        "task_id",
+        "kind",
+        "title",
+        "requirement_ids",
+        "dependency_task_ids",
+        "owner_role",
+        "owner_instance_id",
+        "workspace"
+      ],
+      "title": "PlannedTask",
+      "type": "object"
+    },
+    "ProjectIdentity": {
+      "additionalProperties": true,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "owner": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Owner",
+          "type": "string"
+        },
+        "project_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "slug": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Slug",
+          "type": "string"
+        }
+      },
+      "required": [
+        "project_id",
+        "name",
+        "slug",
+        "owner",
+        "created_at"
+      ],
+      "title": "ProjectIdentity",
+      "type": "object"
+    },
+    "ProjectSpecification": {
+      "additionalProperties": true,
+      "properties": {
+        "approval": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Approval"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "assumptions": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "chosen_stack": {
+          "$ref": "#/$defs/StackChoice"
+        },
+        "constraints": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Constraints",
+          "type": "array"
+        },
+        "data_classifications": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Data Classifications",
+          "type": "array"
+        },
+        "dependencies": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Dependencies",
+          "type": "array"
+        },
+        "design_system_direction": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Design System Direction"
+        },
+        "desired_outcome": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Desired Outcome",
+          "type": "string"
+        },
+        "external_systems": {
+          "items": {
+            "$ref": "#/$defs/ExternalSystem"
+          },
+          "title": "External Systems",
+          "type": "array"
+        },
+        "functional_requirements": {
+          "items": {
+            "$ref": "#/$defs/Requirement"
+          },
+          "minItems": 1,
+          "title": "Functional Requirements",
+          "type": "array"
+        },
+        "goals": {
+          "items": {
+            "$ref": "#/$defs/Goal"
+          },
+          "minItems": 1,
+          "title": "Goals",
+          "type": "array"
+        },
+        "identity": {
+          "$ref": "#/$defs/ProjectIdentity"
+        },
+        "non_functional_requirements": {
+          "items": {
+            "$ref": "#/$defs/NonFunctionalRequirement"
+          },
+          "title": "Non Functional Requirements",
+          "type": "array"
+        },
+        "non_goals": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Non Goals",
+          "type": "array"
+        },
+        "open_questions": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Open Questions",
+          "type": "array"
+        },
+        "personas": {
+          "items": {
+            "$ref": "#/$defs/Persona"
+          },
+          "minItems": 1,
+          "title": "Personas",
+          "type": "array"
+        },
+        "primary_journeys": {
+          "items": {
+            "$ref": "#/$defs/Journey"
+          },
+          "minItems": 1,
+          "title": "Primary Journeys",
+          "type": "array"
+        },
+        "problem_statement": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Problem Statement",
+          "type": "string"
+        },
+        "responsive_behavior": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Responsive Behavior"
+        },
+        "risks": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Risks",
+          "type": "array"
+        },
+        "schema_version": {
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scope_excluded": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Scope Excluded",
+          "type": "array"
+        },
+        "scope_included": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Scope Included",
+          "type": "array"
+        },
+        "standards_profile_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Standards Profile Ids",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/SpecificationStatus"
+        },
+        "success_criteria": {
+          "items": {
+            "$ref": "#/$defs/SuccessCriterion"
+          },
+          "minItems": 1,
+          "title": "Success Criteria",
+          "type": "array"
+        },
+        "threat_model_reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Threat Model Reference"
+        },
+        "threat_model_required": {
+          "title": "Threat Model Required",
+          "type": "boolean"
+        },
+        "traceability": {
+          "items": {
+            "$ref": "#/$defs/TraceabilityEntry"
+          },
+          "title": "Traceability",
+          "type": "array"
+        },
+        "ux_flow_references": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Ux Flow References",
+          "type": "array"
+        }
+      },
+      "required": [
+        "schema_version",
+        "identity",
+        "status",
+        "problem_statement",
+        "desired_outcome",
+        "personas",
+        "primary_journeys",
+        "goals",
+        "success_criteria",
+        "non_goals",
+        "scope_included",
+        "scope_excluded",
+        "functional_requirements",
+        "non_functional_requirements",
+        "chosen_stack",
+        "ux_flow_references",
+        "responsive_behavior",
+        "design_system_direction",
+        "external_systems",
+        "data_classifications",
+        "assumptions",
+        "constraints",
+        "risks",
+        "dependencies",
+        "threat_model_required",
+        "threat_model_reference",
+        "standards_profile_ids",
+        "open_questions",
+        "traceability",
+        "approval"
+      ],
+      "title": "ProjectSpecification",
+      "type": "object"
+    },
+    "Requirement": {
+      "additionalProperties": true,
+      "properties": {
+        "acceptance_criteria": {
+          "items": {
+            "$ref": "#/$defs/AcceptanceCriterion"
+          },
+          "minItems": 1,
+          "title": "Acceptance Criteria",
+          "type": "array"
+        },
+        "requirement_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Requirement Id",
+          "type": "string"
+        },
+        "statement": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "requirement_id",
+        "statement",
+        "acceptance_criteria"
+      ],
+      "title": "Requirement",
+      "type": "object"
+    },
+    "RiskLevel": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    },
+    "SpecificationStatus": {
+      "enum": [
+        "draft",
+        "approved"
+      ],
+      "title": "SpecificationStatus",
+      "type": "string"
+    },
+    "StackAlternative": {
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "rationale"
+      ],
+      "title": "StackAlternative",
+      "type": "object"
+    },
+    "StackChoice": {
+      "additionalProperties": true,
+      "properties": {
+        "alternatives": {
+          "items": {
+            "$ref": "#/$defs/StackAlternative"
+          },
+          "title": "Alternatives",
+          "type": "array"
+        },
+        "components": {
+          "items": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Components",
+          "type": "array"
+        },
+        "rationale": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "components",
+        "alternatives",
+        "rationale"
+      ],
+      "title": "StackChoice",
+      "type": "object"
+    },
+    "SuccessCriterion": {
+      "additionalProperties": true,
+      "properties": {
+        "criterion_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Criterion Id",
+          "type": "string"
+        },
+        "measurement": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Measurement",
+          "type": "string"
+        },
+        "statement": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "criterion_id",
+        "statement",
+        "measurement"
+      ],
+      "title": "SuccessCriterion",
+      "type": "object"
+    },
+    "TaskKind": {
+      "enum": [
+        "planning",
+        "implementation",
+        "user_review",
+        "code_review",
+        "build",
+        "quality_engineering",
+        "independent_audit"
+      ],
+      "title": "TaskKind",
+      "type": "string"
+    },
+    "TraceabilityEntry": {
+      "additionalProperties": true,
+      "properties": {
+        "acceptance_criterion_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Acceptance Criterion Ids",
+          "type": "array"
+        },
+        "requirement_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Requirement Id",
+          "type": "string"
+        },
+        "traceability_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Traceability Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "traceability_id",
+        "requirement_id",
+        "acceptance_criterion_ids"
+      ],
+      "title": "TraceabilityEntry",
+      "type": "object"
+    },
+    "VerificationStep": {
+      "additionalProperties": true,
+      "properties": {
+        "applicability_reason": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Applicability Reason"
+        },
+        "applicable": {
+          "default": true,
+          "title": "Applicable",
+          "type": "boolean"
+        },
+        "kind": {
+          "$ref": "#/$defs/TaskKind"
+        },
+        "producer_task_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Producer Task Ids",
+          "type": "array"
+        },
+        "reviewer_instance_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Reviewer Instance Id",
+          "type": "string"
+        },
+        "reviewer_role": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Reviewer Role",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "verification_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Verification Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "verification_id",
+        "kind",
+        "title",
+        "reviewer_role",
+        "reviewer_instance_id",
+        "producer_task_ids"
+      ],
+      "title": "VerificationStep",
+      "type": "object"
+    },
+    "WorkspaceAllocation": {
+      "additionalProperties": true,
+      "properties": {
+        "isolation_kind": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Isolation Kind",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        }
+      },
+      "required": [
+        "isolation_kind",
+        "locator"
+      ],
+      "title": "WorkspaceAllocation",
+      "type": "object"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/milestone-plan.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "milestones": {
+      "items": {
+        "$ref": "#/$defs/MilestoneDefinition"
+      },
+      "minItems": 1,
+      "title": "Milestones",
+      "type": "array"
+    },
+    "plan_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Plan Id",
+      "type": "string"
+    },
+    "project_specification": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ProjectSpecification"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "project_specification_reference": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "plan_id",
+    "project_specification",
+    "project_specification_reference",
+    "milestones"
+  ],
+  "title": "MilestonePlan",
+  "type": "object",
+  "x-agentic-studio-runtime-validation": {
+    "canonical_validator": "MilestonePlan.validate_plan",
+    "required_rules": [
+      "approved specification/reference identity and canonical digest binding",
+      "milestone-local requirement, task, and verification coverage",
+      "mandatory gate, role independence, workspace ownership, and dependency DAG validation"
+    ]
+  }
+}

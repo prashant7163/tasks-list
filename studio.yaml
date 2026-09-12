@@ -1,0 +1,8 @@
+schema_version: 1.0.0
+project_id: tasks-list
+selected_runtime: codex
+project_name: tasks-list
+policy_profile_id: default
+evidence_retention:
+  quality_engineering_reports:
+    max_complete_cycles: 10

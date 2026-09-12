@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "marker_id": "marker-milestone-plan-review-ready",
+  "checkpoint_reference": {
+    "artifact_id": "milestone-plan-review-ready",
+    "locator": ".studio/runs/tasks-list-discovery/checkpoints/00000000000000000007-milestone-plan-review-ready.json",
+    "schema_version": "1.0.0",
+    "sha256": "1fcc939c9f56231636f4c1d75a34ffa8de3ce5733eb971122ed7d7568670512d"
+  },
+  "classification": "safe",
+  "reason_code": "checkpoint_bindings_valid",
+  "explanation": "The approved specification is accepted and the exact milestone plan validates; the remaining boundary is the application owner's plan decision.",
+  "completed_work": [
+    "Accepted the exact approved specification through Studio governance.",
+    "Drafted and validated the complete three-milestone plan.",
+    "Recorded the plan-review checkpoint without submitting the plan."
+  ],
+  "remaining_work": [
+    "Obtain the application owner's explicit decision on canonical plan digest f6d6bbb42dd7676005aa4668fc9cd9c4f2bc445e2e6f469ee4542f0fd573b4de.",
+    "If approved, submit the unchanged plan and prepare registered readiness evidence.",
+    "If changes are requested or rejected, revise the plan before any submission or implementation."
+  ],
+  "next_operation": "Wait for the application owner's exact plan decision; do not dispatch implementation.",
+  "user_confirmation_required": false,
+  "created_at": "2026-09-12T15:22:57Z"
+}

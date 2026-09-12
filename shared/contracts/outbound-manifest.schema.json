@@ -1,0 +1,66 @@
+{
+  "$id": "https://schemas.agentic-studio.local/v1/outbound-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "blocked_finding_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Blocked Finding Ids",
+      "type": "array"
+    },
+    "destination": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Destination",
+      "type": "string"
+    },
+    "manifest_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Manifest Id",
+      "type": "string"
+    },
+    "payload_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Payload Digest",
+      "type": "string"
+    },
+    "policy_decision": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Policy Decision",
+      "type": "string"
+    },
+    "redaction_count": {
+      "minimum": 0,
+      "title": "Redaction Count",
+      "type": "integer"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_paths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Paths",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "destination",
+    "source_paths",
+    "redaction_count",
+    "blocked_finding_ids",
+    "policy_decision",
+    "payload_digest"
+  ],
+  "title": "OutboundManifest",
+  "type": "object"
+}

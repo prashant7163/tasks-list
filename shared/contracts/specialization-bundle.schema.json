@@ -1,0 +1,60 @@
+{
+  "$id": "https://schemas.agentic-studio.local/v1/specialization-bundle.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "bundle_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Bundle Id",
+      "type": "string"
+    },
+    "domain": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Domain",
+      "type": "string"
+    },
+    "fallback": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Fallback",
+      "type": "string"
+    },
+    "required_assurance_roles": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Required Assurance Roles",
+      "type": "array"
+    },
+    "role_facets": {
+      "patternProperties": {
+        "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Role Facets",
+      "type": "object"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "bundle_id",
+    "domain",
+    "role_facets",
+    "required_assurance_roles",
+    "fallback"
+  ],
+  "title": "SpecializationBundle",
+  "type": "object"
+}

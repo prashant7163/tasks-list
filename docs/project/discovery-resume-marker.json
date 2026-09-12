@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "marker_id": "marker-discovery-draft-ready",
+  "checkpoint_reference": {
+    "artifact_id": "discovery-draft-ready",
+    "locator": ".studio/runs/tasks-list-discovery/checkpoints/00000000000000000002-discovery-draft-ready.json",
+    "schema_version": "1.0.0",
+    "sha256": "4d1ae106a0dcb5d196c1c2af127322365cd05887b1b4bdd2529527ed76075b7a"
+  },
+  "classification": "safe",
+  "reason_code": "checkpoint_bindings_valid",
+  "explanation": "The discovery draft, canonical validation evidence, and pending approval prerequisites are bound to a durable checkpoint; no external side effects are unresolved.",
+  "completed_work": [
+    "Drafted and canonically validated the project specification.",
+    "Reviewed the draft against the discovery guide.",
+    "Kept the specification in draft with no approval and no open product questions."
+  ],
+  "remaining_work": [
+    "Produce the required Architect threat model and bind its reference into the draft.",
+    "Revalidate the modified draft and compute its new exact approval digest.",
+    "Obtain the application owner's explicit decision on that exact digest before planning or implementation."
+  ],
+  "next_operation": "Activate the materially affected Architect for the required threat model without beginning implementation.",
+  "user_confirmation_required": false,
+  "created_at": "2026-09-12T14:50:27Z"
+}

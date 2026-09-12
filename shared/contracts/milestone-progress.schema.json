@@ -1,0 +1,414 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "ImplementationStep": {
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/StepStatus"
+        },
+        "step_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Step Id",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "step_id",
+        "text",
+        "status"
+      ],
+      "title": "ImplementationStep",
+      "type": "object"
+    },
+    "ImplementationTracker": {
+      "additionalProperties": true,
+      "properties": {
+        "acceptance_references": {
+          "items": {
+            "$ref": "#/$defs/ArtifactReference"
+          },
+          "title": "Acceptance References",
+          "type": "array"
+        },
+        "affected_paths": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Paths",
+          "type": "array"
+        },
+        "base_snapshot": {
+          "pattern": "^[0-9a-f]{40,64}$",
+          "title": "Base Snapshot",
+          "type": "string"
+        },
+        "blocker": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Blocker"
+        },
+        "current_snapshot": {
+          "pattern": "^[0-9a-f]{40,64}$",
+          "title": "Current Snapshot",
+          "type": "string"
+        },
+        "current_step_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Current Step Id"
+        },
+        "dependency_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Dependency Ids",
+          "type": "array"
+        },
+        "evidence_references": {
+          "items": {
+            "$ref": "#/$defs/ArtifactReference"
+          },
+          "title": "Evidence References",
+          "type": "array"
+        },
+        "goal": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Goal",
+          "type": "string"
+        },
+        "handoff_reference": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ArtifactReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "milestone_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Milestone Id",
+          "type": "string"
+        },
+        "next_action": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Next Action",
+          "type": "string"
+        },
+        "owner_instance_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Owner Instance Id",
+          "type": "string"
+        },
+        "safe_resume_marker_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Safe Resume Marker Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/ImplementationStep"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Steps",
+          "type": "array"
+        },
+        "task_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "tests_added": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tests Added",
+          "type": "array"
+        },
+        "tests_planned": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tests Planned",
+          "type": "array"
+        },
+        "tracker_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Tracker Id",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "work_package_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Work Package Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "tracker_id",
+        "task_id",
+        "milestone_id",
+        "owner_instance_id",
+        "work_package_id",
+        "base_snapshot",
+        "current_snapshot",
+        "goal",
+        "acceptance_references",
+        "dependency_ids",
+        "steps",
+        "tests_planned",
+        "tests_added",
+        "affected_paths",
+        "current_step_id",
+        "next_action",
+        "evidence_references",
+        "safe_resume_marker_id",
+        "updated_at",
+        "handoff_reference"
+      ],
+      "title": "ImplementationTracker",
+      "type": "object"
+    },
+    "MilestoneProgressStatus": {
+      "enum": [
+        "planned",
+        "active",
+        "blocked",
+        "awaiting_approval",
+        "approved",
+        "cancelled"
+      ],
+      "title": "MilestoneProgressStatus",
+      "type": "string"
+    },
+    "StepStatus": {
+      "enum": [
+        "pending",
+        "active",
+        "complete",
+        "blocked"
+      ],
+      "title": "StepStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/milestone-progress.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "active_task_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Active Task Ids",
+      "type": "array"
+    },
+    "affected_roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Affected Roles",
+      "type": "array"
+    },
+    "base_snapshot": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "title": "Base Snapshot",
+      "type": "string"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Completed At"
+    },
+    "contract_reference": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "current_snapshot": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "title": "Current Snapshot",
+      "type": "string"
+    },
+    "evidence_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Evidence References",
+      "type": "array"
+    },
+    "gate_outcomes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Gate Outcomes",
+      "type": "object"
+    },
+    "latest_safe_resume_marker_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Latest Safe Resume Marker Id",
+      "type": "string"
+    },
+    "milestone_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Milestone Id",
+      "type": "string"
+    },
+    "not_applicable_roles": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Not Applicable Roles",
+      "type": "object"
+    },
+    "progress_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Progress Id",
+      "type": "string"
+    },
+    "readiness_reference": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/MilestoneProgressStatus"
+    },
+    "supporting_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Supporting References",
+      "type": "array"
+    },
+    "task_trackers": {
+      "items": {
+        "$ref": "#/$defs/ImplementationTracker"
+      },
+      "title": "Task Trackers",
+      "type": "array"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    },
+    "work_package_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Work Package Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "progress_id",
+    "milestone_id",
+    "status",
+    "created_at",
+    "updated_at",
+    "completed_at",
+    "base_snapshot",
+    "current_snapshot",
+    "readiness_reference",
+    "contract_reference",
+    "supporting_references",
+    "affected_roles",
+    "not_applicable_roles",
+    "work_package_ids",
+    "gate_outcomes",
+    "evidence_references",
+    "latest_safe_resume_marker_id",
+    "task_trackers",
+    "active_task_ids"
+  ],
+  "title": "MilestoneProgress",
+  "type": "object"
+}

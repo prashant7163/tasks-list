@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "specification-review-ready",
+  "project_id": "tasks-list",
+  "run_id": "tasks-list-discovery",
+  "task_id": null,
+  "journal_sequence": 5,
+  "previous_checkpoint_hash": "4d1ae106a0dcb5d196c1c2af127322365cd05887b1b4bdd2529527ed76075b7a",
+  "checkpoint_hash": null,
+  "source_revision": "bd23c8782c62e50f5d3cc83ae33b60d47aacecfa9c7f45bcc268838d90828c59",
+  "worktree_digest": "c7e3e6c5e1e3dd4c25ef71c11586c23b2e0ce745469b04de146d1d89a84ab663",
+  "contract_version": "1.0.0",
+  "lease_generation": null,
+  "artifact_references": [],
+  "current_action": "Schema-valid, traceable draft specification is ready for the application owner's exact-digest review.",
+  "next_operation": "Obtain the application owner's explicit decision on approval digest 9ed869d4f768de599bfdbbd378681388a85e195b58746fc69984f01b09d7d01c; do not submit or plan without approval.",
+  "completed_work": [
+    "Produced and independently validated the required Architect threat model.",
+    "Produced and independently reviewed the affected UX interaction flow.",
+    "Bound both artifacts by exact SHA-256 reference into the draft specification.",
+    "Revalidated the specification, all bound references, 16 requirements, 52 acceptance criteria, and 16 traceability mappings.",
+    "Confirmed draft status, null approval, zero open questions, and no unresolved discovery prerequisite."
+  ],
+  "pending_work": [
+    "Application owner reviews the exact draft and explicitly approves, requests changes, or rejects digest 9ed869d4f768de599bfdbbd378681388a85e195b58746fc69984f01b09d7d01c.",
+    "Only after exact approval, record the human decision and submit the approved specification through Studio governance.",
+    "Do not begin implementation planning or implementation before governed specification approval."
+  ],
+  "idempotency_outcomes": {
+    "resume-discovery-architect-20260912": "safe resume accepted; session session-1201a37c0be802421ff23c58 active"
+  },
+  "created_at": "2026-09-12T15:17:46Z"
+}

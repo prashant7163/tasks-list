@@ -1,0 +1,270 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/handoff.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "acceptance_criteria": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Acceptance Criteria",
+      "type": "array"
+    },
+    "agent_envelope_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Agent Envelope Digest",
+      "type": "string"
+    },
+    "agent_instance_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Agent Instance Id",
+      "type": "string"
+    },
+    "allowed_paths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Paths",
+      "type": "array"
+    },
+    "allowed_tools": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Tools",
+      "type": "array"
+    },
+    "applicable_gate": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Applicable Gate",
+      "type": "string"
+    },
+    "author_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Author Id",
+      "type": "string"
+    },
+    "candidate_digest": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Candidate Digest"
+    },
+    "constraints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Constraints",
+      "type": "array"
+    },
+    "context_pack_manifest_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Context Pack Manifest Id",
+      "type": "string"
+    },
+    "context_summary": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Context Summary",
+      "type": "string"
+    },
+    "contract_reference": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "correlation_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Correlation Ids",
+      "type": "array"
+    },
+    "current_action": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Current Action",
+      "type": "string"
+    },
+    "expected_result_schema": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Expected Result Schema",
+      "type": "string"
+    },
+    "handoff_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Handoff Id",
+      "type": "string"
+    },
+    "next_action": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Next Action",
+      "type": "string"
+    },
+    "prior_gate_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Prior Gate References",
+      "type": "array"
+    },
+    "progress_reference": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "provenance_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Provenance References",
+      "type": "array"
+    },
+    "readiness_reference": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "recipient_role": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Recipient Role",
+      "type": "string"
+    },
+    "response_destination": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Response Destination",
+      "type": "string"
+    },
+    "reviewer_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewer Id"
+    },
+    "safe_resume_marker_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Safe Resume Marker Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sender_role": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Sender Role",
+      "type": "string"
+    },
+    "source_revision": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "title": "Source Revision",
+      "type": "string"
+    },
+    "task_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "termination_condition": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Termination Condition",
+      "type": "string"
+    },
+    "work_package_reference": {
+      "$ref": "#/$defs/ArtifactReference"
+    },
+    "workspace": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Workspace",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "handoff_id",
+    "task_id",
+    "agent_instance_id",
+    "agent_envelope_digest",
+    "sender_role",
+    "recipient_role",
+    "context_summary",
+    "context_pack_manifest_id",
+    "provenance_references",
+    "readiness_reference",
+    "contract_reference",
+    "work_package_reference",
+    "progress_reference",
+    "current_action",
+    "next_action",
+    "safe_resume_marker_id",
+    "constraints",
+    "acceptance_criteria",
+    "allowed_paths",
+    "allowed_tools",
+    "expected_result_schema",
+    "workspace",
+    "source_revision",
+    "author_id",
+    "applicable_gate",
+    "prior_gate_references",
+    "response_destination",
+    "termination_condition",
+    "correlation_ids"
+  ],
+  "title": "Handoff",
+  "type": "object"
+}

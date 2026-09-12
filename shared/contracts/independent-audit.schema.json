@@ -1,0 +1,245 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "Finding": {
+      "additionalProperties": true,
+      "properties": {
+        "category": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Category",
+          "type": "string"
+        },
+        "disposition": {
+          "$ref": "#/$defs/FindingState",
+          "default": "open"
+        },
+        "evidence_reference": {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        "finding_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "recommendation": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Recommendation",
+          "type": "string"
+        },
+        "severity": {
+          "maxLength": 40,
+          "minLength": 1,
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "severity",
+        "locator",
+        "category",
+        "rationale",
+        "recommendation",
+        "evidence_reference"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "FindingDisposition": {
+      "additionalProperties": true,
+      "properties": {
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/ArtifactReference"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "finding_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "outcome": {
+          "$ref": "#/$defs/FindingState"
+        },
+        "rationale": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "outcome",
+        "rationale",
+        "evidence"
+      ],
+      "title": "FindingDisposition",
+      "type": "object"
+    },
+    "FindingState": {
+      "enum": [
+        "open",
+        "remediated",
+        "not_applicable_or_invalid"
+      ],
+      "title": "FindingState",
+      "type": "string"
+    },
+    "ReviewOutcome": {
+      "enum": [
+        "pass",
+        "revision_required"
+      ],
+      "title": "ReviewOutcome",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/independent-audit.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "audit_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Audit Id",
+      "type": "string"
+    },
+    "auditor_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Auditor Id",
+      "type": "string"
+    },
+    "author_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Author Ids",
+      "type": "array"
+    },
+    "candidate_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Candidate Digest",
+      "type": "string"
+    },
+    "completed_at": {
+      "format": "date-time",
+      "title": "Completed At",
+      "type": "string"
+    },
+    "dispositions": {
+      "items": {
+        "$ref": "#/$defs/FindingDisposition"
+      },
+      "title": "Dispositions",
+      "type": "array"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "milestone_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Milestone Id",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/ReviewOutcome"
+    },
+    "response_destination": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Response Destination",
+      "type": "string"
+    },
+    "reviewer_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Reviewer Ids",
+      "type": "array"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "traced_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Traced References",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "audit_id",
+    "milestone_id",
+    "author_ids",
+    "reviewer_ids",
+    "auditor_id",
+    "candidate_digest",
+    "traced_references",
+    "findings",
+    "dispositions",
+    "outcome",
+    "completed_at",
+    "response_destination"
+  ],
+  "title": "IndependentAudit",
+  "type": "object"
+}

@@ -1,0 +1,64 @@
+{
+  "$defs": {
+    "EvidenceRetention": {
+      "additionalProperties": true,
+      "properties": {
+        "quality_engineering_reports": {
+          "$ref": "#/$defs/QualityEngineeringRetention"
+        }
+      },
+      "title": "EvidenceRetention",
+      "type": "object"
+    },
+    "QualityEngineeringRetention": {
+      "additionalProperties": true,
+      "properties": {
+        "max_complete_cycles": {
+          "default": 10,
+          "minimum": 1,
+          "title": "Max Complete Cycles",
+          "type": "integer"
+        }
+      },
+      "title": "QualityEngineeringRetention",
+      "type": "object"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/studio-config.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "evidence_retention": {
+      "$ref": "#/$defs/EvidenceRetention"
+    },
+    "policy_profile_id": {
+      "default": "default",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Policy Profile Id",
+      "type": "string"
+    },
+    "project_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selected_runtime": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Selected Runtime",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "selected_runtime"
+  ],
+  "title": "StudioConfig",
+  "type": "object"
+}

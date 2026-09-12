@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "marker_id": "marker-specification-review-ready",
+  "checkpoint_reference": {
+    "artifact_id": "specification-review-ready",
+    "locator": ".studio/runs/tasks-list-discovery/checkpoints/00000000000000000005-specification-review-ready.json",
+    "schema_version": "1.0.0",
+    "sha256": "7613e00c8aae61d387dd782169d9cdfb07fa8479a253a10f93d2f4a29b3361ff"
+  },
+  "classification": "safe",
+  "reason_code": "checkpoint_bindings_valid",
+  "explanation": "The final discovery draft and its exact Architect and UX references validate; the only remaining boundary is the application owner's explicit exact-digest decision.",
+  "completed_work": [
+    "Validated and bound the threat model and UX flow into the draft specification.",
+    "Validated all requirements, acceptance criteria, traceability, and bound digests.",
+    "Recorded the approval-review checkpoint without submitting or approving the specification."
+  ],
+  "remaining_work": [
+    "Obtain the application owner's explicit decision on approval digest 9ed869d4f768de599bfdbbd378681388a85e195b58746fc69984f01b09d7d01c.",
+    "If approved, record that exact human decision and submit the approved specification through Studio governance.",
+    "If changes are requested or the draft is rejected, return it to the Discovery Lead."
+  ],
+  "next_operation": "Wait for the application owner's explicit exact-digest decision; do not plan or implement.",
+  "user_confirmation_required": false,
+  "created_at": "2026-09-12T15:18:03Z"
+}

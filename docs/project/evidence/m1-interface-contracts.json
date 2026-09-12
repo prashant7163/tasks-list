@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "m1-interface-contracts",
+  "milestone_id": "secure-local-foundation",
+  "interfaces": [
+    {
+      "interface_id": "github-delivery-records",
+      "owner_instance_id": "orchestrator-tech-lead-delivery",
+      "producer": "GitHub milestones and issues",
+      "consumers": ["all milestone participants"],
+      "decision": "Use the three approved milestone objectives and exit criteria and one issue per planned implementation task; include requirement IDs, dependencies, and approved artifact digests."
+    },
+    {
+      "interface_id": "compose-service-wiring",
+      "owner_instance_id": "backend-engineer-auth",
+      "producer": "compose.yaml",
+      "consumers": ["frontend-engineer-auth"],
+      "decision": "Backend owns compose.yaml and creates the frontend service boundary during the platform task; Frontend owns only frontend/** and must not edit compose.yaml directly."
+    },
+    {
+      "interface_id": "session-api",
+      "owner_instance_id": "backend-engineer-auth",
+      "producer": "signup, login, logout, current-user, cookie-session, and CSRF contract",
+      "consumers": ["frontend-engineer-auth"],
+      "decision": "Server owns identity, normalization, session state, rotation, expiry, logout invalidation, and CSRF enforcement; the browser sends credentials and safe bounded fields only."
+    }
+  ],
+  "rulings": [
+    "Ruling: compose.yaml has one owner, backend-engineer-auth. This resolves the approved plan's overlapping backend create/frontend modify entries against the readiness no-overlap constraint. Cost if wrong: frontend integration may require a governed backend remediation attempt."
+  ]
+}

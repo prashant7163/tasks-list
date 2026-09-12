@@ -1,0 +1,7 @@
+schema_version: 1.0.0
+runtime_id: codex
+control_plane: studioctl
+provider_state_authoritative: false
+declarative_agents_path: .codex/agents
+root_role: orchestrator-tech-lead
+audit_recipient: orchestrator-tech-lead

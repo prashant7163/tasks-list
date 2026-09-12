@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "approval_id": "apr-github-delivery-records-m1",
+  "subject_type": "external_capability",
+  "subject_id": "github-delivery-records",
+  "subject_digest": "5689df60352aa978f1fdd7eb3dced0bebec99f7935408e68abca8d357b75920a",
+  "decision": "approved",
+  "decided_by": "application-owner",
+  "decided_at": "2026-09-12T15:49:57Z",
+  "comment": "Approved by the application owner in the three-item yes/no batch for Milestone 1."
+}

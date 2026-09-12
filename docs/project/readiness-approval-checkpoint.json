@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "m1-readiness-approval-boundary",
+  "project_id": "tasks-list",
+  "run_id": "tasks-list-discovery",
+  "task_id": null,
+  "journal_sequence": 27,
+  "previous_checkpoint_hash": "dd265e7a933f376706489dc88203b3f8db25055a5fc949cb2dd9aa3770ecc106",
+  "checkpoint_hash": null,
+  "source_revision": "bd23c8782c62e50f5d3cc83ae33b60d47aacecfa9c7f45bcc268838d90828c59",
+  "worktree_digest": "491d199e1d54c707b5f726b3a690fdcd7f1e3d73110c075d3660f970e531af97",
+  "contract_version": "1.0.0",
+  "lease_generation": null,
+  "artifact_references": [
+    {"artifact_id": "tasks-list", "locator": "docs/project/specification.json", "schema_version": "1.0.0", "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"},
+    {"artifact_id": "tasks-list-v1-plan", "locator": "docs/project/plan.json", "schema_version": "1.0.0", "sha256": "b6e7b2e312b3a8b66565913923d6c647473977d5e2ddfb2df7c24d8b53d57b0a"},
+    {"artifact_id": "secure-local-foundation-readiness-blocked", "locator": "docs/project/readiness.json", "schema_version": "1.0.0", "sha256": "3417be53fbe11406a6d1d754b6a91a89a2babc859acf88260262958be1e3a273"},
+    {"artifact_id": "github-delivery-records", "locator": "docs/project/github-delivery-capability.json", "schema_version": "1.0.0", "sha256": "90828b1cb364e8b7cb1647c202a098034d20db8ef8ec0213d9bd5cee324662c5"}
+  ],
+  "current_action": "Milestone 1 readiness inputs are registered and awaiting exact human approval for the quarantined GitHub capability and seven role envelopes.",
+  "next_operation": "Record the application owner's yes/no decisions on the exact capability and envelope digests, then activate only approved subjects and submit a fresh readiness snapshot.",
+  "completed_work": [
+    "Verified GitHub identity prashant7163 and ADMIN access to the private canonical repository using approved network access.",
+    "Completed a passing Studio doctor check.",
+    "Registered redacted standards, role-independence, access, integration, context, work-package, interface, and threat evidence.",
+    "Registered github-delivery-records in quarantined state without using its write authority.",
+    "Prepared seven pending least-privilege agent envelopes restricted to gpt-5.6-sol."
+  ],
+  "pending_work": [
+    "Application owner decides the exact GitHub capability digest.",
+    "Application owner decides the exact seven agent-envelope digests.",
+    "Application owner decides whether to authorize the initial governance baseline commit on master required because the repository has no commits.",
+    "Orchestrator activates approved authority, submits passing readiness, creates isolated worktrees, and starts governed tasks."
+  ],
+  "idempotency_outcomes": {
+    "trust-github-delivery-proposed-20260912": "github-delivery-records registered as quarantined",
+    "evidence-m1-agent-envelopes-bound-20260912": "seven pending exact agent envelopes registered as supporting evidence"
+  },
+  "created_at": "2026-09-12T15:47:16Z"
+}

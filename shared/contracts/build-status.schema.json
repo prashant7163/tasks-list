@@ -1,0 +1,168 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "ReviewOutcome": {
+      "enum": [
+        "pass",
+        "revision_required"
+      ],
+      "title": "ReviewOutcome",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/build-status.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "diagnostic_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactReference"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "integrity_check": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Integrity Check",
+      "type": "string"
+    },
+    "likely_cause": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Likely Cause"
+    },
+    "next_action": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Next Action"
+    },
+    "outcome": {
+      "$ref": "#/$defs/ReviewOutcome"
+    },
+    "pipeline_identity": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Pipeline Identity",
+      "type": "string"
+    },
+    "recorded_at": {
+      "format": "date-time",
+      "title": "Recorded At",
+      "type": "string"
+    },
+    "repository_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Repository Id",
+      "type": "string"
+    },
+    "retry_count": {
+      "minimum": 0,
+      "title": "Retry Count",
+      "type": "integer"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "standards_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Standards Digest",
+      "type": "string"
+    },
+    "status_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Status Id",
+      "type": "string"
+    },
+    "suspected_component": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Suspected Component"
+    },
+    "tested_snapshot_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Tested Snapshot Id",
+      "type": "string"
+    },
+    "trust_registry_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Trust Registry Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "status_id",
+    "recorded_at",
+    "repository_id",
+    "tested_snapshot_id",
+    "pipeline_identity",
+    "standards_digest",
+    "trust_registry_digest",
+    "integrity_check",
+    "outcome",
+    "diagnostic_reference",
+    "retry_count"
+  ],
+  "title": "BuildStatus",
+  "type": "object"
+}

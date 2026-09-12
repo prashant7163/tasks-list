@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "m1-rolling-progress",
+  "milestone_id": "secure-local-foundation",
+  "decision": "applicable",
+  "status": "readiness_preparation",
+  "completed": [
+    "approved specification accepted",
+    "approved milestone plan accepted",
+    "GitHub identity and repository permission verified with network access",
+    "Studio doctor passed"
+  ],
+  "next": [
+    "obtain exact human approval for the GitHub capability and seven role envelopes",
+    "submit fresh passing readiness",
+    "create an initial governance baseline commit so plan-mandated worktrees can be created",
+    "execute milestone tasks and ordered assurance gates"
+  ]
+}

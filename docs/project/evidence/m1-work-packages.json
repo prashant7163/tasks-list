@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "m1-work-packages",
+  "milestone_id": "secure-local-foundation",
+  "work_packages": [
+    {
+      "work_package_id": "m1-delivery-tracking",
+      "owner_instance_id": "orchestrator-tech-lead-delivery",
+      "owned_locators": ["github/prashant7163/tasks-list"],
+      "dependency_work_package_ids": [],
+      "sequence": 1,
+      "deliverable": "Canonical repository mapping, three approved delivery milestones, and seven scoped task issues with requirement, dependency, status, and digest links.",
+      "integration_references": [
+        {
+          "artifact_id": "m1-interface-contracts",
+          "locator": "docs/project/evidence/m1-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"
+        }
+      ]
+    },
+    {
+      "work_package_id": "m1-backend-auth",
+      "owner_instance_id": "backend-engineer-auth",
+      "owned_locators": ["backend", "compose.yaml"],
+      "dependency_work_package_ids": ["m1-delivery-tracking"],
+      "sequence": 2,
+      "deliverable": "Test-first Spring Boot authentication/session foundation, PostgreSQL/Flyway persistence, and Compose service boundary.",
+      "integration_references": [
+        {
+          "artifact_id": "m1-interface-contracts",
+          "locator": "docs/project/evidence/m1-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"
+        }
+      ]
+    },
+    {
+      "work_package_id": "m1-frontend-auth",
+      "owner_instance_id": "frontend-engineer-auth",
+      "owned_locators": ["frontend"],
+      "dependency_work_package_ids": ["m1-backend-auth"],
+      "sequence": 3,
+      "deliverable": "Test-first responsive registration and login flows consuming the approved session API without direct Compose ownership.",
+      "integration_references": [
+        {
+          "artifact_id": "m1-interface-contracts",
+          "locator": "docs/project/evidence/m1-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"
+        }
+      ]
+    },
+    {
+      "work_package_id": "m1-code-review",
+      "owner_instance_id": "code-reviewer-m1",
+      "owned_locators": ["docs/project/evidence/m1/code-review"],
+      "dependency_work_package_ids": ["m1-delivery-tracking", "m1-backend-auth", "m1-frontend-auth"],
+      "sequence": 4,
+      "deliverable": "Independent exact-candidate correctness, security, maintainability, and meaningful-test review evidence.",
+      "integration_references": [
+        {
+          "artifact_id": "m1-interface-contracts",
+          "locator": "docs/project/evidence/m1-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"
+        }
+      ]
+    },
+    {
+      "work_package_id": "m1-build-verification",
+      "owner_instance_id": "build-manager-m1",
+      "owned_locators": ["docs/project/evidence/m1/build"],
+      "dependency_work_package_ids": ["m1-code-review"],
+      "sequence": 5,
+      "deliverable": "Reproducible frontend, backend, migration, dependency, and Compose build evidence for the reviewed candidate.",
+      "integration_references": [
+        {
+          "artifact_id": "m1-interface-contracts",
+          "locator": "docs/project/evidence/m1-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"
+        }
+      ]
+    },
+    {
+      "work_package_id": "m1-quality-review",
+      "owner_instance_id": "quality-engineer-m1",
+      "owned_locators": ["docs/project/evidence/m1/quality"],
+      "dependency_work_package_ids": ["m1-build-verification"],
+      "sequence": 6,
+      "deliverable": "Supported-blast-radius functional, security, accessibility, session, persistence, and responsive verification evidence.",
+      "integration_references": [
+        {
+          "artifact_id": "m1-integration-test-plan",
+          "locator": "docs/project/evidence/m1-integration-test-plan.json",
+          "schema_version": "1.0.0",
+          "sha256": "241799b5f74c978089b1f70fb56873fc3508059bc68dfca566ba9cb3220b4a89"
+        }
+      ]
+    },
+    {
+      "work_package_id": "m1-independent-audit",
+      "owner_instance_id": "independent-auditor-m1",
+      "owned_locators": ["docs/project/evidence/m1/audit"],
+      "dependency_work_package_ids": ["m1-code-review", "m1-build-verification", "m1-quality-review"],
+      "sequence": 7,
+      "deliverable": "Independent trace of approved scope, exact candidates, ordered gates, findings, dispositions, and milestone evidence reported only to the Orchestrator.",
+      "integration_references": [
+        {
+          "artifact_id": "m1-integration-test-plan",
+          "locator": "docs/project/evidence/m1-integration-test-plan.json",
+          "schema_version": "1.0.0",
+          "sha256": "241799b5f74c978089b1f70fb56873fc3508059bc68dfca566ba9cb3220b4a89"
+        }
+      ]
+    }
+  ]
+}

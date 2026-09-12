@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "capability_id": "github-delivery-records",
+  "capability_type": "GitHub CLI repository planning",
+  "purpose": "Read the private tasks-list repository and create or update only the approved delivery milestones and task issues required by Milestone 1.",
+  "source": "/opt/homebrew/bin/gh",
+  "version": "2.100.0",
+  "digest": "1179745d43ea43dff3fa1f0e34bfb204e8f99232204f106c71ca8c2e0f6cb41a",
+  "license": "MIT",
+  "minimum_permissions": [
+    "Read repository metadata for prashant7163/tasks-list",
+    "Read and write milestones for prashant7163/tasks-list",
+    "Read and write issues for prashant7163/tasks-list"
+  ],
+  "network_endpoints": [
+    "api.github.com",
+    "github.com"
+  ],
+  "data_classifications": [
+    "private repository metadata",
+    "approved project requirements",
+    "approved plan identifiers and digests"
+  ],
+  "consuming_roles": [
+    "orchestrator-tech-lead"
+  ],
+  "integrity_verification": "GitHub CLI 2.100.0 at /opt/homebrew/bin/gh has SHA-256 1179745d43ea43dff3fa1f0e34bfb204e8f99232204f106c71ca8c2e0f6cb41a; authenticated identity and ADMIN repository permission were verified read-only.",
+  "approval_reference": {
+    "artifact_id": "github-delivery-records",
+    "locator": "docs/project/github-delivery-capability-approval.json",
+    "schema_version": "1.0.0",
+    "sha256": "c03cb1ec84d5857876095266de3072d08fe9c5f2b3b452d2aba2faf001db6ae9"
+  },
+  "status": "active",
+  "rollback": "Quarantine this capability immediately; preserve read-back evidence and remove only Studio-created milestones or issues after explicit approval if rollback is required.",
+  "review_trigger": "Re-review before any use outside prashant7163/tasks-list, any permission expansion, CLI binary/version change, authentication identity change, or work beyond approved milestones and issues."
+}

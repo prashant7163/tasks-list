@@ -1,0 +1,200 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/checkpoint.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "artifact_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Artifact References",
+      "type": "array"
+    },
+    "checkpoint_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Checkpoint Hash"
+    },
+    "checkpoint_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Checkpoint Id",
+      "type": "string"
+    },
+    "completed_work": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Completed Work",
+      "type": "array"
+    },
+    "contract_version": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "current_action": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Current Action",
+      "type": "string"
+    },
+    "idempotency_outcomes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Idempotency Outcomes",
+      "type": "object"
+    },
+    "journal_sequence": {
+      "minimum": 0,
+      "title": "Journal Sequence",
+      "type": "integer"
+    },
+    "lease_generation": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lease Generation"
+    },
+    "next_operation": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Next Operation",
+      "type": "string"
+    },
+    "pending_work": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Pending Work",
+      "type": "array"
+    },
+    "previous_checkpoint_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Previous Checkpoint Hash"
+    },
+    "project_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_revision": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "title": "Source Revision",
+      "type": "string"
+    },
+    "task_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Task Id"
+    },
+    "worktree_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Worktree Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "checkpoint_id",
+    "project_id",
+    "run_id",
+    "task_id",
+    "journal_sequence",
+    "source_revision",
+    "worktree_digest",
+    "contract_version",
+    "artifact_references",
+    "current_action",
+    "next_operation",
+    "completed_work",
+    "pending_work",
+    "idempotency_outcomes",
+    "created_at"
+  ],
+  "title": "Checkpoint",
+  "type": "object"
+}

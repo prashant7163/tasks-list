@@ -1,0 +1,17 @@
+schema_version: 1.0.0
+policy_id: stage-one-quality-gates
+gates:
+  - {gate_id: specification-ready, responsible_role: discovery-lead, required_evidence: [approved-specification]}
+  - {gate_id: plan-ready, responsible_role: orchestrator-tech-lead, required_evidence: [validated-plan]}
+  - {gate_id: milestone-readiness, responsible_role: orchestrator-tech-lead, required_evidence: [readiness-record]}
+  - {gate_id: context-request-ready, responsible_role: orchestrator-tech-lead, required_evidence: [context-manifest]}
+  - {gate_id: task-complete, responsible_role: backend-engineer, required_evidence: [task-result]}
+  - {gate_id: integration-candidate, responsible_role: orchestrator-tech-lead, required_evidence: [candidate-digest]}
+  - {gate_id: code-review-pass, responsible_role: code-reviewer, required_evidence: [code-review]}
+  - {gate_id: build-manager-pass, responsible_role: build-manager, required_evidence: [build-status]}
+  - {gate_id: quality-engineer-pass, responsible_role: quality-engineer, required_evidence: [quality-report]}
+  - {gate_id: evidence-retention-valid, responsible_role: quality-engineer, required_evidence: [retention-record]}
+  - {gate_id: independent-audit-pass, responsible_role: independent-auditor, required_evidence: [audit]}
+  - {gate_id: recovery-ready, responsible_role: orchestrator-tech-lead, required_evidence: [resume-marker]}
+  - {gate_id: review-package-ready, responsible_role: orchestrator-tech-lead, required_evidence: [milestone-review]}
+  - {gate_id: milestone-approved, responsible_role: orchestrator-tech-lead, required_evidence: [human-approval]}

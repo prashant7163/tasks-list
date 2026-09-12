@@ -1,0 +1,73 @@
+{
+  "$defs": {
+    "SensitivityClass": {
+      "enum": [
+        "public",
+        "internal",
+        "confidential",
+        "restricted"
+      ],
+      "title": "SensitivityClass",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/sensitive-finding.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "action": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Action",
+      "type": "string"
+    },
+    "confidence": {
+      "maxLength": 40,
+      "minLength": 1,
+      "title": "Confidence",
+      "type": "string"
+    },
+    "content_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Digest",
+      "type": "string"
+    },
+    "finding_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Finding Id",
+      "type": "string"
+    },
+    "kind": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Kind",
+      "type": "string"
+    },
+    "path": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Path",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sensitivity": {
+      "$ref": "#/$defs/SensitivityClass"
+    }
+  },
+  "required": [
+    "schema_version",
+    "finding_id",
+    "path",
+    "kind",
+    "sensitivity",
+    "confidence",
+    "content_digest",
+    "action"
+  ],
+  "title": "SensitiveFinding",
+  "type": "object"
+}

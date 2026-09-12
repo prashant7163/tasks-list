@@ -1,0 +1,189 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "SkillTrustStatus": {
+      "enum": [
+        "reference_only",
+        "untrusted_candidate",
+        "trusted_active",
+        "revoked"
+      ],
+      "title": "SkillTrustStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/skill-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "compatible_roles": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Compatible Roles",
+      "type": "array"
+    },
+    "content_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Digest",
+      "type": "string"
+    },
+    "data_dependencies": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Data Dependencies",
+      "type": "array"
+    },
+    "evaluation_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Evaluation References",
+      "type": "array"
+    },
+    "fallback": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Fallback",
+      "type": "string"
+    },
+    "inputs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Inputs",
+      "type": "array"
+    },
+    "license": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "License",
+      "type": "string"
+    },
+    "outputs": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Outputs",
+      "type": "array"
+    },
+    "permissions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Permissions",
+      "type": "array"
+    },
+    "prohibited_uses": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Prohibited Uses",
+      "type": "array"
+    },
+    "provenance": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Provenance",
+      "type": "string"
+    },
+    "purpose": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Purpose",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "skill_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Skill Id",
+      "type": "string"
+    },
+    "tool_dependencies": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tool Dependencies",
+      "type": "array"
+    },
+    "triggers": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Triggers",
+      "type": "array"
+    },
+    "trust_status": {
+      "$ref": "#/$defs/SkillTrustStatus"
+    },
+    "version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "skill_id",
+    "version",
+    "purpose",
+    "triggers",
+    "inputs",
+    "outputs",
+    "compatible_roles",
+    "tool_dependencies",
+    "data_dependencies",
+    "permissions",
+    "prohibited_uses",
+    "fallback",
+    "content_digest",
+    "provenance",
+    "license",
+    "trust_status",
+    "evaluation_references"
+  ],
+  "title": "SkillManifest",
+  "type": "object"
+}

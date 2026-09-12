@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "readiness-blocked-github-auth",
+  "project_id": "tasks-list",
+  "run_id": "tasks-list-discovery",
+  "task_id": null,
+  "journal_sequence": 10,
+  "previous_checkpoint_hash": "1fcc939c9f56231636f4c1d75a34ffa8de3ce5733eb971122ed7d7568670512d",
+  "checkpoint_hash": null,
+  "source_revision": "bd23c8782c62e50f5d3cc83ae33b60d47aacecfa9c7f45bcc268838d90828c59",
+  "worktree_digest": "fa332823468ff68114751241c7d243fc69a948dd6aaf19c5f2d597f79bedd408",
+  "contract_version": "1.0.0",
+  "lease_generation": null,
+  "artifact_references": [
+    {
+      "artifact_id": "tasks-list",
+      "locator": "docs/project/specification.json",
+      "schema_version": "1.0.0",
+      "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"
+    },
+    {
+      "artifact_id": "tasks-list-v1-plan",
+      "locator": "docs/project/plan.json",
+      "schema_version": "1.0.0",
+      "sha256": "b6e7b2e312b3a8b66565913923d6c647473977d5e2ddfb2df7c24d8b53d57b0a"
+    },
+    {
+      "artifact_id": "secure-local-foundation-readiness-blocked",
+      "locator": "docs/project/readiness.json",
+      "schema_version": "1.0.0",
+      "sha256": "3417be53fbe11406a6d1d754b6a91a89a2babc859acf88260262958be1e3a273"
+    }
+  ],
+  "current_action": "Milestone 1 readiness is blocked because the configured GitHub authentication is invalid.",
+  "next_operation": "Application owner re-authenticates gh for github.com account prashant7163, then the Orchestrator verifies least-privilege access and prepares fresh readiness evidence.",
+  "completed_work": [
+    "Accepted the approved milestone plan and advanced Studio to readiness_pending.",
+    "Verified the canonical origin maps to https://github.com/prashant7163/tasks-list.git.",
+    "Detected that the active gh account prashant7163 has an invalid token without exposing credential material.",
+    "Submitted a revision-required readiness record and moved Studio to blocked without dispatching implementation."
+  ],
+  "pending_work": [
+    "Application owner restores authenticated GitHub access outside persisted Studio state.",
+    "Orchestrator verifies repository read/write access and prepares exact external-capability and agent-instance approval envelopes.",
+    "Application owner separately approves those exact envelopes.",
+    "Orchestrator submits a distinct fresh passing readiness snapshot before any implementation task."
+  ],
+  "idempotency_outcomes": {
+    "plan-approved-f6d6bbb4": "approved milestone plan accepted; phase advanced to readiness_pending",
+    "readiness-blocked-github-auth-20260912": "revision-required readiness accepted; phase moved to blocked"
+  },
+  "created_at": "2026-09-12T15:25:47Z"
+}

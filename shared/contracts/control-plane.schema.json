@@ -1,0 +1,132 @@
+{
+  "$defs": {
+    "ArtifactInput": {
+      "additionalProperties": true,
+      "properties": {
+        "expected_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Sha256"
+        },
+        "file": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "File",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ArtifactKind"
+        }
+      },
+      "required": [
+        "kind",
+        "file"
+      ],
+      "title": "ArtifactInput",
+      "type": "object"
+    },
+    "ArtifactKind": {
+      "enum": [
+        "specification",
+        "approval",
+        "plan",
+        "readiness",
+        "task",
+        "result",
+        "gate",
+        "checkpoint",
+        "resume_marker",
+        "doctor_result",
+        "control",
+        "capability",
+        "incident",
+        "supporting_evidence"
+      ],
+      "title": "ArtifactKind",
+      "type": "string"
+    },
+    "RunPhase": {
+      "enum": [
+        "discovery",
+        "specification_approved",
+        "planning",
+        "readiness_pending",
+        "ready",
+        "running",
+        "blocked",
+        "awaiting_user_approval",
+        "approved",
+        "cancelled"
+      ],
+      "title": "RunPhase",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/control-plane.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "artifacts": {
+      "items": {
+        "$ref": "#/$defs/ArtifactInput"
+      },
+      "minItems": 1,
+      "title": "Artifacts",
+      "type": "array"
+    },
+    "current_source_revision": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "title": "Current Source Revision",
+      "type": "string"
+    },
+    "initial_phase": {
+      "$ref": "#/$defs/RunPhase"
+    },
+    "project_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selected_runtime": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Selected Runtime",
+      "type": "string"
+    },
+    "source": {
+      "const": "pre_native_import",
+      "title": "Source",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "run_id",
+    "source",
+    "initial_phase",
+    "selected_runtime",
+    "current_source_revision",
+    "artifacts"
+  ],
+  "title": "RunImportManifest",
+  "type": "object"
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "m1-github-access-20260912",
+  "verified_at": "2026-09-12T15:39:00Z",
+  "identity": "prashant7163",
+  "repository": "prashant7163/tasks-list",
+  "repository_url": "https://github.com/prashant7163/tasks-list",
+  "private": true,
+  "viewer_permission": "ADMIN",
+  "default_branch": null,
+  "verification_commands": [
+    "gh api user --jq .login",
+    "gh repo view prashant7163/tasks-list --json nameWithOwner,url,viewerPermission,isPrivate,defaultBranchRef"
+  ],
+  "result": "pass",
+  "redacted": true
+}

@@ -1,0 +1,248 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    },
+    "ChangeClass": {
+      "enum": [
+        "code_producing",
+        "executable_or_configuration",
+        "security_sensitive",
+        "documentation_only"
+      ],
+      "title": "ChangeClass",
+      "type": "string"
+    },
+    "ErrorRecord": {
+      "additionalProperties": true,
+      "properties": {
+        "code": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "evidence_references": {
+          "items": {
+            "$ref": "#/$defs/ArtifactReference"
+          },
+          "title": "Evidence References",
+          "type": "array"
+        },
+        "message": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "retryable": {
+          "default": false,
+          "title": "Retryable",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "ErrorRecord",
+      "type": "object"
+    },
+    "ResultOutcome": {
+      "enum": [
+        "success",
+        "failed",
+        "blocked",
+        "interrupted"
+      ],
+      "title": "ResultOutcome",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/task-result.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "artifact_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Artifact References",
+      "type": "array"
+    },
+    "assumptions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Assumptions",
+      "type": "array"
+    },
+    "attempt_number": {
+      "minimum": 1,
+      "title": "Attempt Number",
+      "type": "integer"
+    },
+    "candidate_digest": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Candidate Digest"
+    },
+    "change_class": {
+      "$ref": "#/$defs/ChangeClass"
+    },
+    "changed_paths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Changed Paths",
+      "type": "array"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ErrorRecord"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "outcome": {
+      "$ref": "#/$defs/ResultOutcome"
+    },
+    "quality_evidence": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Quality Evidence",
+      "type": "array"
+    },
+    "requested_follow_up": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Requested Follow Up",
+      "type": "array"
+    },
+    "result_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Result Id",
+      "type": "string"
+    },
+    "risks": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Risks",
+      "type": "array"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "self_verification": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Self Verification",
+      "type": "array"
+    },
+    "task_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "unit_test_evidence": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Unit Test Evidence",
+      "type": "array"
+    },
+    "usage": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "title": "Usage",
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "result_id",
+    "task_id",
+    "attempt_number",
+    "outcome",
+    "artifact_references",
+    "changed_paths",
+    "self_verification",
+    "unit_test_evidence",
+    "quality_evidence",
+    "assumptions",
+    "limitations",
+    "risks",
+    "requested_follow_up",
+    "usage",
+    "error",
+    "change_class"
+  ],
+  "title": "TaskResult",
+  "type": "object"
+}

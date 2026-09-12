@@ -1,0 +1,124 @@
+{
+  "$defs": {
+    "ArtifactReference": {
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "schema_version": {
+          "pattern": "^1\\.\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "locator",
+        "schema_version",
+        "sha256"
+      ],
+      "title": "ArtifactReference",
+      "type": "object"
+    }
+  },
+  "$id": "https://schemas.agentic-studio.local/v1/threat-model.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "abuse_cases": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Abuse Cases",
+      "type": "array"
+    },
+    "actors": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Actors",
+      "type": "array"
+    },
+    "assets": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Assets",
+      "type": "array"
+    },
+    "controls": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Controls",
+      "type": "array"
+    },
+    "evidence_references": {
+      "items": {
+        "$ref": "#/$defs/ArtifactReference"
+      },
+      "title": "Evidence References",
+      "type": "array"
+    },
+    "owner_roles": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "title": "Owner Roles",
+      "type": "array"
+    },
+    "residual_risks": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Residual Risks",
+      "type": "array"
+    },
+    "schema_version": {
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "threat_model_id": {
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "title": "Threat Model Id",
+      "type": "string"
+    },
+    "trust_boundaries": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Trust Boundaries",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "threat_model_id",
+    "assets",
+    "actors",
+    "trust_boundaries",
+    "abuse_cases",
+    "controls",
+    "residual_risks",
+    "owner_roles",
+    "evidence_references"
+  ],
+  "title": "ThreatModel",
+  "type": "object"
+}

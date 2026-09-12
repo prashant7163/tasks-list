@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "m1-role-independence",
+  "milestone_id": "secure-local-foundation",
+  "decision": "applicable",
+  "role_catalog": {
+    "locator": "shared/roles/catalog.yaml",
+    "sha256": "a3c55baaf7d9bb16ecbfd2f4c53857f3d51cba612cca477020eb9bbb35432be9"
+  },
+  "capability_registry": {
+    "locator": "shared/roles/capabilities.yaml",
+    "sha256": "80409194edd1a6e39c4b2f2c60f3d76fd22c4e76708fa30d69985b960cc3aabd"
+  },
+  "covered_role_ids": [
+    "orchestrator-tech-lead",
+    "backend-engineer",
+    "frontend-engineer",
+    "code-reviewer",
+    "build-manager",
+    "quality-engineer",
+    "independent-auditor"
+  ],
+  "separation": {
+    "implementation": ["backend-engineer-auth", "frontend-engineer-auth"],
+    "review": "code-reviewer-m1",
+    "build": "build-manager-m1",
+    "quality": "quality-engineer-m1",
+    "audit": "independent-auditor-m1",
+    "audit_route": "orchestrator-tech-lead-delivery"
+  }
+}
