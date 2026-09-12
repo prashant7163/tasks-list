@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: tasks-list-backend
+  datasource:
+    url: ${TASKS_DB_URL}
+    username: ${TASKS_DB_USER}
+    password: ${TASKS_DB_PASSWORD}
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  session:
+    timeout: 30m
+    jdbc:
+      initialize-schema: never
+server:
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+      tracking-modes: cookie
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+logging:
+  file:
+    name: ${TASKS_LOG_FILE:logs/tasks-list.log}
+  level:
+    org.springframework.jdbc: INFO
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: INFO
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
+      total-size-cap: 100MB
+tasks-list:
+  frontend-origin: ${TASKS_FRONTEND_ORIGIN:http://localhost:5173}

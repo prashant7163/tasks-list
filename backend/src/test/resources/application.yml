@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:taskslist;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  session:
+    jdbc:
+      initialize-schema: never
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+logging:
+  file:
+    name: ${java.io.tmpdir}/tasks-list-test.log
+  level:
+    org.springframework.jdbc: INFO
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: INFO
