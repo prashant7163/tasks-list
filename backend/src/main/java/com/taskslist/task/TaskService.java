@@ -7,6 +7,7 @@ import com.taskslist.task.TaskDtos.TaskResponse;
 import com.taskslist.user.User;
 import java.time.Clock;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class TaskService {
         User owner = owner(authentication);
         lock(owner);
         activeTasks(owner).forEach(task -> task.setPriority(task.getPriority() + 1));
-        Task task = new Task(owner, normalized(title), normalized(description), Instant.now(clock));
+        Task task = new Task(owner, normalized(title), normalized(description), now());
         return TaskResponse.from(tasks.save(task));
     }
 
@@ -82,7 +83,7 @@ public class TaskService {
         Task task = ownedTask(owner, id);
         requireStatus(task, TaskStatus.ACTIVE);
         int removedPriority = task.getPriority();
-        task.complete(Instant.now(clock));
+        task.complete(now());
         activeTasks(owner).stream()
             .filter(active -> active.getPriority() > removedPriority)
             .forEach(active -> active.setPriority(active.getPriority() - 1));
@@ -124,6 +125,10 @@ public class TaskService {
 
     private String normalized(String value) {
         return value.trim();
+    }
+
+    private Instant now() {
+        return Instant.now(clock).truncatedTo(ChronoUnit.MICROS);
     }
 
     static final class TaskNotFoundException extends RuntimeException {

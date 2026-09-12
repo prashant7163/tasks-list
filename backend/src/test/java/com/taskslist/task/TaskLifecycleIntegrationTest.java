@@ -16,10 +16,14 @@ import com.jayway.jsonpath.JsonPath;
 import jakarta.servlet.http.Cookie;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
+import java.time.Clock;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,10 +48,12 @@ class TaskLifecycleIntegrationTest {
     private static final AtomicBoolean FAIL_NEXT_REPOSITORY_SAVE = new AtomicBoolean();
 
     @Autowired MockMvc mvc;
+    @Autowired AdjustableClock taskClock;
 
     @AfterEach
     void clearRepositoryFailure() {
         FAIL_NEXT_REPOSITORY_SAVE.set(false);
+        taskClock.useSystemUtc();
     }
 
     @Test
@@ -228,6 +235,29 @@ class TaskLifecycleIntegrationTest {
         assertThat(countsBody(owner)).isEqualTo(countsBefore);
     }
 
+    @Test
+    void backendTimestampsUsePostgresqlMicrosecondPrecisionAndRemainStableAcrossReads() throws Exception {
+        taskClock.set(Instant.parse("2026-09-12T19:23:49.500992260Z"));
+        Session owner = session("Timestamp precision");
+
+        MvcResult created = createResult(owner, "Precision task", "Timestamp description", "");
+        String createdAt = JsonPath.read(created.getResponse().getContentAsString(), "$.createdAt");
+        assertThat(createdAt).isEqualTo("2026-09-12T19:23:49.500992Z");
+        long id = ((Number) JsonPath.read(created.getResponse().getContentAsString(), "$.id")).longValue();
+        assertThat(task(owner, "ACTIVE", id).get("createdAt")).isEqualTo(createdAt);
+
+        taskClock.set(Instant.parse("2026-09-12T19:23:49.962466010Z"));
+        MvcResult completed = mutate(owner, post("/api/tasks/{id}/complete", id), status().isOk()).andReturn();
+        String completedBody = completed.getResponse().getContentAsString();
+        String completedAt = JsonPath.read(completedBody, "$.completedAt");
+        assertThat(JsonPath.<String>read(completedBody, "$.createdAt")).isEqualTo(createdAt);
+        assertThat(completedAt).isEqualTo("2026-09-12T19:23:49.962466Z");
+
+        Map<String, Object> readCompleted = task(owner, "COMPLETED", id);
+        assertThat(readCompleted.get("createdAt")).isEqualTo(createdAt);
+        assertThat(readCompleted.get("completedAt")).isEqualTo(completedAt);
+    }
+
     private void assertCounts(Session owner, int active, int completed) throws Exception {
         mvc.perform(get("/api/tasks/counts").cookie(owner.cookie()))
             .andExpect(status().isOk())
@@ -333,6 +363,12 @@ class TaskLifecycleIntegrationTest {
     static class RepositoryFailureConfiguration {
 
         @Bean
+        @Primary
+        AdjustableClock adjustableClock() {
+            return new AdjustableClock();
+        }
+
+        @Bean
         static BeanPostProcessor taskRepositoryFailurePostProcessor() {
             return new BeanPostProcessor() {
                 @Override
@@ -357,6 +393,33 @@ class TaskLifecycleIntegrationTest {
                     );
                 }
             };
+        }
+    }
+
+    static final class AdjustableClock extends Clock {
+        private final AtomicReference<Clock> delegate = new AtomicReference<>(Clock.systemUTC());
+
+        void set(Instant instant) {
+            delegate.set(Clock.fixed(instant, ZoneOffset.UTC));
+        }
+
+        void useSystemUtc() {
+            delegate.set(Clock.systemUTC());
+        }
+
+        @Override
+        public ZoneId getZone() {
+            return delegate.get().getZone();
+        }
+
+        @Override
+        public Clock withZone(ZoneId zone) {
+            return delegate.get().withZone(zone);
+        }
+
+        @Override
+        public Instant instant() {
+            return delegate.get().instant();
         }
     }
 }
