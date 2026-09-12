@@ -8,29 +8,46 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.jayway.jsonpath.JsonPath;
 import jakarta.servlet.http.Cookie;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Proxy;
 import java.time.Instant;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(TaskLifecycleIntegrationTest.RepositoryFailureConfiguration.class)
 class TaskLifecycleIntegrationTest {
 
     private static final AtomicInteger USER_SEQUENCE = new AtomicInteger();
+    private static final AtomicBoolean FAIL_NEXT_REPOSITORY_SAVE = new AtomicBoolean();
 
     @Autowired MockMvc mvc;
+
+    @AfterEach
+    void clearRepositoryFailure() {
+        FAIL_NEXT_REPOSITORY_SAVE.set(false);
+    }
 
     @Test
     void createValidatesFieldsAndAssignsImmutableBackendLifecycleStateAtHighestPriority() throws Exception {
@@ -181,11 +198,53 @@ class TaskLifecycleIntegrationTest {
         assertCounts(owner, 0, 1);
     }
 
+    @Test
+    void databaseFailureAfterPriorityShiftReturnsGenericErrorAndRollsBackEveryChange() throws Exception {
+        Session owner = session("Database rollback");
+        create(owner, "First unchanged", "First description", "");
+        create(owner, "Second unchanged", "Second description", "");
+        String tasksBefore = listBody(owner, "ACTIVE");
+        String countsBefore = countsBody(owner);
+
+        FAIL_NEXT_REPOSITORY_SAVE.set(true);
+        try {
+            mvc.perform(post("/api/tasks")
+                    .cookie(owner.cookie())
+                    .header(owner.csrfHeader(), owner.csrfToken())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("""
+                        {"title":"Must not persist","description":"Failed create"}
+                        """))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("{\"error\":\"Request could not be completed\"}"))
+                .andExpect(jsonPath("$.error", is("Request could not be completed")))
+                .andExpect(jsonPath("$.exception").doesNotExist())
+                .andExpect(jsonPath("$.trace").doesNotExist());
+        } finally {
+            FAIL_NEXT_REPOSITORY_SAVE.set(false);
+        }
+
+        assertThat(listBody(owner, "ACTIVE")).isEqualTo(tasksBefore).doesNotContain("Must not persist");
+        assertThat(countsBody(owner)).isEqualTo(countsBefore);
+    }
+
     private void assertCounts(Session owner, int active, int completed) throws Exception {
         mvc.perform(get("/api/tasks/counts").cookie(owner.cookie()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.active", is(active)))
             .andExpect(jsonPath("$.completed", is(completed)));
+    }
+
+    private String listBody(Session owner, String taskStatus) throws Exception {
+        return mvc.perform(get("/api/tasks").queryParam("status", taskStatus).cookie(owner.cookie()))
+            .andExpect(status().isOk())
+            .andReturn().getResponse().getContentAsString();
+    }
+
+    private String countsBody(Session owner) throws Exception {
+        return mvc.perform(get("/api/tasks/counts").cookie(owner.cookie()))
+            .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.status().isOk())
+            .andReturn().getResponse().getContentAsString();
     }
 
     private Map<String, Object> task(Session owner, String status, long id) throws Exception {
@@ -269,4 +328,35 @@ class TaskLifecycleIntegrationTest {
 
     private record Csrf(Cookie cookie, String header, String token) {}
     private record Session(Cookie cookie, String csrfHeader, String csrfToken) {}
+
+    @TestConfiguration(proxyBeanMethods = false)
+    static class RepositoryFailureConfiguration {
+
+        @Bean
+        static BeanPostProcessor taskRepositoryFailurePostProcessor() {
+            return new BeanPostProcessor() {
+                @Override
+                public Object postProcessAfterInitialization(Object bean, String beanName) {
+                    if (!(bean instanceof TaskRepository)) {
+                        return bean;
+                    }
+                    return Proxy.newProxyInstance(
+                        TaskRepository.class.getClassLoader(),
+                        new Class<?>[] {TaskRepository.class},
+                        (proxy, method, arguments) -> {
+                            if (method.getName().equals("save")
+                                && FAIL_NEXT_REPOSITORY_SAVE.compareAndSet(true, false)) {
+                                throw new DataAccessResourceFailureException("injected task repository failure");
+                            }
+                            try {
+                                return method.invoke(bean, arguments);
+                            } catch (InvocationTargetException invocation) {
+                                throw invocation.getTargetException();
+                            }
+                        }
+                    );
+                }
+            };
+        }
+    }
 }
