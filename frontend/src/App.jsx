@@ -1,5 +1,7 @@
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { ApiError, createApiClient } from './api'
+import TaskPage from './tasks/TaskPage'
+import { createTaskApi } from './tasks/taskApi'
 
 const PUBLIC_ROUTES = new Set(['/login', '/signup'])
 const utf8 = new TextEncoder()
@@ -218,19 +220,18 @@ function TaskLanding({ api, user, onSessionEnded, onLogout }) {
         <a className="brand" href="/tasks">Tasks</a>
         <div className="identity"><span>{user.displayName}</span><button className="secondary" type="button" onClick={logout} disabled={pending}>{pending ? 'Logging out…' : 'Log out'}</button></div>
       </header>
-      <section className="task-shell" aria-labelledby="active-title">
+      <div>
         {error && <p className="alert" role="alert" tabIndex="-1" ref={alertRef}>{error}</p>}
         {pending && <p className="status" role="status">Logging out…</p>}
-        <nav className="tabs" aria-label="Task views"><a aria-current="page" href="/tasks">Active</a><span aria-disabled="true">Completed</span></nav>
-        <h1 id="active-title">Active tasks</h1>
-        <p className="empty-copy">Your active tasks will appear here.</p>
-      </section>
+        <TaskPage api={api.tasks} onSessionEnded={onSessionEnded} />
+      </div>
     </main>
   )
 }
 
 export default function App() {
   const api = useMemo(() => createApiClient(), [])
+  const taskApi = useMemo(() => createTaskApi(), [])
   const [route, setRoute] = useState(pathRoute)
   const [session, setSession] = useState({ state: 'checking', user: null })
   const [notice, setNotice] = useState('')
@@ -265,7 +266,7 @@ export default function App() {
 
   if (session.state === 'checking') return <main className="loading" role="status">Checking your session…</main>
   if (session.state === 'authenticated') {
-    return <TaskLanding api={api} user={session.user} onLogout={() => { setSession({ state: 'anonymous', user: null }); setNotice('You have been logged out.'); navigate('/login', true) }} onSessionEnded={() => { setSession({ state: 'anonymous', user: null }); setNotice('Your session ended. Log in again.'); navigate('/login', true) }} />
+    return <TaskLanding api={{ ...api, tasks: taskApi }} user={session.user} onLogout={() => { setSession({ state: 'anonymous', user: null }); setNotice('You have been logged out.'); navigate('/login', true) }} onSessionEnded={() => { setSession({ state: 'anonymous', user: null }); setNotice('Your session ended. Log in again.'); navigate('/login', true) }} />
   }
   if (route === '/signup') return <Signup api={api} onSuccess={() => { setNotice('Account created. Log in to continue.'); navigate('/login', true) }} />
   return <Login api={api} notice={notice} onAuthenticated={(user) => { setNotice(''); setSession({ state: 'authenticated', user }); navigate('/tasks', true) }} />
