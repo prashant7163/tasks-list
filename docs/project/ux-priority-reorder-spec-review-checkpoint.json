@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "ux-priority-reorder-spec-review-ready",
+  "project_id": "tasks-list",
+  "run_id": "ux-priority-reorder-discoverability",
+  "task_id": null,
+  "journal_sequence": 303,
+  "previous_checkpoint_hash": null,
+  "checkpoint_hash": null,
+  "source_revision": "bd23c8782c62e50f5d3cc83ae33b60d47aacecfa9c7f45bcc268838d90828c59",
+  "worktree_digest": "0f1ab2a9590b039ab52c914481b5a16d02ebce622f0872bb5024db318c815a8c",
+  "contract_version": "1.0.0",
+  "lease_generation": null,
+  "artifact_references": [],
+  "current_action": "The approved design is committed and self-reviewed; the application owner must now review the persisted exact specification before planning begins.",
+  "next_operation": "Obtain the application owner's explicit approval or requested changes for docs/superpowers/specs/2026-09-13-priority-reorder-discoverability-design.md at SHA-256 0f1ab2a9590b039ab52c914481b5a16d02ebce622f0872bb5024db318c815a8c.",
+  "completed_work": [
+    "Initialized and selected Studio run ux-priority-reorder-discoverability.",
+    "Confirmed the root cause in frontend default-sort and drag-source code and matched it to existing tests.",
+    "Read back open GitHub issues 4 through 7 without mutating their state.",
+    "Obtained application-owner approval for the proposed design.",
+    "Recorded Discovery Lead and Architect assessments with no backend contract expansion.",
+    "Committed the self-reviewed design specification as commit 8898da8fd175a551d2eafe809349650e6c69783c."
+  ],
+  "pending_work": [
+    "Application owner reviews and explicitly approves or requests changes to the persisted specification.",
+    "After approval, derive and submit the run-specific schema-valid Studio specification without altering prior approved snapshots.",
+    "Use the writing-plans skill to create the implementation plan before any production-code change.",
+    "Execute implementation, ordered assurance gates, and idempotent GitHub issue reconciliation."
+  ],
+  "idempotency_outcomes": {
+    "init-ux-priority-reorder-discoverability-v1": "fresh run initialized and selected",
+    "evidence-ux-priority-reorder-design-specification-v1": "accepted"
+  },
+  "created_at": "2026-09-13T11:07:16Z"
+}

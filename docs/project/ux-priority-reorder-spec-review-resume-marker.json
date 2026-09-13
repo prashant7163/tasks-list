@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "marker_id": "ux-priority-reorder-spec-review-resume",
+  "checkpoint_reference": {
+    "artifact_id": "ux-priority-reorder-spec-review-ready",
+    "locator": ".studio/runs/ux-priority-reorder-discoverability/artifacts/77872589a4b83bd8cc2dd5fafd09d20e43463d49d6341877c9e724a20e4142e9.json",
+    "schema_version": "1.0.0",
+    "sha256": "77872589a4b83bd8cc2dd5fafd09d20e43463d49d6341877c9e724a20e4142e9"
+  },
+  "classification": "safe",
+  "reason_code": "checkpoint_bindings_valid",
+  "explanation": "The committed design, accepted supporting evidence, and pending exact-specification review are bound to a durable checkpoint; no implementation or GitHub mutation has begun.",
+  "completed_work": [
+    "Initialized the fresh Studio run and recorded the confirmed root cause.",
+    "Obtained design approval and committed the self-reviewed specification.",
+    "Recorded the exact design digest and created a durable Studio checkpoint."
+  ],
+  "remaining_work": [
+    "Obtain application-owner review of the committed exact specification.",
+    "Create and submit the run-specific Studio specification and implementation plan.",
+    "Execute the test-first frontend fix, ordered assurance gates, and GitHub reconciliation."
+  ],
+  "next_operation": "After explicit application-owner approval, use this marker to resume from checkpoint ux-priority-reorder-spec-review-ready and begin run-specific specification and plan preparation.",
+  "user_confirmation_required": true,
+  "created_at": "2026-09-13T11:07:16Z"
+}
