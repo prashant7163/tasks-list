@@ -9,7 +9,7 @@ import TaskTabs from './TaskTabs'
 
 const EMPTY = { ACTIVE: [], COMPLETED: [] }
 const DEFAULT_SORTS = {
-  ACTIVE: { key: 'createdAt', direction: 'desc' },
+  ACTIVE: { key: 'priority', direction: 'asc' },
   COMPLETED: { key: 'completedAt', direction: 'desc' },
 }
 

@@ -64,6 +64,8 @@ const PriorityTaskList = forwardRef(function PriorityTaskList({ tasks, disabled,
     dropTargetRef.current = null
   }
 
+  if (!tasks.length) return <p className="empty-copy">No active tasks yet.</p>
+
   return (
     <div>
       <p className="reorder-help">Drag tasks to change priority. Mouse only.</p>
