@@ -46,6 +46,16 @@ function fakeApi(activeTasks, completedTasks = []) {
   }
 }
 
+function deferred() {
+  let resolve
+  let reject
+  const promise = new Promise((nextResolve, nextReject) => {
+    resolve = nextResolve
+    reject = nextReject
+  })
+  return { promise, resolve, reject }
+}
+
 function titles() {
   return screen.getAllByRole('article').map((article) => within(article).getByRole('heading').textContent)
 }
@@ -141,6 +151,68 @@ it('enables mouse reorder only for Active Priority highest-first and cancels wit
   await user.selectOptions(screen.getByLabelText('Active sort direction'), 'desc')
   expect(screen.queryByText(/Drag tasks to change priority/)).not.toBeInTheDocument()
   expect(screen.getByRole('article', { name: 'First' })).not.toHaveAttribute('draggable', 'true')
+})
+
+it('does not expose stale tasks for reorder while Priority highest-first is loading', async () => {
+  const priorityLoad = deferred()
+  const api = fakeApi([task(1, 'First', 2), task(2, 'Second', 1)])
+  const immediateList = api.list
+  api.list = vi.fn((status, sort) => {
+    if (status === 'ACTIVE' && sort.key === 'priority' && sort.direction === 'asc') return priorityLoad.promise
+    return immediateList(status, sort)
+  })
+  const user = userEvent.setup()
+  render(<TaskPage api={api} onSessionEnded={vi.fn()} />)
+
+  await screen.findByRole('tab', { name: 'Active (2)' })
+  await user.selectOptions(screen.getByLabelText('Active sort direction'), 'asc')
+  await waitFor(() => expect(titles()).toEqual(['First', 'Second']))
+  await user.selectOptions(screen.getByLabelText('Sort Active tasks by'), 'priority')
+
+  const staleFirst = screen.getByRole('article', { name: 'First' })
+  const staleSecond = screen.getByRole('article', { name: 'Second' })
+  expect.soft(staleFirst).not.toHaveAttribute('draggable', 'true')
+  fireEvent.dragStart(staleFirst)
+  fireEvent.dragEnter(staleSecond)
+  fireEvent.drop(staleSecond)
+  expect.soft(api.reorder).not.toHaveBeenCalled()
+
+  priorityLoad.resolve({ tasks: [task(2, 'Second', 1), task(1, 'First', 2)], count: 2 })
+  await waitFor(() => expect(titles()).toEqual(['Second', 'First']))
+  expect(screen.getByRole('article', { name: 'Second' })).toHaveAttribute('draggable', 'true')
+})
+
+it('restores the last confirmed presentation when Priority highest-first fails to load', async () => {
+  const priorityLoad = deferred()
+  const api = fakeApi([task(1, 'First', 2), task(2, 'Second', 1)])
+  const immediateList = api.list
+  api.list = vi.fn((status, sort) => {
+    if (status === 'ACTIVE' && sort.key === 'priority' && sort.direction === 'asc') return priorityLoad.promise
+    return immediateList(status, sort)
+  })
+  const user = userEvent.setup()
+  render(<TaskPage api={api} onSessionEnded={vi.fn()} />)
+
+  await screen.findByRole('tab', { name: 'Active (2)' })
+  await user.selectOptions(screen.getByLabelText('Active sort direction'), 'asc')
+  await waitFor(() => expect(titles()).toEqual(['First', 'Second']))
+  await user.selectOptions(screen.getByLabelText('Sort Active tasks by'), 'priority')
+
+  const staleFirst = screen.getByRole('article', { name: 'First' })
+  const staleSecond = screen.getByRole('article', { name: 'Second' })
+  expect.soft(staleFirst).not.toHaveAttribute('draggable', 'true')
+  fireEvent.dragStart(staleFirst)
+  fireEvent.dragEnter(staleSecond)
+  fireEvent.drop(staleSecond)
+  expect.soft(api.reorder).not.toHaveBeenCalled()
+  priorityLoad.reject(new ApiError(500, { error: 'Sort failed' }))
+
+  expect(await screen.findByRole('alert')).toHaveTextContent('Tasks could not be loaded. Please try again.')
+  expect(screen.getByLabelText('Sort Active tasks by')).toHaveValue('createdAt')
+  expect(screen.getByLabelText('Active sort direction')).toHaveValue('asc')
+  expect(titles()).toEqual(['First', 'Second'])
+  expect(screen.getByRole('article', { name: 'First' })).not.toHaveAttribute('draggable', 'true')
+  expect(api.reorder).not.toHaveBeenCalled()
 })
 
 it('locks conflicting actions while reorder is pending and adopts the authoritative response', async () => {
