@@ -56,48 +56,48 @@ class TaskOrderingIntegrationTest {
     @Test
     void activeListsUseTheDefaultAndEveryAllowedSortWithoutChangingSavedPriority() throws Exception {
         Session owner = session("Active sorting");
-        long bravo = create(owner, "bravo");
-        long alpha = create(owner, "Alpha");
-        long charlie = create(owner, "charlie");
-        setCreatedAt(bravo, "2026-01-03T00:00:00Z");
+        long zulu = create(owner, "Zulu");
+        long alpha = create(owner, "alpha");
+        long bravo = create(owner, "Bravo");
+        setCreatedAt(zulu, "2026-01-03T00:00:00Z");
         setCreatedAt(alpha, "2026-01-01T00:00:00Z");
-        setCreatedAt(charlie, "2026-01-02T00:00:00Z");
+        setCreatedAt(bravo, "2026-01-02T00:00:00Z");
 
-        assertTitles(owner, "ACTIVE", null, null, "bravo", "charlie", "Alpha");
-        assertTitles(owner, "ACTIVE", "createdAt", "asc", "Alpha", "charlie", "bravo");
-        assertTitles(owner, "ACTIVE", "createdAt", "desc", "bravo", "charlie", "Alpha");
-        assertTitles(owner, "ACTIVE", "priority", "asc", "charlie", "Alpha", "bravo");
-        assertTitles(owner, "ACTIVE", "priority", "desc", "bravo", "Alpha", "charlie");
-        assertTitles(owner, "ACTIVE", "title", "asc", "Alpha", "bravo", "charlie");
-        assertTitles(owner, "ACTIVE", "title", "desc", "charlie", "bravo", "Alpha");
+        assertTitles(owner, "ACTIVE", null, null, "Zulu", "Bravo", "alpha");
+        assertTitles(owner, "ACTIVE", "createdAt", "asc", "alpha", "Bravo", "Zulu");
+        assertTitles(owner, "ACTIVE", "createdAt", "desc", "Zulu", "Bravo", "alpha");
+        assertTitles(owner, "ACTIVE", "priority", "asc", "Bravo", "alpha", "Zulu");
+        assertTitles(owner, "ACTIVE", "priority", "desc", "Zulu", "alpha", "Bravo");
+        assertTitles(owner, "ACTIVE", "title", "asc", "alpha", "Bravo", "Zulu");
+        assertTitles(owner, "ACTIVE", "title", "desc", "Zulu", "Bravo", "alpha");
 
         assertThat(priorities(owner)).containsExactly(
-            new SavedPriority(charlie, 1), new SavedPriority(alpha, 2), new SavedPriority(bravo, 3));
+            new SavedPriority(bravo, 1), new SavedPriority(alpha, 2), new SavedPriority(zulu, 3));
     }
 
     @Test
     void completedListsUseTheDefaultAndEveryAllowedSortCaseInsensitively() throws Exception {
         Session owner = session("Completed sorting");
-        long bravo = create(owner, "bravo");
-        long alpha = create(owner, "Alpha");
-        long charlie = create(owner, "charlie");
-        mutate(owner, post("/api/tasks/{id}/complete", bravo)).andExpect(status().isOk());
+        long zulu = create(owner, "Zulu");
+        long alpha = create(owner, "alpha");
+        long bravo = create(owner, "Bravo");
+        mutate(owner, post("/api/tasks/{id}/complete", zulu)).andExpect(status().isOk());
         mutate(owner, post("/api/tasks/{id}/complete", alpha)).andExpect(status().isOk());
-        mutate(owner, post("/api/tasks/{id}/complete", charlie)).andExpect(status().isOk());
-        setCreatedAt(bravo, "2026-01-03T00:00:00Z");
+        mutate(owner, post("/api/tasks/{id}/complete", bravo)).andExpect(status().isOk());
+        setCreatedAt(zulu, "2026-01-03T00:00:00Z");
         setCreatedAt(alpha, "2026-01-01T00:00:00Z");
-        setCreatedAt(charlie, "2026-01-02T00:00:00Z");
-        setCompletedAt(bravo, "2026-02-01T00:00:00Z");
+        setCreatedAt(bravo, "2026-01-02T00:00:00Z");
+        setCompletedAt(zulu, "2026-02-01T00:00:00Z");
         setCompletedAt(alpha, "2026-02-03T00:00:00Z");
-        setCompletedAt(charlie, "2026-02-02T00:00:00Z");
+        setCompletedAt(bravo, "2026-02-02T00:00:00Z");
 
-        assertTitles(owner, "COMPLETED", null, null, "Alpha", "charlie", "bravo");
-        assertTitles(owner, "COMPLETED", "completedAt", "asc", "bravo", "charlie", "Alpha");
-        assertTitles(owner, "COMPLETED", "completedAt", "desc", "Alpha", "charlie", "bravo");
-        assertTitles(owner, "COMPLETED", "createdAt", "asc", "Alpha", "charlie", "bravo");
-        assertTitles(owner, "COMPLETED", "createdAt", "desc", "bravo", "charlie", "Alpha");
-        assertTitles(owner, "COMPLETED", "title", "asc", "Alpha", "bravo", "charlie");
-        assertTitles(owner, "COMPLETED", "title", "desc", "charlie", "bravo", "Alpha");
+        assertTitles(owner, "COMPLETED", null, null, "alpha", "Bravo", "Zulu");
+        assertTitles(owner, "COMPLETED", "completedAt", "asc", "Zulu", "Bravo", "alpha");
+        assertTitles(owner, "COMPLETED", "completedAt", "desc", "alpha", "Bravo", "Zulu");
+        assertTitles(owner, "COMPLETED", "createdAt", "asc", "alpha", "Bravo", "Zulu");
+        assertTitles(owner, "COMPLETED", "createdAt", "desc", "Zulu", "Bravo", "alpha");
+        assertTitles(owner, "COMPLETED", "title", "asc", "alpha", "Bravo", "Zulu");
+        assertTitles(owner, "COMPLETED", "title", "desc", "Zulu", "Bravo", "alpha");
     }
 
     @Test
