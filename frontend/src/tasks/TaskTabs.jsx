@@ -2,7 +2,7 @@ import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 const STATUSES = ['ACTIVE', 'COMPLETED']
 
-const TaskTabs = forwardRef(function TaskTabs({ selected, counts, onSelect }, ref) {
+const TaskTabs = forwardRef(function TaskTabs({ selected, counts, disabled = false, onSelect }, ref) {
   const tabs = useRef({})
 
   useImperativeHandle(ref, () => ({
@@ -10,6 +10,7 @@ const TaskTabs = forwardRef(function TaskTabs({ selected, counts, onSelect }, re
   }))
 
   function selectFromKeyboard(event, status) {
+    if (disabled) return
     const index = STATUSES.indexOf(status)
     let next
     if (event.key === 'ArrowRight') next = STATUSES[(index + 1) % STATUSES.length]
@@ -34,6 +35,7 @@ const TaskTabs = forwardRef(function TaskTabs({ selected, counts, onSelect }, re
             ref={(node) => { tabs.current[status] = node }}
             id={`task-tab-${slug}`}
             type="button"
+            disabled={disabled}
             role="tab"
             aria-selected={selected === status}
             aria-controls={`task-panel-${slug}`}
