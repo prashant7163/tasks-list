@@ -1,17 +1,26 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError } from '../api'
 import DeleteTaskDialog from './DeleteTaskDialog'
+import PriorityTaskList from './PriorityTaskList'
 import TaskForm from './TaskForm'
 import TaskList from './TaskList'
+import TaskSortControls from './TaskSortControls'
 import TaskTabs from './TaskTabs'
 
 const EMPTY = { ACTIVE: [], COMPLETED: [] }
+const DEFAULT_SORTS = {
+  ACTIVE: { key: 'createdAt', direction: 'desc' },
+  COMPLETED: { key: 'completedAt', direction: 'desc' },
+}
 
 export default function TaskPage({ api, onSessionEnded }) {
   const [selected, setSelected] = useState('ACTIVE')
   const [lists, setLists] = useState(EMPTY)
   const [counts, setCounts] = useState({ active: 0, completed: 0 })
+  const [sorts, setSorts] = useState(DEFAULT_SORTS)
+  const [confirmedSorts, setConfirmedSorts] = useState(DEFAULT_SORTS)
   const [loading, setLoading] = useState(true)
+  const [hasLoaded, setHasLoaded] = useState(false)
   const [announcement, setAnnouncement] = useState('')
   const [error, setError] = useState('')
   const [formTask, setFormTask] = useState(undefined)
@@ -24,6 +33,9 @@ export default function TaskPage({ api, onSessionEnded }) {
   const deleteReturnFocusRef = useRef(null)
   const editingTaskIdRef = useRef(null)
   const postRenderFocusRef = useRef(null)
+  const priorityListRef = useRef(null)
+  const loadSequenceRef = useRef(0)
+  const confirmedSortsRef = useRef(DEFAULT_SORTS)
   const selectedRef = useRef(selected)
   selectedRef.current = selected
 
@@ -40,15 +52,21 @@ export default function TaskPage({ api, onSessionEnded }) {
     }
   }
 
-  const load = useCallback(async (announce = true) => {
+  const load = useCallback(async (announce = true, requestedSorts = confirmedSortsRef.current) => {
+    const sequence = ++loadSequenceRef.current
     setLoading(true)
     setError('')
     try {
       const [active, completed, nextCounts] = await Promise.all([
-        api.list('ACTIVE'), api.list('COMPLETED'), api.counts(),
+        api.list('ACTIVE', requestedSorts.ACTIVE), api.list('COMPLETED', requestedSorts.COMPLETED), api.counts(),
       ])
+      if (sequence !== loadSequenceRef.current) return false
       setLists({ ACTIVE: active.tasks, COMPLETED: completed.tasks })
       setCounts(nextCounts)
+      setSorts(requestedSorts)
+      setConfirmedSorts(requestedSorts)
+      confirmedSortsRef.current = requestedSorts
+      setHasLoaded(true)
       if (editingTaskIdRef.current && !active.tasks.some((task) => task.id === editingTaskIdRef.current)) {
         closeTaskForm()
         scheduleStableTaskFocus()
@@ -56,16 +74,20 @@ export default function TaskPage({ api, onSessionEnded }) {
       if (announce) setAnnouncement('Tasks loaded.')
       return true
     } catch (requestError) {
+      if (sequence !== loadSequenceRef.current) return false
       if (requestError instanceof ApiError && requestError.status === 401) onSessionEnded()
-      else setError('Tasks could not be loaded. Please try again.')
+      else {
+        setSorts(confirmedSortsRef.current)
+        setError('Tasks could not be loaded. Please try again.')
+      }
       return false
     } finally {
-      setLoading(false)
+      if (sequence === loadSequenceRef.current) setLoading(false)
     }
   }, [api, onSessionEnded])
 
   useEffect(() => {
-    const frame = requestAnimationFrame(() => load(false))
+    const frame = requestAnimationFrame(() => load(false, DEFAULT_SORTS))
     return () => cancelAnimationFrame(frame)
   }, [load])
   useEffect(() => {
@@ -94,7 +116,7 @@ export default function TaskPage({ api, onSessionEnded }) {
   }
 
   async function mutate(task, pendingText, successText, operation, close, afterReconcile, closeOnFailure = false, closeMatchingEdit = false) {
-    if (pending) return
+    if (pending || (loading && hasLoaded)) return
     setPending({ id: task?.id ?? 'new', text: pendingText })
     setAnnouncement(pendingText)
     setError('')
@@ -119,7 +141,39 @@ export default function TaskPage({ api, onSessionEnded }) {
     }
   }
 
+  async function reorder(orderedIds, draggedId, setReorderMessage) {
+    if (pending || (loading && hasLoaded) || confirmedSorts.ACTIVE.key !== 'priority' || confirmedSorts.ACTIVE.direction !== 'asc') return
+    setPending({ id: 'reorder', text: 'Saving priority order…' })
+    setAnnouncement('Saving priority order…')
+    setError('')
+    try {
+      await api.reorder(orderedIds)
+      const reconciled = await load(false)
+      if (reconciled) {
+        setAnnouncement('Priority order saved.')
+        setReorderMessage('Priority order saved.')
+      } else {
+        setReorderMessage('Priority was saved, but the latest order could not be loaded.')
+        setError('The priority order was saved, but the latest tasks could not be loaded. Retry to reconcile.')
+      }
+    } catch (requestError) {
+      if (requestError instanceof ApiError && requestError.status === 401) {
+        onSessionEnded()
+        return
+      }
+      const restored = await load(false)
+      setError(restored
+        ? 'Priority order could not be saved. The latest order was restored.'
+        : 'Priority order could not be saved or reloaded. Please retry to reconcile.')
+      setReorderMessage(restored ? 'Priority order restored.' : 'Priority order could not be reconciled.')
+    } finally {
+      postRenderFocusRef.current = () => priorityListRef.current?.focus(draggedId)
+      setPending(null)
+    }
+  }
+
   const heading = selected === 'ACTIVE' ? 'Active tasks' : 'Completed tasks'
+  const interactionLocked = Boolean(pending) || (loading && hasLoaded)
 
   return (
     <section className="task-shell" aria-labelledby="task-view-title">
@@ -130,37 +184,62 @@ export default function TaskPage({ api, onSessionEnded }) {
           <button ref={retryRef} className="secondary" type="button" onClick={() => load(true)}>Retry</button>
         </div>
       )}
-      <TaskTabs ref={tabsRef} selected={selected} counts={counts} onSelect={(status) => { setSelected(status); closeTaskForm(); setDeleteTask(null) }} />
+      <TaskTabs ref={tabsRef} selected={selected} counts={counts} disabled={interactionLocked} onSelect={(status) => { setSelected(status); closeTaskForm(); setDeleteTask(null) }} />
       <div className="task-heading">
         <div><p className="eyebrow">Private workspace</p><h1 id="task-view-title">{heading}</h1></div>
-        {selected === 'ACTIVE' && !formOpen && <button ref={newTaskRef} className="primary compact" type="button" onClick={() => { editingTaskIdRef.current = null; setFormTask(undefined); setFormOpen(true) }}>New task</button>}
+        {selected === 'ACTIVE' && !formOpen && <button ref={newTaskRef} className="primary compact" type="button" disabled={interactionLocked} onClick={() => { editingTaskIdRef.current = null; setFormTask(undefined); setFormOpen(true) }}>New task</button>}
       </div>
+      <TaskSortControls
+        status={selected}
+        value={sorts[selected]}
+        disabled={interactionLocked}
+        onChange={(nextSort) => {
+          setError('')
+          setAnnouncement(`Loading ${selected === 'ACTIVE' ? 'Active' : 'Completed'} tasks in the selected order…`)
+          const requestedSorts = { ...sorts, [selected]: nextSort }
+          setSorts(requestedSorts)
+          load(false, requestedSorts)
+        }}
+      />
       {formOpen && (
         <TaskForm
           key={formTask?.id ?? 'new'}
           task={formTask}
-          pending={Boolean(pending)}
+          pending={interactionLocked}
           onCancel={closeTaskForm}
           onSubmit={(values) => mutate(formTask, formTask ? 'Updating task…' : 'Creating task…', formTask ? 'Task updated.' : 'Task created.', () => formTask ? api.edit(formTask.id, values) : api.create(values), closeTaskForm)}
         />
       )}
-      {loading ? <p className="status" role="status">Loading tasks…</p> : ['ACTIVE', 'COMPLETED'].map((status) => (
+      {loading && <p className="status" role="status">{hasLoaded ? 'Refreshing tasks…' : 'Loading tasks…'}</p>}
+      {(!loading || hasLoaded) && ['ACTIVE', 'COMPLETED'].map((status) => (
         <div key={status} id={`task-panel-${status.toLowerCase()}`} role="tabpanel" aria-labelledby={`task-tab-${status.toLowerCase()}`} tabIndex="0" hidden={selected !== status}>
-          <TaskList
-            status={status}
-            tasks={lists[status]}
-            pendingId={pending?.id}
-            onEdit={(task) => { editingTaskIdRef.current = task.id; setFormTask(task); setFormOpen(true) }}
-            onDelete={(task, trigger) => { deleteReturnFocusRef.current = trigger; setDeleteTask(task) }}
-            onComplete={(task) => mutate(task, 'Completing task…', 'Task completed.', () => api.complete(task.id), undefined, () => tabsRef.current?.focus(selected), false, true)}
-            onReactivate={(task) => mutate(task, 'Reactivating task…', 'Task reactivated.', () => api.reactivate(task.id), undefined, () => tabsRef.current?.focus(selected))}
-          />
+          {status === 'ACTIVE' && confirmedSorts.ACTIVE.key === 'priority' && confirmedSorts.ACTIVE.direction === 'asc' ? (
+            <PriorityTaskList
+              ref={priorityListRef}
+              tasks={lists.ACTIVE}
+              disabled={interactionLocked}
+              onReorder={reorder}
+              onEdit={(task) => { editingTaskIdRef.current = task.id; setFormTask(task); setFormOpen(true) }}
+              onDelete={(task, trigger) => { deleteReturnFocusRef.current = trigger; setDeleteTask(task) }}
+              onComplete={(task) => mutate(task, 'Completing task…', 'Task completed.', () => api.complete(task.id), undefined, () => { postRenderFocusRef.current = () => tabsRef.current?.focus(selected) }, false, true)}
+            />
+          ) : (
+            <TaskList
+              status={status}
+              tasks={lists[status]}
+              disabled={interactionLocked}
+              onEdit={(task) => { editingTaskIdRef.current = task.id; setFormTask(task); setFormOpen(true) }}
+              onDelete={(task, trigger) => { deleteReturnFocusRef.current = trigger; setDeleteTask(task) }}
+              onComplete={(task) => mutate(task, 'Completing task…', 'Task completed.', () => api.complete(task.id), undefined, () => { postRenderFocusRef.current = () => tabsRef.current?.focus(selected) }, false, true)}
+              onReactivate={(task) => mutate(task, 'Reactivating task…', 'Task reactivated.', () => api.reactivate(task.id), undefined, () => { postRenderFocusRef.current = () => tabsRef.current?.focus(selected) })}
+            />
+          )}
         </div>
       ))}
       {deleteTask && (
         <DeleteTaskDialog
           task={deleteTask}
-          pending={Boolean(pending)}
+          pending={interactionLocked}
           onCancel={restoreDeleteFocus}
           onConfirm={() => mutate(deleteTask, 'Deleting task…', 'Task deleted.', () => api.delete(deleteTask.id), () => setDeleteTask(null), scheduleStableTaskFocus, true, true)}
         />

@@ -2,6 +2,7 @@ package com.taskslist.task;
 
 import com.taskslist.task.TaskDtos.TaskCountsResponse;
 import com.taskslist.task.TaskDtos.TaskListResponse;
+import com.taskslist.task.TaskDtos.TaskReorderRequest;
 import com.taskslist.task.TaskDtos.TaskResponse;
 import com.taskslist.task.TaskDtos.TaskWriteRequest;
 import jakarta.validation.Valid;
@@ -39,8 +40,13 @@ public class TaskController {
     }
 
     @GetMapping
-    TaskListResponse list(@RequestParam TaskStatus status, Authentication authentication) {
-        return taskService.list(authentication, status);
+    TaskListResponse list(
+        @RequestParam TaskStatus status,
+        @RequestParam(required = false) String sort,
+        @RequestParam(required = false) String direction,
+        Authentication authentication
+    ) {
+        return taskService.list(authentication, status, TaskSort.from(status, sort, direction));
     }
 
     @GetMapping("/counts")
@@ -82,6 +88,14 @@ public class TaskController {
         return taskService.reactivate(authentication, id);
     }
 
+    @PostMapping("/reorder")
+    TaskListResponse reorder(
+        @Valid @RequestBody TaskReorderRequest request,
+        Authentication authentication
+    ) {
+        return taskService.reorder(authentication, request.taskIds());
+    }
+
     @ExceptionHandler(TaskService.TaskNotFoundException.class)
     ResponseEntity<Map<String, String>> notFound() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Task not found"));
@@ -90,6 +104,16 @@ public class TaskController {
     @ExceptionHandler(TaskService.InvalidTaskTransitionException.class)
     ResponseEntity<Map<String, String>> invalidTransition() {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Invalid task transition"));
+    }
+
+    @ExceptionHandler(TaskService.InvalidTaskOrderException.class)
+    ResponseEntity<Map<String, String>> invalidOrder() {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Task order is stale"));
+    }
+
+    @ExceptionHandler(TaskSort.InvalidTaskSortException.class)
+    ResponseEntity<Map<String, String>> invalidSort() {
+        return ResponseEntity.badRequest().body(Map.of("error", "Invalid request"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
