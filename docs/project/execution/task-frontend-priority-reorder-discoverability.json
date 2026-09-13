@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "frontend-engineer-priority-reorder-discoverability",
+  "project_id": "tasks-list",
+  "run_id": "ux-priority-reorder-discoverability",
+  "milestone_id": "priority-reorder-discoverability",
+  "assigned_agent_instance_id": "frontend-engineer-ordering",
+  "agent_envelope_digest": "120ba468a802dcc555f55c269fe5a3fbc101151e7c2d425887f56aadc6f89533",
+  "objective": "Default Active tasks to priority highest-first, preserve the Priority empty state, make a persistent visible grip the sole mouse drag source, and add exact component and browser regression evidence without changing backend contracts.",
+  "owning_role": "Frontend Engineer",
+  "change_class": "code_producing",
+  "author_id": "frontend-engineer-ordering",
+  "dependency_ids": [],
+  "ready_dependency_ids": [],
+  "requirement_ids": ["task-list-views", "active-priority-reorder", "task-sorting", "accessibility-responsive-interface"],
+  "acceptance_criterion_ids": [
+    "task-list-views-active-default",
+    "task-list-views-completed-separate",
+    "active-priority-ordering",
+    "active-priority-drag-drop",
+    "active-priority-persistence",
+    "active-priority-drag-affordance",
+    "active-priority-empty-state",
+    "task-sorting-active",
+    "task-sorting-completed",
+    "task-sorting-presentation-only",
+    "accessibility-responsive-viewports",
+    "accessibility-focus-labels"
+  ],
+  "milestone_readiness": {
+    "artifact_id": "priority-reorder-discoverability-ready-v1",
+    "locator": "docs/project/readiness-ux-priority-reorder-discoverability.json",
+    "schema_version": "1.0.0",
+    "sha256": "373f7141b9a31fd6f340c74ff98b1942d4b1082c07a508ac2aa071113fb293cc"
+  },
+  "contract_snapshot": {
+    "artifact_id": "priority-reorder-discoverability-contract-v1",
+    "locator": "docs/project/ux-priority-reorder-contract-snapshot.json",
+    "schema_version": "1.0.0",
+    "sha256": "3f98238fbbe02ed689ca4fa6e7ba9be18c649c9657b7cffff2adbc8035e7f9b4"
+  },
+  "work_package": {
+    "artifact_id": "ux-priority-reorder-frontend",
+    "locator": "docs/project/evidence/ux-priority-reorder-work-packages.json",
+    "schema_version": "1.0.0",
+    "sha256": "ea7221133c45a8f6d3975dd7b16d566d101f9a97444421d55c79d9793cbabe46"
+  },
+  "milestone_progress": {
+    "artifact_id": "priority-reorder-discoverability-progress-v1",
+    "locator": "docs/project/execution/ux-priority-reorder-progress.json",
+    "schema_version": "1.0.0",
+    "sha256": "7a3047dfeb1731f92d985d04bff12cef8810231f5e9e34faca7aee45e3f82b85"
+  },
+  "task_progress": null,
+  "change_intent_references": [
+    {
+      "artifact_id": "ux-priority-reorder-implementation",
+      "locator": "docs/project/execution/ux-priority-reorder-change-intent.json",
+      "schema_version": "1.0.0",
+      "sha256": "8947df13f2fff47e3a54ad52ede463be91bd8fbfd769fc437892aebfdb2cc737"
+    }
+  ],
+  "declared_inputs": [
+    {
+      "artifact_id": "tasks-list",
+      "locator": "docs/project/specification-ux-priority-reorder-discoverability.json",
+      "schema_version": "1.0.0",
+      "sha256": "1ef683d741a0eac3db5687dab9b353996cdfce55b01a25fd813f198d07076f21"
+    },
+    {
+      "artifact_id": "tasks-list-priority-reorder-plan-v1",
+      "locator": "docs/project/plan-ux-priority-reorder-discoverability.json",
+      "schema_version": "1.0.0",
+      "sha256": "59e9a6334f5fc289f1488240f6cfa414969e185d5fb8114938d6efb7f41cf428"
+    },
+    {
+      "artifact_id": "ux-priority-reorder-interface-contracts",
+      "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+      "schema_version": "1.0.0",
+      "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+    },
+    {
+      "artifact_id": "ux-priority-reorder-integration-test-plan",
+      "locator": "docs/project/evidence/ux-priority-reorder-integration-test-plan.json",
+      "schema_version": "1.0.0",
+      "sha256": "fa02f85797dd15b163cb32cab2d693e63ac3bd8ac3087a010a6ea76c63a9d967"
+    }
+  ],
+  "required_outputs": [
+    "Committed frontend exact candidate with TDD RED and GREEN evidence for each approved plan task",
+    "Passing focused and full frontend component tests plus production build",
+    "Passing desktop and mobile browser evidence for default ordering, grip visibility, target size, contrast, and exclusive drag initiation",
+    "Passing existing authoritative reconciliation, focus restoration, pending-state, and backend ordering regressions"
+  ],
+  "allowed_paths": ["frontend"],
+  "allowed_tools": ["apply_patch", "git-scoped", "npm", "vite", "vitest", "playwright", "local-browser-tests"],
+  "network_policy": "No application data egress; dependency retrieval only if already authorized and required.",
+  "workspace": ".worktrees/ux-priority-reorder-discoverability",
+  "risk": "medium-frontend-ordering-drag-accessibility",
+  "required_approval_ids": ["apr-frontend-ordering-m3"],
+  "verification_commands": [
+    "npm --prefix frontend test -- --run",
+    "npm --prefix frontend run build",
+    "npm --prefix frontend run test:e2e",
+    "./mvnw -f backend/pom.xml -Dtest=TaskOrderingIntegrationTest test"
+  ],
+  "gate_chain": ["code_review", "build_verification", "quality_review", "independent_audit"],
+  "reviewer_must_differ": true,
+  "auditor_must_differ": true,
+  "remediation_owner_role": "Orchestrator",
+  "downstream_gates": ["user-review-priority-reorder"],
+  "max_attempts": 3,
+  "attempt_number": 1,
+  "lifecycle": "ready",
+  "created_at": "2026-09-13T11:30:00Z"
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "priority-reorder-discoverability-progress-v1",
+  "milestone_id": "priority-reorder-discoverability",
+  "source_revision": "f0c7888",
+  "state": "ready",
+  "completed": ["approved design", "approved specification", "approved implementation plan", "fresh readiness", "isolated baseline with 49 passing frontend tests"],
+  "current": "Dispatch frontend implementation through four sequential TDD plan tasks with an independent task review after each.",
+  "remaining": ["frontend implementation", "Code Review", "Build Verification", "Quality Review", "Independent Audit", "GitHub issue reconciliation"]
+}

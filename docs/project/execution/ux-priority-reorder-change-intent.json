@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-implementation",
+  "milestone_id": "priority-reorder-discoverability",
+  "task_id": "frontend-engineer-priority-reorder-discoverability",
+  "allowed_paths": ["frontend/src/tasks", "frontend/src/styles.css", "frontend/e2e/tasks.spec.js"],
+  "intent": [
+    "Change the initial Active sort tuple from createdAt descending to priority ascending.",
+    "Preserve the Active empty-state copy when PriorityTaskList is mounted with no tasks.",
+    "Make a visible labeled grip the sole native mouse drag source while retaining wrapper drop targeting.",
+    "Add component and browser regression evidence without changing backend contracts."
+  ],
+  "excluded": ["backend changes", "database changes", "keyboard reorder", "touch reorder", "new dependencies", "unrelated refactors"]
+}
