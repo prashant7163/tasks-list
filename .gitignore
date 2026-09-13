@@ -5,6 +5,7 @@
 .studio/projection/
 .studio/runtime/
 .superpowers/
+.worktrees/
 workspaces/
 .DS_Store
 conformance.json
