@@ -52,13 +52,14 @@ button:disabled { cursor: wait; opacity: 0.65; }
 .task-actions { display: flex; align-items: flex-start; gap: 0.55rem; }
 .reorder-help { margin: 0 0 0.35rem; color: #3f554b; font-weight: 700; }
 .reorder-status { min-height: 1.35rem; margin: 0 0 0.75rem; color: #53685e; font-size: 0.9rem; }
-.priority-item { position: relative; min-width: 0; cursor: grab; border-radius: 0.85rem; }
-.priority-item:active { cursor: grabbing; }
-.priority-item .task-card { padding-left: 3.2rem; }
+.priority-item { position: relative; min-width: 0; border-radius: 0.85rem; }
+.priority-item .task-card { padding-left: 4.75rem; }
 .priority-item.dragging { opacity: 0.64; outline: 3px dashed #176347; outline-offset: 2px; }
 .priority-item.drop-target { outline: 3px solid #176347; outline-offset: 3px; }
-.priority-list.pending .priority-item { cursor: wait; }
-.drag-handle { position: absolute; z-index: 1; left: 1.15rem; top: 1.25rem; color: #53685e; font-size: 1.2rem; font-weight: 800; letter-spacing: -0.25rem; }
+.priority-list.pending .drag-handle { cursor: wait; opacity: 0.65; }
+.drag-handle { position: absolute; z-index: 1; left: 1rem; top: 1rem; display: grid; width: 2.5rem; height: 2.5rem; place-items: center; color: #173e30; background: #e8eeea; border: 1px solid #899e93; border-radius: 0.55rem; cursor: grab; user-select: none; }
+.drag-handle:active { cursor: grabbing; }
+.drag-handle-icon { font-size: 1.4rem; line-height: 1; }
 .text-button { padding: 0.4rem; color: #155f47; background: transparent; border: 0; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
 .text-button.destructive { color: #8a2828; }
 .task-form { margin: 0 0 1.5rem; padding: 1.25rem; background: #fff; border: 1px solid #d5dfd9; border-radius: 0.85rem; }
@@ -69,5 +70,5 @@ button:disabled { cursor: wait; opacity: 0.65; }
 .dialog { width: min(100%, 28rem); padding: 1.5rem; background: #fff; border-radius: 0.9rem; box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.25); }
 .dialog h2 { margin-top: 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-@media (max-width: 34rem) { .auth-page { align-items: start; padding: 0; background: #fff; } .auth-card { min-height: 100vh; border: 0; border-radius: 0; box-shadow: none; } .app-header { align-items: flex-start; min-width: 0; } .identity { min-width: 0; align-items: flex-end; flex-direction: column; gap: 0.6rem; text-align: right; overflow-wrap: anywhere; } .tabs { gap: 1rem; margin-bottom: 1.75rem; } .task-shell { width: min(calc(100% - 1.5rem), 70rem); } .task-heading { align-items: stretch; flex-direction: column; } .task-heading .primary { width: 100%; } .sort-controls { display: grid; } .task-card { grid-template-columns: 1fr; padding: 1rem; } .priority-item .task-card { padding-left: 2.8rem; } .drag-handle { left: 0.9rem; top: 1rem; } .task-actions { flex-wrap: wrap; } .form-actions { align-items: stretch; flex-direction: column; } .form-actions button { width: 100%; } .action-message { align-items: stretch; flex-direction: column; } }
+@media (max-width: 34rem) { .auth-page { align-items: start; padding: 0; background: #fff; } .auth-card { min-height: 100vh; border: 0; border-radius: 0; box-shadow: none; } .app-header { align-items: flex-start; min-width: 0; } .identity { min-width: 0; align-items: flex-end; flex-direction: column; gap: 0.6rem; text-align: right; overflow-wrap: anywhere; } .tabs { gap: 1rem; margin-bottom: 1.75rem; } .task-shell { width: min(calc(100% - 1.5rem), 70rem); } .task-heading { align-items: stretch; flex-direction: column; } .task-heading .primary { width: 100%; } .sort-controls { display: grid; } .task-card { grid-template-columns: 1fr; padding: 1rem; } .priority-item .task-card { padding-top: 4.5rem; padding-left: 1rem; } .drag-handle { left: 1rem; top: 0.75rem; } .task-actions { flex-wrap: wrap; } .form-actions { align-items: stretch; flex-direction: column; } .form-actions button { width: 100%; } .action-message { align-items: stretch; flex-direction: column; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; } }
