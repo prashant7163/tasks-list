@@ -154,8 +154,11 @@ it('enables mouse reorder only for Active Priority highest-first and cancels wit
   expect(screen.getByText(/Drag tasks to change priority/)).toBeInTheDocument()
 
   fireEvent.dragStart(first)
+  fireEvent.dragEnter(secondItem)
+  fireEvent.drop(secondItem)
   expect(screen.getByRole('status', { name: 'Reorder status' })).toHaveTextContent('Ready to reorder')
   expect(api.reorder).not.toHaveBeenCalled()
+  expect(titles()).toEqual(['First', 'Second'])
   fireEvent.dragStart(firstHandle)
   expect(screen.getByRole('status', { name: 'Reorder status' })).toHaveTextContent('Picked up First')
   fireEvent.dragEnter(secondItem)
