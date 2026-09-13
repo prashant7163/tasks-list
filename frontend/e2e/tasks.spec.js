@@ -25,6 +25,25 @@ async function taskTitles(page) {
   return page.getByRole('article').getByRole('heading').allTextContents()
 }
 
+function relativeLuminance([red, green, blue]) {
+  const channels = [red, green, blue].map((channel) => {
+    const normalized = channel / 255
+    return normalized <= 0.04045
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4
+  })
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+}
+
+function rgbChannels(value) {
+  return value.match(/\d+(?:\.\d+)?/g).slice(0, 3).map(Number)
+}
+
+function contrastRatio(foreground, background) {
+  const [lighter, darker] = [relativeLuminance(foreground), relativeLuminance(background)].sort((a, b) => b - a)
+  return (lighter + 0.05) / (darker + 0.05)
+}
+
 async function dragTask(page, sourceName, targetName) {
   const source = page.locator('.priority-item').filter({ has: page.getByRole('article', { name: sourceName }) }).locator('.drag-handle')
   const target = page.locator('.priority-item').filter({ has: page.getByRole('article', { name: targetName }) }).locator('.drag-handle')
@@ -49,8 +68,38 @@ test('full task ordering journey persists and remains usable without page overfl
   await createTask(page, 'bravo')
 
   await expect(page.getByRole('tab', { name: 'Active (3)' })).toHaveAttribute('aria-selected', 'true')
-  await expect(page.getByLabel('Sort Active tasks by')).toHaveValue('createdAt')
-  await expect(page.getByLabel('Active sort direction')).toHaveValue('desc')
+  await expect(page.getByLabel('Sort Active tasks by')).toHaveValue('priority')
+  await expect(page.getByLabel('Active sort direction')).toHaveValue('asc')
+  const grips = page.locator('.drag-handle')
+  await expect(grips).toHaveCount(3)
+  const firstGrip = grips.first()
+  await expect(firstGrip).toBeVisible()
+  const box = await firstGrip.boundingBox()
+  expect(box.width).toBeGreaterThanOrEqual(24)
+  expect(box.height).toBeGreaterThanOrEqual(24)
+  await expect(firstGrip).toHaveCSS('cursor', 'grab')
+  await expect(page.getByRole('article').first()).not.toHaveAttribute('draggable', 'true')
+  const gripColors = await firstGrip.evaluate((grip) => {
+    const icon = grip.querySelector('.drag-handle-icon')
+    return {
+      foreground: getComputedStyle(icon).color,
+      background: getComputedStyle(grip).backgroundColor,
+    }
+  })
+  const ratio = contrastRatio(rgbChannels(gripColors.foreground), rgbChannels(gripColors.background))
+  expect(ratio).toBeGreaterThanOrEqual(3)
+  await testInfo.attach('drag-grip-metrics', {
+    body: JSON.stringify({
+      viewport: testInfo.project.use.viewport,
+      width: box.width,
+      height: box.height,
+      foreground: gripColors.foreground,
+      background: gripColors.background,
+      contrastRatio: Number(ratio.toFixed(4)),
+    }),
+    contentType: 'application/json',
+  })
+  await expect.poll(() => taskTitles(page)).toEqual(['bravo', 'Alpha', 'zulu'])
 
   await page.getByLabel('Sort Active tasks by').selectOption('title')
   await page.getByLabel('Active sort direction').selectOption('asc')
@@ -81,16 +130,16 @@ test('full task ordering journey persists and remains usable without page overfl
   }
 
   await page.reload()
-  await page.getByLabel('Sort Active tasks by').selectOption('priority')
-  await page.getByLabel('Active sort direction').selectOption('asc')
+  await expect(page.getByLabel('Sort Active tasks by')).toHaveValue('priority')
+  await expect(page.getByLabel('Active sort direction')).toHaveValue('asc')
   await expect.poll(() => taskTitles(page)).toEqual(savedOrder)
 
   await page.getByRole('button', { name: 'Log out' }).click()
   await page.getByLabel('Email').fill(identity.email)
   await page.getByLabel('Password').fill(identity.password)
   await page.getByRole('button', { name: 'Log in' }).click()
-  await page.getByLabel('Sort Active tasks by').selectOption('priority')
-  await page.getByLabel('Active sort direction').selectOption('asc')
+  await expect(page.getByLabel('Sort Active tasks by')).toHaveValue('priority')
+  await expect(page.getByLabel('Active sort direction')).toHaveValue('asc')
   await expect.poll(() => taskTitles(page)).toEqual(savedOrder)
 
   await page.getByRole('checkbox', { name: 'Complete bravo' }).press('Space')
@@ -140,8 +189,8 @@ test('rejected reorder visibly restores the authoritative order', async ({ page 
   await signupAndLogin(page, identity)
   await createTask(page, 'First')
   await createTask(page, 'Second')
-  await page.getByLabel('Sort Active tasks by').selectOption('priority')
-  await page.getByLabel('Active sort direction').selectOption('asc')
+  await expect(page.getByLabel('Sort Active tasks by')).toHaveValue('priority')
+  await expect(page.getByLabel('Active sort direction')).toHaveValue('asc')
   await expect.poll(() => taskTitles(page)).toEqual(['Second', 'First'])
   const authoritative = await taskTitles(page)
 
