@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-role-independence",
+  "milestone_id": "priority-reorder-discoverability",
+  "decision": "applicable",
+  "covered_role_ids": ["orchestrator-tech-lead", "frontend-engineer", "code-reviewer", "build-manager", "quality-engineer", "independent-auditor"],
+  "rationale": "Implementation, orchestration, Code Review, Build Verification, Quality Review, and Independent Audit remain assigned to distinct approved identities."
+}

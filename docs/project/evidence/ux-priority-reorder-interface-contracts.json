@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-interface-contracts",
+  "milestone_id": "priority-reorder-discoverability",
+  "interfaces": [
+    {
+      "interface_id": "frontend-ordering-and-drag-contract",
+      "owner_instance_id": "frontend-engineer-ordering",
+      "contract": "Active sends sortKey=priority and direction=asc by default; Completed retains completedAt desc; only the visible grip starts mouse drag; the wrapper accepts drops; success reloads authoritative state; failures retain confirmed state and restore focus."
+    },
+    {
+      "interface_id": "github-issue-reconciliation",
+      "owner_instance_id": "orchestrator-tech-lead-delivery",
+      "contract": "Only the Orchestrator closes issues; issues 4 through 6 require prior accepted milestone evidence and issue 7 additionally requires this milestone's accepted ordered gate chain."
+    }
+  ]
+}

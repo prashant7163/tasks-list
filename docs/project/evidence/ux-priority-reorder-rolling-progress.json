@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-rolling-progress",
+  "milestone_id": "priority-reorder-discoverability",
+  "source_revision": "2123300687dd8f387c0ec75c2137ed98c805418d",
+  "baseline": {
+    "milestone_2_merge": "1281b38",
+    "milestone_3_merge": "b976725",
+    "frontend_tests": "49 passing before this change",
+    "backend_tests": "37 passing before this change"
+  },
+  "current": "Approved design, specification, and implementation plan are committed; isolated worktree baseline tests pass; implementation has not started."
+}

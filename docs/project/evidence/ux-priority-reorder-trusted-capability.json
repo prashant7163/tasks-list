@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-trusted-capability",
+  "milestone_id": "priority-reorder-discoverability",
+  "decision": "applicable",
+  "capability_ids": ["github-cli-issue-read-write"],
+  "rationale": "Repository-local implementation needs no external capability; the Orchestrator alone uses the authenticated GitHub CLI to read and close only issues 4 through 7 after their evidence conditions are met."
+}

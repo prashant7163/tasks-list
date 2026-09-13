@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-threat-decision",
+  "milestone_id": "priority-reorder-discoverability",
+  "decision": "applicable",
+  "control_ids": ["mouse-drag-source-boundary", "backend-authoritative-reconciliation", "pending-action-exclusion", "exact-evidence-before-issue-close"],
+  "rationale": "The change crosses UI event, asynchronous reconciliation, and external issue-state boundaries; controls keep the grip as sole drag source, preserve backend authority, block conflicting pending actions, and delay issue closure until evidence is accepted."
+}
