@@ -154,7 +154,11 @@ class TaskLifecycleIntegrationTest {
         assertCounts(owner, 1, 1);
 
         mutate(owner, post("/api/tasks/{id}/reactivate", first), status().isOk());
-        mvc.perform(get("/api/tasks").queryParam("status", "ACTIVE").cookie(owner.cookie()))
+        mvc.perform(get("/api/tasks")
+                .queryParam("status", "ACTIVE")
+                .queryParam("sort", "priority")
+                .queryParam("direction", "asc")
+                .cookie(owner.cookie()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.tasks[0].id", is((int) first)))
             .andExpect(jsonPath("$.tasks[0].priority", is(1)))

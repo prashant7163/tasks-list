@@ -3,6 +3,7 @@ package com.taskslist.task;
 import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByOwnerIdAndStatusOrderByPriorityAsc(Long ownerId, TaskStatus status);
 
-    List<Task> findByOwnerIdAndStatusOrderByCompletedAtDesc(Long ownerId, TaskStatus status);
+    List<Task> findByOwnerIdAndStatus(Long ownerId, TaskStatus status, Sort sort);
 
     long countByOwnerIdAndStatus(Long ownerId, TaskStatus status);
 

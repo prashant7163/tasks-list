@@ -8,7 +8,11 @@ import com.taskslist.user.User;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,12 +31,9 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
-    public TaskListResponse list(Authentication authentication, TaskStatus status) {
+    public TaskListResponse list(Authentication authentication, TaskStatus status, TaskSort sort) {
         User owner = owner(authentication);
-        List<Task> ownedTasks = status == TaskStatus.ACTIVE
-            ? tasks.findByOwnerIdAndStatusOrderByPriorityAsc(owner.getId(), status)
-            : tasks.findByOwnerIdAndStatusOrderByCompletedAtDesc(owner.getId(), status);
-        return new TaskListResponse(ownedTasks.stream().map(TaskResponse::from).toList(), ownedTasks.size());
+        return response(tasks.findByOwnerIdAndStatus(owner.getId(), status, sort.definition()));
     }
 
     @Transactional(readOnly = true)
@@ -101,6 +102,40 @@ public class TaskService {
         return TaskResponse.from(task);
     }
 
+    @Transactional
+    public TaskListResponse reorder(Authentication authentication, List<Long> orderedIds) {
+        User owner = owner(authentication);
+        lock(owner);
+        List<Task> activeTasks = activeTasks(owner);
+        if (!isCompleteOrder(activeTasks, orderedIds)) {
+            throw new InvalidTaskOrderException();
+        }
+
+        Map<Long, Task> byId = new HashMap<>();
+        activeTasks.forEach(task -> byId.put(task.getId(), task));
+        List<Task> reordered = orderedIds.stream().map(byId::get).toList();
+        for (int index = 0; index < reordered.size(); index++) {
+            reordered.get(index).setPriority(index + 1);
+        }
+        tasks.flush();
+        return response(reordered);
+    }
+
+    private boolean isCompleteOrder(List<Task> activeTasks, List<Long> orderedIds) {
+        if (orderedIds == null || orderedIds.size() != activeTasks.size()) {
+            return false;
+        }
+        HashSet<Long> requested = new HashSet<>(orderedIds);
+        if (requested.size() != orderedIds.size()) {
+            return false;
+        }
+        return requested.equals(activeTasks.stream().map(Task::getId).collect(Collectors.toSet()));
+    }
+
+    private TaskListResponse response(List<Task> ownedTasks) {
+        return new TaskListResponse(ownedTasks.stream().map(TaskResponse::from).toList(), ownedTasks.size());
+    }
+
     private User owner(Authentication authentication) {
         return authService.currentUser(authentication.getName());
     }
@@ -136,6 +171,10 @@ public class TaskService {
     }
 
     static final class InvalidTaskTransitionException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+    }
+
+    static final class InvalidTaskOrderException extends RuntimeException {
         private static final long serialVersionUID = 1L;
     }
 }

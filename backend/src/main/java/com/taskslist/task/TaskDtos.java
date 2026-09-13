@@ -1,6 +1,7 @@
 package com.taskslist.task;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.util.List;
@@ -13,6 +14,8 @@ public final class TaskDtos {
         @NotBlank @Size(max = 120) String title,
         @NotBlank @Size(max = 1000) String description
     ) {}
+
+    public record TaskReorderRequest(@NotNull List<@NotNull Long> taskIds) {}
 
     public record TaskResponse(
         Long id,
