@@ -177,7 +177,7 @@ export default function TaskPage({ api, onSessionEnded }) {
 
   return (
     <section className="task-shell" aria-labelledby="task-view-title">
-      <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
+      <div className="sr-only" role="status" aria-label="Task status" aria-live="polite">{announcement}</div>
       {error && (
         <div className="alert action-message" role="alert">
           <span>{error}</span>
