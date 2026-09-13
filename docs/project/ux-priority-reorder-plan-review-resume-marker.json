@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "marker_id": "marker-ux-priority-reorder-plan-review-resume",
+  "checkpoint_reference": {
+    "artifact_id": "ux-priority-reorder-plan-review-ready",
+    "locator": ".studio/runs/ux-priority-reorder-discoverability/checkpoints/00000000000000000307-ux-priority-reorder-plan-review-ready.json",
+    "schema_version": "1.0.0",
+    "sha256": "c2333f2ae952945d5ac5ed60525610c13d70a38bd246cf4e78f9c0c49f3692ce"
+  },
+  "classification": "safe",
+  "reason_code": "exact_plan_approval_pending",
+  "explanation": "The approved Studio specification is accepted and the self-reviewed plan is bound to a durable checkpoint; implementation and GitHub mutations have not begun.",
+  "completed_work": [
+    "Accepted the application owner's exact specification approval.",
+    "Submitted the schema-valid run-specific specification to Studio.",
+    "Created, self-reviewed, committed, and checkpointed the implementation plan."
+  ],
+  "remaining_work": [
+    "Obtain the application owner's exact plan decision.",
+    "Submit the Studio milestone plan and readiness evidence.",
+    "Execute the frontend fix, assurance gates, and evidence-backed issue reconciliation."
+  ],
+  "next_operation": "Wait for the application owner's decision on plan SHA-256 1a6e606e14e12beb400eb32dc4b317839c1f2e41e92f84ce86602e6138cd2096.",
+  "user_confirmation_required": false,
+  "created_at": "2026-09-13T11:17:48Z"
+}
