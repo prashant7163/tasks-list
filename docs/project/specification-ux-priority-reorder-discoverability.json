@@ -1,0 +1,865 @@
+{
+  "schema_version": "1.0.0",
+  "identity": {
+    "project_id": "tasks-list",
+    "name": "Personal Task List",
+    "slug": "tasks-list",
+    "owner": "Application Owner",
+    "created_at": "2026-09-12T14:46:06Z"
+  },
+  "status": "approved",
+  "problem_statement": "The delivered Active task view initially sorts by creation date, so saved priority and its mouse drag affordance are hidden until users discover the Priority/highest-first sort combination; the decorative grip also does not act as the exclusive drag origin, and completed GitHub work remains recorded as open.",
+  "desired_outcome": "Make saved priority the intuitive initial Active ordering, expose a clearly visible dedicated mouse drag grip immediately, preserve all authoritative reorder and Completed-sort behavior, and reconcile completed GitHub issue state with exact evidence.",
+  "personas": [
+    {
+      "persona_id": "personal-task-user",
+      "name": "Personal task-list user",
+      "needs": [
+        "Create a private account and return through a secure session.",
+        "Capture, revise, prioritize, complete, and reactivate personal tasks.",
+        "See active and completed work separately on desktop and mobile-sized viewports.",
+        "Trust that task data persists locally and remains inaccessible to other users."
+      ]
+    },
+    {
+      "persona_id": "local-operator",
+      "name": "Local application operator",
+      "needs": [
+        "Start the complete application with Docker Compose and required local configuration.",
+        "Begin with an empty database and retain PostgreSQL data through ordinary container replacement.",
+        "Diagnose operation through clean, human-readable rolling logs."
+      ]
+    }
+  ],
+  "primary_journeys": [
+    {
+      "journey_id": "register-and-sign-in",
+      "persona_id": "personal-task-user",
+      "outcome": "The user creates an account and starts an authenticated task-management session.",
+      "steps": [
+        "Open Sign Up and submit a display name, email, and password.",
+        "Receive a success indication and return to Login without being automatically signed in.",
+        "Submit the normalized email and password.",
+        "Arrive on the Active tab with the signed-in display name visible."
+      ]
+    },
+    {
+      "journey_id": "manage-active-tasks",
+      "persona_id": "personal-task-user",
+      "outcome": "The user immediately sees and maintains a correctly validated, prioritized, and optionally re-sorted active task list.",
+      "steps": [
+        "Open Active and see Priority highest-first selected with saved priority order and a visible grip on every task.",
+        "Create a task with a required title and description and see it immediately at highest priority.",
+        "Edit an active task without changing its creation time or priority.",
+        "Press and hold a task grip with the mouse, drag to a new position, release, and retain the authoritative order after reload.",
+        "Choose another allowed Active sort key and direction when desired; reorder grips are absent outside Priority highest-first.",
+        "Cancel or confirm deletion through a confirmation dialog."
+      ]
+    },
+    {
+      "journey_id": "complete-and-reactivate",
+      "persona_id": "personal-task-user",
+      "outcome": "The user moves tasks reversibly between Active and Completed while counts and status-specific fields stay correct.",
+      "steps": [
+        "Complete an active task with its checkbox.",
+        "See it leave Active, enter Completed with muted styling and a backend-assigned completion time, and lose priority.",
+        "Sort Completed tasks by an allowed key and direction.",
+        "Reactivate the task and see it return to Active at highest priority with completion time cleared.",
+        "Observe both tab counts update after each transition."
+      ]
+    },
+    {
+      "journey_id": "protect-and-end-session",
+      "persona_id": "personal-task-user",
+      "outcome": "The user cannot access another account's data and can end access to protected pages.",
+      "steps": [
+        "Use task operations only within the authenticated account's ownership scope.",
+        "Receive not-found behavior for a task that does not exist or is not owned by the account.",
+        "Log out and return to Login.",
+        "Remain unable to access protected content with the invalidated or expired session."
+      ]
+    },
+    {
+      "journey_id": "run-locally-with-persistence",
+      "persona_id": "local-operator",
+      "outcome": "The operator starts and restarts the local stack without seeded data or loss of persisted user data.",
+      "steps": [
+        "Supply required local configuration and run docker compose up.",
+        "Observe frontend, backend, and PostgreSQL services start and Flyway migrations apply automatically.",
+        "Confirm the first startup has no users or tasks.",
+        "Create data, recreate ordinary service containers, and confirm the named PostgreSQL volume retains it."
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "goal_id": "private-task-management",
+      "statement": "Enable each registered user to manage only their own active and completed tasks."
+    },
+    {
+      "goal_id": "predictable-task-state",
+      "statement": "Keep task validation, lifecycle transitions, timestamps, sorting, and active priority deterministic and backend-authoritative."
+    },
+    {
+      "goal_id": "local-persistent-operation",
+      "statement": "Run the complete stack locally with Docker Compose and preserve PostgreSQL data in a named volume."
+    },
+    {
+      "goal_id": "traceable-delivery",
+      "statement": "Map Studio to the canonical GitHub repository and track appropriate delivery work through current issues and milestones."
+    }
+  ],
+  "success_criteria": [
+    {
+      "criterion_id": "success-local-startup",
+      "statement": "The complete empty-state application starts locally and applies its schema automatically.",
+      "measurement": "From an empty database with required configuration supplied, docker compose up starts frontend, backend, and PostgreSQL; Flyway completes; user and task row counts are zero."
+    },
+    {
+      "criterion_id": "success-account-session",
+      "statement": "Registration, login, logout, and invalid-session handling follow the settled account flow.",
+      "measurement": "Acceptance scenarios verify registration redirects to Login without a session, normalized duplicate email is rejected, valid login opens Active, and logout or expiry prevents protected access."
+    },
+    {
+      "criterion_id": "success-owner-isolation",
+      "statement": "No user can read or mutate another user's tasks.",
+      "measurement": "A two-user authorization test exercises every task read and mutation capability and receives no foreign task data, with direct foreign IDs producing not-found behavior."
+    },
+    {
+      "criterion_id": "success-active-management",
+      "statement": "Users immediately see saved priority and can create, edit, delete, sort, and deliberately reorder valid active tasks with correct visible state.",
+      "measurement": "Acceptance scenarios cover Priority/highest-first as the Active frontend default, a visible dedicated grip as the sole drag origin, validation bounds, immediate list/count updates, delete confirmation, every Active sort direction, and persisted contiguous priority after reload and later login."
+    },
+    {
+      "criterion_id": "success-task-transitions",
+      "statement": "Completion and reactivation preserve immutable task data while updating status-specific data and views.",
+      "measurement": "Acceptance scenarios verify completion time and priority removal on completion, read-only Completed behavior, all Completed sorts, and highest-priority assignment with cleared completion time on reactivation."
+    },
+    {
+      "criterion_id": "success-data-persistence",
+      "statement": "Accounts and tasks survive ordinary Compose restarts and container recreation.",
+      "measurement": "After creating at least one account and task, recreate the application and database containers without deleting the named volume and verify the same account and task remain available."
+    },
+    {
+      "criterion_id": "success-responsive-accessible-ui",
+      "statement": "The minimal interface remains usable with conventional controls on ordinary desktop and mobile viewport sizes.",
+      "measurement": "UI review at representative desktop and mobile widths confirms readable content, visible keyboard focus, clear labels, reachable actions, and no viewport-blocking layout failures."
+    },
+    {
+      "criterion_id": "success-delivery-traceability",
+      "statement": "The Studio project and appropriate delivery records are traceable in the canonical GitHub repository.",
+      "measurement": "Verify repository mapping to https://github.com/prashant7163/tasks-list and that agreed stages have milestones with scoped issues carrying acceptance criteria, status, and relevant implementation or evidence links."
+    }
+  ],
+  "non_goals": [
+    "Deploying or hosting the application in the cloud or designing a multi-server architecture.",
+    "Adding due dates, reminders, notifications, user-entered completion dates, or calendar behavior.",
+    "Adding tags, categories, projects, subtasks, search, extra filters, pagination, or infinite scrolling.",
+    "Adding attachments, rich text, collaboration, task sharing, multiple assignees, analytics, audit history, or seeded demo data.",
+    "Adding email verification, password recovery, profile management, account deletion, administrative screens, social login, or third-party product integrations.",
+    "Creating a native mobile client, elaborate branding, or a UI component framework.",
+    "Prescribing capacity, scalability, performance targets, an automated-test framework, or an exact dependency version during discovery."
+  ],
+  "scope_included": [
+    "React/Vite frontend with Sign Up, Login, and a protected task view containing Active and Completed tabs, per-tab counts, and independent sort controls.",
+    "Spring Boot REST backend with Spring Security server-side sessions, CSRF protection, ownership enforcement, validation, task lifecycle logic, sorting, and transactional priority updates.",
+    "PostgreSQL persistence through JPA/Hibernate and automatically applied Flyway migrations.",
+    "Registration with display name, normalized case-insensitive unique email, adaptively hashed password, and redirect to Login without automatic authentication.",
+    "Active task creation, editing, confirmed permanent deletion, completion, reversible sorting, and immediately discoverable mouse drag-and-drop priority ordering through a dedicated visible grip.",
+    "Completed task display with muted styling, reversible sorting, read-only behavior except reactivation, and backend-controlled completion timestamps.",
+    "Docker Compose orchestration for frontend, backend, and PostgreSQL, with an empty initial database and a named database volume.",
+    "Clean human-readable logging with rolling log files.",
+    "Canonical GitHub repository mapping plus useful issue and milestone tracking for delivery stages, implementable work, defects, actionable decisions, and acceptance follow-ups."
+  ],
+  "scope_excluded": [
+    "All capabilities listed in non_goals.",
+    "Email-format validation and password-strength or complexity rules beyond required, nonblank input and normal defensive size limits.",
+    "Editing or deleting completed tasks, or assigning priority to completed tasks.",
+    "Trusting frontend validation or authorization as enforcement of business rules.",
+    "Automatic authentication immediately after registration.",
+    "Drag-and-drop outside the normal highest-to-lowest Priority view; the reverse Priority view may disable reordering.",
+    "Ceremonial or duplicate tracking artifacts that do not add delivery value."
+  ],
+  "functional_requirements": [
+    {
+      "requirement_id": "account-registration",
+      "statement": "The system shall register an account from a required display name, email, and password while enforcing normalized email uniqueness and safe password storage.",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "account-registration-required-fields",
+          "statement": "Blank or whitespace-only display name, email, or password is rejected with a clear field-level error."
+        },
+        {
+          "criterion_id": "account-registration-email-normalization",
+          "statement": "Surrounding email whitespace is trimmed and email lookup and uniqueness are case-insensitive, so differently capitalized forms cannot create distinct accounts."
+        },
+        {
+          "criterion_id": "account-registration-password-hash",
+          "statement": "The stored credential is only an adaptive Spring Security password hash and never the plaintext password."
+        },
+        {
+          "criterion_id": "account-registration-redirect",
+          "statement": "Successful registration creates the account, shows success, creates no authenticated session, and redirects to Login."
+        }
+      ]
+    },
+    {
+      "requirement_id": "session-authentication",
+      "statement": "The system shall authenticate by email and password using a server-side session and provide current-user, logout, and protected-route behavior.",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "session-authentication-generic-error",
+          "statement": "Invalid credentials return one generic error that does not disclose whether the email exists."
+        },
+        {
+          "criterion_id": "session-authentication-success",
+          "statement": "Valid credentials create a server-side session in an HTTP-only cookie and redirect to the Active tab."
+        },
+        {
+          "criterion_id": "session-authentication-route-guard",
+          "statement": "Unauthenticated access to protected content and an expired or invalid session return the UI to Login; authenticated access to public auth routes may redirect to tasks."
+        },
+        {
+          "criterion_id": "session-authentication-logout",
+          "statement": "Logout invalidates the server-side session and returns the user to Login, after which protected content is inaccessible."
+        }
+      ]
+    },
+    {
+      "requirement_id": "task-owner-authorization",
+      "statement": "The backend shall scope every task read and mutation to the authenticated owner without disclosing foreign task existence.",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "task-owner-authorization-isolation",
+          "statement": "Across list, edit, delete, complete, reactivate, and reorder capabilities, one registered user cannot view or change another user's tasks."
+        },
+        {
+          "criterion_id": "task-owner-authorization-not-found",
+          "statement": "A requested task that is absent or not owned by the authenticated user produces the same not-found behavior."
+        }
+      ]
+    },
+    {
+      "requirement_id": "task-list-views",
+      "statement": "The protected task view shall show the signed-in identity, Logout, task creation access, and separate Active and Completed tabs with independent counts and sort controls.",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "task-list-views-active-default",
+          "statement": "After login the Active tab is selected and shows only active tasks in Priority highest-first order, the user's display name, Logout, creation access, its count, Active sort controls, and visible reorder grips when tasks exist."
+        },
+        {
+          "criterion_id": "task-list-views-completed-separate",
+          "statement": "The Completed tab shows only completed tasks, its own count and sort controls, and readable muted grayscale task styling."
+        },
+        {
+          "criterion_id": "task-list-views-fields",
+          "statement": "Active cards show completion, title, description, creation date, edit, and delete; Completed cards show title, description, creation date, completion date, and Reactivate."
+        }
+      ]
+    },
+    {
+      "requirement_id": "active-task-create-edit-delete",
+      "statement": "The system shall let users create, edit, and permanently delete their own active tasks under the settled field and state rules.",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "active-task-field-validation",
+          "statement": "Creation and editing reject a blank title or description, a title over 120 characters, or a description over 1,000 characters with clear field-level errors."
+        },
+        {
+          "criterion_id": "active-task-create-state",
+          "statement": "A valid new task is ACTIVE with backend-assigned immutable creation time and highest active priority, and appears with an updated count without a full page reload."
+        },
+        {
+          "criterion_id": "active-task-edit-invariants",
+          "statement": "Editing is limited to active tasks and changes title or description without changing creation time or priority."
+        },
+        {
+          "criterion_id": "active-task-delete-confirmation",
+          "statement": "Deleting is limited to active tasks; cancel leaves the task unchanged, while confirmation permanently deletes it and closes any active-priority gap."
+        }
+      ]
+    },
+    {
+      "requirement_id": "task-completion-reactivation",
+      "statement": "The system shall support valid, reversible transitions between ACTIVE and COMPLETED while preserving owner, content, and creation time.",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "task-completion-effects",
+          "statement": "Completing an active task sets COMPLETED and backend current completion time, clears priority, moves it between tabs, and updates both counts."
+        },
+        {
+          "criterion_id": "task-completed-read-only",
+          "statement": "A completed task has no priority and cannot be edited or deleted."
+        },
+        {
+          "criterion_id": "task-reactivation-effects",
+          "statement": "Reactivating a completed task sets ACTIVE, clears completion time, assigns highest active priority, moves it between tabs, and updates both counts."
+        },
+        {
+          "criterion_id": "task-transition-rejection",
+          "statement": "Completing an already completed task or reactivating an active task is rejected without changing persisted state."
+        }
+      ]
+    },
+    {
+      "requirement_id": "active-priority-reorder",
+      "statement": "The system shall maintain a unique contiguous priority order for each user's active tasks and persist authorized mouse drag-and-drop reorder operations transactionally.",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "active-priority-ordering",
+          "statement": "Within each user's active tasks, lower numeric positions mean higher priority and positions remain unique and contiguous beginning at 1."
+        },
+        {
+          "criterion_id": "active-priority-drag-drop",
+          "statement": "In the normal highest-first Priority view, every active task has a clearly visible dedicated mouse grip; only that grip initiates press-and-hold dragging, while the task item remains the drop surface."
+        },
+        {
+          "criterion_id": "active-priority-transaction",
+          "statement": "The backend validates that every reordered task is active and owned by the authenticated user, then commits the entire order transactionally or rejects it without partial changes."
+        },
+        {
+          "criterion_id": "active-priority-persistence",
+          "statement": "A successful reordered priority survives reload and later login; reverse Priority sorting is only a reversed presentation and may disable drag-and-drop."
+        },
+        {
+          "criterion_id": "active-priority-drag-affordance",
+          "statement": "Each enabled grip has a bounded pointer target at least 24 by 24 CSS pixels, a graphic with at least 3:1 contrast against the card, grab/grabbing cursor feedback, and no overlap with task content or controls."
+        },
+        {
+          "criterion_id": "active-priority-empty-state",
+          "statement": "The default Priority highest-first Active view preserves the established empty-state copy when no active tasks exist."
+        }
+      ]
+    },
+    {
+      "requirement_id": "task-sorting",
+      "statement": "The system shall provide only the allowed, reversible, case-insensitive task sort choices, with presentation sorting separate from saved priority.",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "task-sorting-active",
+          "statement": "The frontend Active view defaults to Priority highest-first and supports both directions for creation date, priority, and case-insensitive title; the backend omitted-query default remains unchanged."
+        },
+        {
+          "criterion_id": "task-sorting-completed",
+          "statement": "Completed defaults to completion newest-first and supports both directions for completion date, creation date, and case-insensitive title."
+        },
+        {
+          "criterion_id": "task-sorting-presentation-only",
+          "statement": "Changing a sort choice does not mutate task state or saved priority; only an explicit valid reorder changes priority."
+        },
+        {
+          "criterion_id": "task-sorting-invalid-rejected",
+          "statement": "An unsupported sort key or direction is rejected and is never interpolated into an unsafe dynamic query."
+        }
+      ]
+    },
+    {
+      "requirement_id": "rest-capabilities",
+      "statement": "The backend shall expose REST capabilities for authentication, current identity, status-specific task lists and counts, task mutations, lifecycle transitions, and active reorder.",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "rest-capabilities-complete",
+          "statement": "The API provides register, login, logout, current identity, list Active, list Completed, create, edit, delete, complete, reactivate, and reorder capabilities."
+        },
+        {
+          "criterion_id": "rest-capabilities-counts",
+          "statement": "List responses or an equivalent small summary capability provide enough information to render both tab counts after reads and mutations."
+        }
+      ]
+    },
+    {
+      "requirement_id": "delivery-tracking",
+      "statement": "The Studio project shall map to the canonical GitHub repository and use useful issues and milestones as current delivery records.",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "delivery-tracking-repository",
+          "statement": "The mapped canonical repository is https://github.com/prashant7163/tasks-list."
+        },
+        {
+          "criterion_id": "delivery-tracking-milestones",
+          "statement": "One or more GitHub milestones represent the agreed first-version delivery stages."
+        },
+        {
+          "criterion_id": "delivery-tracking-issues",
+          "statement": "Implementable work, defects, actionable decisions, and acceptance follow-ups use scoped issues with clear titles, descriptions, acceptance criteria, and applicable milestone assignments."
+        },
+        {
+          "criterion_id": "delivery-tracking-links-status",
+          "statement": "Relevant branches, commits, pull requests, test evidence, and decision notes link to satisfying issues, whose states are reconciled idempotently to reflect planned, active, blocked, and complete work without duplicate ceremony."
+        }
+      ]
+    }
+  ],
+  "non_functional_requirements": [
+    {
+      "requirement_id": "security-session-protection",
+      "statement": "Authentication, session, CSRF, validation, ownership, password, and error controls shall protect credentials and private task data at the local web trust boundary.",
+      "category": "security",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "security-session-cookie-csrf",
+          "statement": "Session cookies are HTTP-only with appropriate same-site settings, and state-changing requests enforce CSRF protection."
+        },
+        {
+          "criterion_id": "security-backend-authority",
+          "statement": "The backend independently enforces authentication, ownership, field bounds, allowed sorts, state transitions, timestamps, and reorder validity."
+        },
+        {
+          "criterion_id": "security-safe-errors-logs",
+          "statement": "User-facing errors and logs expose neither stack traces, plaintext passwords, session identifiers, nor unnecessary sensitive values."
+        }
+      ]
+    },
+    {
+      "requirement_id": "privacy-data-minimization",
+      "statement": "The application shall persist and expose only the account and task data required by the settled first-version scope.",
+      "category": "privacy",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "privacy-data-minimization-fields",
+          "statement": "Persisted product data is limited to required identity, password hash, task content, ownership, current status, current priority, and creation or completion timestamps."
+        },
+        {
+          "criterion_id": "privacy-no-history-disclosure",
+          "statement": "No audit trail, state-change history, analytics, foreign task data, or credential existence signal is exposed."
+        }
+      ]
+    },
+    {
+      "requirement_id": "accessibility-responsive-interface",
+      "statement": "The frontend shall provide a minimal responsive interface with clear labels, visible focus, readable states, and conventional form and button behavior.",
+      "category": "accessibility",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "accessibility-responsive-viewports",
+          "statement": "Sign Up, Login, Active, and Completed views remain readable and operable at representative ordinary desktop and mobile viewport sizes."
+        },
+        {
+          "criterion_id": "accessibility-focus-labels",
+          "statement": "Interactive controls have clear labels and visible keyboard focus, muted Completed styling retains readable contrast, and the mouse-only drag grip remains visually discoverable without falsely presenting keyboard-button semantics."
+        },
+        {
+          "criterion_id": "accessibility-form-feedback",
+          "statement": "Form validation and backend failures are associated with understandable fields or actions and do not rely only on color."
+        }
+      ]
+    },
+    {
+      "requirement_id": "reliability-transactional-state",
+      "statement": "Task state changes shall be transactional and unexpected server or database failures shall preserve previously committed data.",
+      "category": "reliability",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "reliability-atomic-mutations",
+          "statement": "Create, edit, delete, complete, reactivate, and especially multi-task priority reorder either commit their intended valid state fully or leave existing persisted state unchanged."
+        },
+        {
+          "criterion_id": "reliability-unexpected-error",
+          "statement": "An unexpected server or database error returns a generic retry message and does not partially apply the attempted mutation."
+        },
+        {
+          "criterion_id": "reliability-volume-persistence",
+          "statement": "A named volume mounted at PostgreSQL's data directory retains users and tasks across ordinary service restart and container recreation."
+        }
+      ]
+    },
+    {
+      "requirement_id": "operability-local-compose",
+      "statement": "The application shall be locally operable as frontend, backend, and PostgreSQL services through Docker Compose with automatic schema migration and useful rolling logs.",
+      "category": "operability",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "operability-compose-start",
+          "statement": "With required local configuration supplied, docker compose up starts every required service without requiring demo or seeded data."
+        },
+        {
+          "criterion_id": "operability-flyway-startup",
+          "statement": "Backend startup automatically applies mutually compatible Flyway migrations to an empty or existing database."
+        },
+        {
+          "criterion_id": "operability-rolling-logs",
+          "statement": "Application logging is clean and human-readable and uses rolling files so ordinary operation does not create an unbounded single log file."
+        }
+      ]
+    },
+    {
+      "requirement_id": "maintainability-repository-structure",
+      "statement": "The implementation shall keep clear frontend, backend, database-migration, and local-orchestration boundaries in one repository without speculative infrastructure.",
+      "category": "maintainability",
+      "acceptance_criteria": [
+        {
+          "criterion_id": "maintainability-directory-boundaries",
+          "statement": "React/Vite code resides under frontend, Spring Boot code under backend, and Compose configuration declares the frontend, backend, and PostgreSQL services."
+        },
+        {
+          "criterion_id": "maintainability-stable-stack",
+          "statement": "Implementation selects stable mutually compatible releases for the approved stack and records the selected versions in normal build manifests."
+        },
+        {
+          "criterion_id": "maintainability-no-speculation",
+          "statement": "The first version contains no cloud, multi-server, scalability, component-library, or unrelated product scaffolding."
+        }
+      ]
+    }
+  ],
+  "chosen_stack": {
+    "components": [
+      "React with Vite for the frontend",
+      "Plain CSS without a component library",
+      "Spring Boot REST API",
+      "Spring Security server-side sessions",
+      "JPA/Hibernate persistence",
+      "PostgreSQL database",
+      "Flyway schema migrations",
+      "Docker Compose local orchestration",
+      "Human-readable clean logging with rolling logs"
+    ],
+    "alternatives": [
+      {
+        "name": "JWT authentication",
+        "rationale": "Explicitly rejected in favor of server-side sessions for this small local-first application."
+      },
+      {
+        "name": "Frontend component library",
+        "rationale": "Explicitly excluded; plain CSS is sufficient for the minimal interface."
+      },
+      {
+        "name": "Cloud or multi-server deployment",
+        "rationale": "Explicitly excluded because the required runtime is local Docker Compose."
+      }
+    ],
+    "rationale": "The application owner settled this conventional small full-stack stack; it supports backend-authoritative sessions and validation, relational persistence and migrations, a lightweight responsive UI, and reproducible local startup without speculative infrastructure."
+  },
+  "ux_flow_references": [
+    "docs/project/ux-flow.md#sha256=f5844504edef7d757a7c136027eb8debe2f02b9d69802e0fa9f173032285c614",
+    "docs/superpowers/specs/2026-09-13-priority-reorder-discoverability-design.md"
+  ],
+  "responsive_behavior": "Use a clean minimal layout that remains readable and operable on ordinary desktop and mobile viewport sizes. Active opens in Priority highest-first with visible non-overlapping mouse drag grips when tasks exist; Completed retains completion newest-first. Preserve visible counts, sort controls, forms, buttons, focus states, and no horizontal overflow; touch reorder is not implied.",
+  "design_system_direction": "Plain CSS with no component library, elaborate branding, or decorative product work. Use clear labels, conventional controls, visible focus states, readable muted grayscale styling for Completed tasks, and a clearly bounded high-contrast drag grip whose graphic has at least 3:1 contrast against the card.",
+  "external_systems": [
+    {
+      "system_id": "github",
+      "name": "GitHub repository https://github.com/prashant7163/tasks-list",
+      "purpose": "Canonical source repository and delivery tracking through issues, milestones, branches, commits, pull requests, evidence links, and decision notes.",
+      "data_classifications": [
+        "Repository source and configuration",
+        "Delivery planning and status metadata",
+        "Test and review evidence",
+        "Non-secret decision records"
+      ]
+    }
+  ],
+  "data_classifications": [
+    "Account identity data: display name and normalized email",
+    "Authentication secrets: plaintext password in transit only, adaptive password hash at rest, and server-side session identifier",
+    "Private user content: task title and description",
+    "Task metadata: ownership, status, active priority, creation time, and completion time",
+    "Operational data: redacted application logs and generic error details",
+    "Delivery metadata: GitHub issues, milestones, links, status, and evidence references"
+  ],
+  "settled_decisions": [
+    "The application is deliberately small, local-first, and delivered as a full-stack web application in one repository.",
+    "Authentication uses Spring Security server-side sessions rather than JWT; registration does not sign the user in.",
+    "The backend is authoritative for authentication, ownership, validation, state changes, timestamps, sorting inputs, and priority.",
+    "Completion is reversible, Completed tasks are read-only except reactivation, and reactivated tasks return at highest active priority.",
+    "PostgreSQL data persists through a named Docker volume and Flyway migrations run during backend startup.",
+    "The canonical GitHub repository and GitHub issue and milestone tracking requirements are fixed.",
+    "No unresolved product questions remain within the stated scope.",
+    "Active and Completed use separate tabs and independent sorting; the Active frontend default is Priority highest-first and the Completed default is completion newest-first.",
+    "A clearly visible grip is the sole mouse drag origin; the task item remains the drop surface, and keyboard or touch reorder remains outside scope.",
+    "The backend omitted-query sort default, REST contract, authorization, database schema, and transactional priority rules remain unchanged.",
+    "GitHub issues 4 through 6 close with prior accepted evidence; issue 7 remains open until this exact fix completes ordered assurance."
+  ],
+  "assumptions": [
+    "Implementation can select stable mutually compatible dependency releases available when work begins without changing the approved technology stack.",
+    "Implementation can select normal defensive maximum sizes for registration fields that do not introduce product-level email-format or password-strength rules.",
+    "The local operator will supply required non-secret configuration and keep credentials or environment secrets outside repository and Studio state.",
+    "The delivery operator will have authorized access to map the Studio project and maintain issues and milestones in the canonical GitHub repository.",
+    "Ordinary mobile viewport usability applies to the responsive web interface; the specified priority reorder interaction is mouse drag-and-drop and does not imply a native mobile or touch-reorder requirement.",
+    "Exact REST route names may follow established Spring conventions as long as every required capability and behavior remains available."
+  ],
+  "constraints": [
+    "Use one repository with frontend and backend directories and Docker Compose configuration for frontend, backend, and PostgreSQL.",
+    "Run locally through Docker Compose; cloud hosting and multi-server architecture are outside scope.",
+    "Start the first empty database without seeded users or tasks and mount a named volume at PostgreSQL's data directory.",
+    "Store timestamps in UTC and let the frontend format them for display.",
+    "Title is required, nonblank, and at most 120 characters; description is required, nonblank, and at most 1,000 characters.",
+    "Email comparison and uniqueness are case-insensitive after trimming and normalization, with no product-level email-format validation.",
+    "Passwords have no product-level strength rule but must never be stored in plaintext.",
+    "No prescribed performance, capacity, multi-server, automated-test framework, or test-coverage percentage target may be inferred.",
+    "Only exact explicit human approval of the final specification digest may move this draft across the approval boundary."
+  ],
+  "risks": [
+    "A missing ownership predicate on any task route could expose or mutate another user's private tasks; mitigate with centralized authenticated-owner queries and two-user tests across every capability.",
+    "Session-cookie or CSRF misconfiguration could permit unauthorized state changes; mitigate through an Architect-reviewed threat model and security-focused integration tests.",
+    "Concurrent task creation, completion, deletion, reactivation, or reorder could produce duplicate or gapped priorities; mitigate with database constraints or locking as appropriate and transactional invariant tests.",
+    "Dynamic sort handling could become an injection or correctness vector; mitigate by mapping an explicit allowlist of keys and directions to typed backend sort definitions.",
+    "Container recreation could lose data if the named volume is mis-mounted or removed; mitigate with explicit Compose configuration and a persistence acceptance test.",
+    "Frontend and backend state may diverge after failed mutations; mitigate by applying UI updates only from successful authoritative responses and presenting safe retry feedback.",
+    "Logs could leak credentials, session identifiers, or task content; mitigate with redaction rules and verification of authentication and error log paths.",
+    "A nested draggable element could leave whole-card dragging enabled; mitigate by making only the grip draggable, retaining the wrapper only as a drop surface, and testing forbidden drag origins.",
+    "Defaulting to the priority component could suppress the existing empty state; mitigate with an explicit empty-state regression test.",
+    "A stronger grip could overlap content at narrow widths or remain subjectively faint; mitigate with desktop/mobile layout checks plus computed target-size and contrast evidence.",
+    "Changing the frontend default could regress confirmed-sort race protection or authoritative reconciliation; mitigate by retaining and rerunning pending-load, rejected-load, success, cancellation, reload, and later-login tests.",
+    "GitHub tracking can become stale or ceremonial; mitigate with fresh live readback and idempotent evidence-linked reconciliation at delivery gates."
+  ],
+  "dependencies": [
+    "A local Docker Engine with Docker Compose support.",
+    "Stable mutually compatible React, Vite, Java, Spring Boot, Spring Security, JPA/Hibernate, PostgreSQL, Flyway, and build-tool releases selected during implementation.",
+    "Browser support for standard responsive web behavior, HTTP cookies, conventional forms, and the required mouse drag-and-drop interaction.",
+    "Authorized GitHub access to https://github.com/prashant7163/tasks-list for later repository mapping and governed issue and milestone operations.",
+    "An Architect threat-model artifact covering account data, credentials, server-side sessions, CSRF, browser-to-backend trust, and per-user task authorization before specification approval.",
+    "A UX flow artifact for responsive authentication, Active and Completed views, validation, confirmation, session expiry, and mutation-failure states before implementation planning."
+  ],
+  "threat_model_required": true,
+  "threat_model_reference": "docs/project/threat-model.json#sha256=158f9ee6d6f71618e66366e55f6f40950ee331a6c728db29857bd7b4eeb1da78",
+  "standards_profile_ids": [
+    "studio-engineering-baseline"
+  ],
+  "materially_affected_specialists": [
+    {
+      "role_id": "discovery-lead",
+      "reason": "The approved behavior change must be captured in a bounded, traceable run-specific specification."
+    },
+    {
+      "role_id": "architect",
+      "reason": "The frontend interaction and superseding UI-default clause require confirmation that public API, data, and threat boundaries remain unchanged."
+    },
+    {
+      "role_id": "ux-ui-designer",
+      "reason": "The visible grip, pointer target, contrast, and responsive non-overlap behavior require interaction review."
+    },
+    {
+      "role_id": "frontend-engineer",
+      "reason": "The implementation and regression tests are confined to the React/Vite frontend."
+    },
+    {
+      "role_id": "code-reviewer",
+      "reason": "The code-producing frontend task requires independent exact-candidate review."
+    },
+    {
+      "role_id": "build-manager",
+      "reason": "The exact frontend candidate requires reproducible test and production-build evidence."
+    },
+    {
+      "role_id": "quality-engineer",
+      "reason": "Desktop and mobile-width behavior, drag initiation, persistence, rollback, and regression scope require independent verification."
+    },
+    {
+      "role_id": "independent-auditor",
+      "reason": "The completed task and GitHub reconciliation require identity-independent evidence tracing reported only to the Orchestrator."
+    }
+  ],
+  "open_questions": [],
+  "traceability": [
+    {
+      "traceability_id": "trace-account-registration",
+      "requirement_id": "account-registration",
+      "acceptance_criterion_ids": [
+        "account-registration-required-fields",
+        "account-registration-email-normalization",
+        "account-registration-password-hash",
+        "account-registration-redirect"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 5.1, 10, and 11 criteria 3-4"
+      ]
+    },
+    {
+      "traceability_id": "trace-session-authentication",
+      "requirement_id": "session-authentication",
+      "acceptance_criterion_ids": [
+        "session-authentication-generic-error",
+        "session-authentication-success",
+        "session-authentication-route-guard",
+        "session-authentication-logout"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 4.2, 5.2, 9-10, and 11 criteria 3 and 15"
+      ]
+    },
+    {
+      "traceability_id": "trace-task-owner-authorization",
+      "requirement_id": "task-owner-authorization",
+      "acceptance_criterion_ids": [
+        "task-owner-authorization-isolation",
+        "task-owner-authorization-not-found"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 5.3, 10, and 11 criterion 5"
+      ]
+    },
+    {
+      "traceability_id": "trace-task-list-views",
+      "requirement_id": "task-list-views",
+      "acceptance_criterion_ids": [
+        "task-list-views-active-default",
+        "task-list-views-completed-separate",
+        "task-list-views-fields"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 4.3, 7.1, 8.1, and 11 criteria 10-12"
+      ]
+    },
+    {
+      "traceability_id": "trace-active-task-create-edit-delete",
+      "requirement_id": "active-task-create-edit-delete",
+      "acceptance_criterion_ids": [
+        "active-task-field-validation",
+        "active-task-create-state",
+        "active-task-edit-invariants",
+        "active-task-delete-confirmation"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 6.1, 7.2-7.4, 10, and 11 criteria 6-8"
+      ]
+    },
+    {
+      "traceability_id": "trace-task-completion-reactivation",
+      "requirement_id": "task-completion-reactivation",
+      "acceptance_criterion_ids": [
+        "task-completion-effects",
+        "task-completed-read-only",
+        "task-reactivation-effects",
+        "task-transition-rejection"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 7.5, 8.1, 8.3, 10, and 11 criteria 11-14"
+      ]
+    },
+    {
+      "traceability_id": "trace-active-priority-reorder",
+      "requirement_id": "active-priority-reorder",
+      "acceptance_criterion_ids": [
+        "active-priority-ordering",
+        "active-priority-drag-drop",
+        "active-priority-transaction",
+        "active-priority-persistence",
+        "active-priority-drag-affordance",
+        "active-priority-empty-state"
+      ],
+      "source_references": [
+        "docs/superpowers/specs/2026-09-13-priority-reorder-discoverability-design.md"
+      ]
+    },
+    {
+      "traceability_id": "trace-task-sorting",
+      "requirement_id": "task-sorting",
+      "acceptance_criterion_ids": [
+        "task-sorting-active",
+        "task-sorting-completed",
+        "task-sorting-presentation-only",
+        "task-sorting-invalid-rejected"
+      ],
+      "source_references": [
+        "docs/superpowers/specs/2026-09-13-priority-reorder-discoverability-design.md"
+      ]
+    },
+    {
+      "traceability_id": "trace-rest-capabilities",
+      "requirement_id": "rest-capabilities",
+      "acceptance_criterion_ids": [
+        "rest-capabilities-complete",
+        "rest-capabilities-counts"
+      ],
+      "source_references": [
+        "application-owner-discovery.md section 9"
+      ]
+    },
+    {
+      "traceability_id": "trace-delivery-tracking",
+      "requirement_id": "delivery-tracking",
+      "acceptance_criterion_ids": [
+        "delivery-tracking-repository",
+        "delivery-tracking-milestones",
+        "delivery-tracking-issues",
+        "delivery-tracking-links-status"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 3.0, 11 criterion 17, and 13"
+      ]
+    },
+    {
+      "traceability_id": "trace-security-session-protection",
+      "requirement_id": "security-session-protection",
+      "acceptance_criterion_ids": [
+        "security-session-cookie-csrf",
+        "security-backend-authority",
+        "security-safe-errors-logs"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 3.2, 5.1-5.3, and 10"
+      ]
+    },
+    {
+      "traceability_id": "trace-privacy-data-minimization",
+      "requirement_id": "privacy-data-minimization",
+      "acceptance_criterion_ids": [
+        "privacy-data-minimization-fields",
+        "privacy-no-history-disclosure"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 5-6, 10, and 12"
+      ]
+    },
+    {
+      "traceability_id": "trace-accessibility-responsive-interface",
+      "requirement_id": "accessibility-responsive-interface",
+      "acceptance_criterion_ids": [
+        "accessibility-responsive-viewports",
+        "accessibility-focus-labels",
+        "accessibility-form-feedback"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 4.1 and 10"
+      ]
+    },
+    {
+      "traceability_id": "trace-reliability-transactional-state",
+      "requirement_id": "reliability-transactional-state",
+      "acceptance_criterion_ids": [
+        "reliability-atomic-mutations",
+        "reliability-unexpected-error",
+        "reliability-volume-persistence"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 3.2, 7.6, 10, and 11 criterion 16"
+      ]
+    },
+    {
+      "traceability_id": "trace-operability-local-compose",
+      "requirement_id": "operability-local-compose",
+      "acceptance_criterion_ids": [
+        "operability-compose-start",
+        "operability-flyway-startup",
+        "operability-rolling-logs"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 3.1-3.2 and 11 criteria 1-2 and 16"
+      ]
+    },
+    {
+      "traceability_id": "trace-maintainability-repository-structure",
+      "requirement_id": "maintainability-repository-structure",
+      "acceptance_criterion_ids": [
+        "maintainability-directory-boundaries",
+        "maintainability-stable-stack",
+        "maintainability-no-speculation"
+      ],
+      "source_references": [
+        "application-owner-discovery.md sections 1, 3.1-3.2, and 12"
+      ]
+    }
+  ],
+  "approval": {
+    "schema_version": "1.0.0",
+    "approval_id": "apr-ux-priority-reorder-spec-v1",
+    "subject_type": "project_specification",
+    "subject_id": "tasks-list",
+    "subject_digest": "ae8d333ef932e003664ed97c40901242efa3c6653d633834cc0b01b2e00b3c14",
+    "decision": "approved",
+    "decided_by": "application-owner",
+    "decided_at": "2026-09-13T11:15:22Z",
+    "comment": "Application owner explicitly approved the persisted design specification at SHA-256 0f1ab2a9590b039ab52c914481b5a16d02ebce622f0872bb5024db318c815a8c; this schema-valid artifact is its run-specific Studio projection."
+  }
+}
