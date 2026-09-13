@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-design-specification",
+  "run_id": "ux-priority-reorder-discoverability",
+  "decision": "applicable",
+  "design_locator": "docs/superpowers/specs/2026-09-13-priority-reorder-discoverability-design.md",
+  "design_sha256": "0f1ab2a9590b039ab52c914481b5a16d02ebce622f0872bb5024db318c815a8c",
+  "design_commit": "8898da8fd175a551d2eafe809349650e6c69783c",
+  "baseline_commit": "b97672580313c79124f5fe1bf0155536a1e90181",
+  "checks": [
+    "The design records the confirmed default-sort and drag-affordance root cause.",
+    "The application owner approved the design direction before this artifact was written.",
+    "Discovery Lead and Architect assessments agree that the minimal change is frontend-only and preserves the backend contract.",
+    "The design self-review found no placeholders, contradictions, open questions, or unnecessary scope."
+  ],
+  "outcome": "pass"
+}

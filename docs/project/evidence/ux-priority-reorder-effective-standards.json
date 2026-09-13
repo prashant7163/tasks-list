@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-effective-standards",
+  "milestone_id": "priority-reorder-discoverability",
+  "decision": "applicable",
+  "applicable_standard_ids": ["secrets-redaction", "human-approval", "exact-snapshot-evidence", "meaningful-tests", "least-privilege"],
+  "exception_ids": [],
+  "rationale": "The Studio engineering baseline, TDD workflow, accessibility criteria, and ordered assurance gates apply without exception."
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-work-packages",
+  "milestone_id": "priority-reorder-discoverability",
+  "work_packages": [
+    {
+      "work_package_id": "ux-priority-reorder-frontend",
+      "owner_instance_id": "frontend-engineer-ordering",
+      "owned_locators": ["frontend/src/tasks", "frontend/src/styles.css", "frontend/e2e/tasks.spec.js"],
+      "dependency_work_package_ids": [],
+      "sequence": 1,
+      "deliverable": "Test-first Active priority default, preserved empty state, visible dedicated mouse grip, and frontend/browser regression coverage."
+    }
+  ]
+}

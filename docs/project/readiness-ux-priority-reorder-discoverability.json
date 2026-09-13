@@ -1,0 +1,1076 @@
+{
+  "schema_version": "1.0.0",
+  "readiness_id": "priority-reorder-discoverability-ready-v1",
+  "outcome": "ready",
+  "milestone_id": "priority-reorder-discoverability",
+  "specification_reference": {
+    "artifact_id": "tasks-list",
+    "locator": "docs/project/specification-ux-priority-reorder-discoverability.json",
+    "schema_version": "1.0.0",
+    "sha256": "1ef683d741a0eac3db5687dab9b353996cdfce55b01a25fd813f198d07076f21"
+  },
+  "plan_reference": {
+    "artifact_id": "tasks-list-priority-reorder-plan-v1",
+    "locator": "docs/project/plan-ux-priority-reorder-discoverability.json",
+    "schema_version": "1.0.0",
+    "sha256": "59e9a6334f5fc289f1488240f6cfa414969e185d5fb8114938d6efb7f41cf428"
+  },
+  "effective_standards": {
+    "decision": "applicable",
+    "rationale": "The Studio engineering baseline, TDD workflow, accessibility criteria, and ordered assurance gates apply without exception.",
+    "evidence_references": [
+      {
+        "artifact_id": "ux-priority-reorder-effective-standards",
+        "locator": "docs/project/evidence/ux-priority-reorder-effective-standards.json",
+        "schema_version": "1.0.0",
+        "sha256": "3534fa04a6dc461429e37d587ea184d2553667cd2a03445d0a6433ccf1c6dcaa"
+      }
+    ],
+    "applicable_standard_ids": [
+      "secrets-redaction",
+      "human-approval",
+      "exact-snapshot-evidence",
+      "meaningful-tests",
+      "least-privilege"
+    ],
+    "exception_ids": []
+  },
+  "role_skill_independence": {
+    "decision": "applicable",
+    "rationale": "Implementation, orchestration, Code Review, Build Verification, Quality Review, and Independent Audit use distinct approved identities.",
+    "evidence_references": [
+      {
+        "artifact_id": "ux-priority-reorder-role-independence",
+        "locator": "docs/project/evidence/ux-priority-reorder-role-independence.json",
+        "schema_version": "1.0.0",
+        "sha256": "36fbf5fcac181e873a380915f6e30e930f34f813ccfe56c8dcebdb1c82ad9ab7"
+      }
+    ],
+    "covered_role_ids": [
+      "orchestrator-tech-lead",
+      "frontend-engineer",
+      "code-reviewer",
+      "build-manager",
+      "quality-engineer",
+      "independent-auditor"
+    ]
+  },
+  "trusted_capability": {
+    "decision": "applicable",
+    "rationale": "The Orchestrator alone needs authenticated GitHub issue read/write access after local assurance; implementation and review remain repository-local.",
+    "evidence_references": [
+      {
+        "artifact_id": "ux-priority-reorder-trusted-capability",
+        "locator": "docs/project/evidence/ux-priority-reorder-trusted-capability.json",
+        "schema_version": "1.0.0",
+        "sha256": "640508befc88a4f26d088f4756b84a4bbc4760fbefe87009f3ae4e014c24a75a"
+      }
+    ],
+    "capability_ids": [
+      "github-cli-issue-read-write"
+    ]
+  },
+  "threat_decision": {
+    "decision": "applicable",
+    "rationale": "UI drag initiation, asynchronous reconciliation, and external issue mutation require explicit boundaries and ordered evidence.",
+    "evidence_references": [
+      {
+        "artifact_id": "ux-priority-reorder-threat-decision",
+        "locator": "docs/project/evidence/ux-priority-reorder-threat-decision.json",
+        "schema_version": "1.0.0",
+        "sha256": "c86162c79eb70b46f75100cdca05cc18a1dc389c067d1523b90d927340bbf756"
+      }
+    ],
+    "control_ids": [
+      "mouse-drag-source-boundary",
+      "backend-authoritative-reconciliation",
+      "pending-action-exclusion",
+      "exact-evidence-before-issue-close"
+    ]
+  },
+  "doctor_result": {
+    "decision": "applicable",
+    "rationale": "Configuration, runtime pin, journal integrity, projection, and secret-reference checks passed for the active run.",
+    "evidence_references": [
+      {
+        "artifact_id": "ux-priority-reorder-doctor",
+        "locator": "docs/project/evidence/ux-priority-reorder-doctor.json",
+        "schema_version": "1.0.0",
+        "sha256": "e28d6a71b6309e4a120f1821ff6ed9d867d82b69cf0ffdcf8acb352051a7c919"
+      }
+    ],
+    "redacted": true
+  },
+  "integration_test_plan": {
+    "decision": "applicable",
+    "rationale": "The change requires component, browser, build, backend regression, and GitHub readback verification across its affected boundaries.",
+    "evidence_references": [
+      {
+        "artifact_id": "ux-priority-reorder-integration-test-plan",
+        "locator": "docs/project/evidence/ux-priority-reorder-integration-test-plan.json",
+        "schema_version": "1.0.0",
+        "sha256": "fa02f85797dd15b163cb32cab2d693e63ac3bd8ac3087a010a6ea76c63a9d967"
+      }
+    ],
+    "integration_point_ids": [
+      "active-default-sort-request",
+      "priority-list-empty-state",
+      "dedicated-drag-grip-events",
+      "authoritative-reorder-reconciliation",
+      "desktop-mobile-browser",
+      "github-issue-evidence"
+    ]
+  },
+  "rolling_progress": {
+    "decision": "applicable",
+    "rationale": "Accepted Milestones 2 and 3 are the implementation baseline; the approved design and plan plus passing 49-test frontend baseline are recorded.",
+    "evidence_references": [
+      {
+        "artifact_id": "ux-priority-reorder-rolling-progress",
+        "locator": "docs/project/evidence/ux-priority-reorder-rolling-progress.json",
+        "schema_version": "1.0.0",
+        "sha256": "2c8dc40399c24e739dbc6440687d8af6a452681fd80c9425db6c0b9f90c62493"
+      }
+    ]
+  },
+  "boundary": "cross_boundary",
+  "role_applicability": [
+    {
+      "role": "orchestrator-tech-lead",
+      "decision": "applicable",
+      "rationale": "Owns evidence-bound GitHub issue reconciliation after all local gates pass.",
+      "owner_instance_id": "orchestrator-tech-lead-delivery",
+      "evidence_reference": {
+        "artifact_id": "ux-priority-reorder-role-independence",
+        "locator": "docs/project/evidence/ux-priority-reorder-role-independence.json",
+        "schema_version": "1.0.0",
+        "sha256": "f9a89a11eb4d44bd6a0d46ed761cefd728c146cb17ae49e93d0d6a190031502f"
+      }
+    },
+    {
+      "role": "frontend-engineer",
+      "decision": "applicable",
+      "rationale": "Owns only the approved frontend ordering, drag-grip, and directly related test changes.",
+      "owner_instance_id": "frontend-engineer-ordering",
+      "evidence_reference": {
+        "artifact_id": "ux-priority-reorder-role-independence",
+        "locator": "docs/project/evidence/ux-priority-reorder-role-independence.json",
+        "schema_version": "1.0.0",
+        "sha256": "f9a89a11eb4d44bd6a0d46ed761cefd728c146cb17ae49e93d0d6a190031502f"
+      }
+    },
+    {
+      "role": "code-reviewer",
+      "decision": "applicable",
+      "rationale": "Independently reviews the exact frontend candidate.",
+      "owner_instance_id": "code-reviewer-m3",
+      "evidence_reference": {
+        "artifact_id": "ux-priority-reorder-role-independence",
+        "locator": "docs/project/evidence/ux-priority-reorder-role-independence.json",
+        "schema_version": "1.0.0",
+        "sha256": "f9a89a11eb4d44bd6a0d46ed761cefd728c146cb17ae49e93d0d6a190031502f"
+      }
+    },
+    {
+      "role": "build-manager",
+      "decision": "applicable",
+      "rationale": "Verifies the exact reviewed candidate builds and its required regression suites execute.",
+      "owner_instance_id": "build-manager-m3",
+      "evidence_reference": {
+        "artifact_id": "ux-priority-reorder-role-independence",
+        "locator": "docs/project/evidence/ux-priority-reorder-role-independence.json",
+        "schema_version": "1.0.0",
+        "sha256": "f9a89a11eb4d44bd6a0d46ed761cefd728c146cb17ae49e93d0d6a190031502f"
+      }
+    },
+    {
+      "role": "quality-engineer",
+      "decision": "applicable",
+      "rationale": "Verifies the supported desktop/mobile, accessibility, ordering, and failure-state blast radius.",
+      "owner_instance_id": "quality-engineer-m3",
+      "evidence_reference": {
+        "artifact_id": "ux-priority-reorder-role-independence",
+        "locator": "docs/project/evidence/ux-priority-reorder-role-independence.json",
+        "schema_version": "1.0.0",
+        "sha256": "f9a89a11eb4d44bd6a0d46ed761cefd728c146cb17ae49e93d0d6a190031502f"
+      }
+    },
+    {
+      "role": "independent-auditor",
+      "decision": "applicable",
+      "rationale": "Traces identities, ordered gates, exact snapshots, and issue reconciliation only to the Orchestrator.",
+      "owner_instance_id": "independent-auditor-m3",
+      "evidence_reference": {
+        "artifact_id": "ux-priority-reorder-role-independence",
+        "locator": "docs/project/evidence/ux-priority-reorder-role-independence.json",
+        "schema_version": "1.0.0",
+        "sha256": "f9a89a11eb4d44bd6a0d46ed761cefd728c146cb17ae49e93d0d6a190031502f"
+      }
+    },
+    {
+      "role": "user",
+      "decision": "not_applicable",
+      "rationale": "The application owner remains the human approval authority rather than an activated agent.",
+      "owner_instance_id": null,
+      "evidence_reference": {
+        "artifact_id": "ux-priority-reorder-role-independence",
+        "locator": "docs/project/evidence/ux-priority-reorder-role-independence.json",
+        "schema_version": "1.0.0",
+        "sha256": "f9a89a11eb4d44bd6a0d46ed761cefd728c146cb17ae49e93d0d6a190031502f"
+      }
+    }
+  ],
+  "affected_roles": [
+    "orchestrator-tech-lead",
+    "frontend-engineer",
+    "code-reviewer",
+    "build-manager",
+    "quality-engineer",
+    "independent-auditor"
+  ],
+  "approved_instances": [
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "orchestrator-tech-lead",
+      "specialization": {
+        "specialization_id": "delivery-tracking",
+        "parameters": [
+          "prashant7163/tasks-list",
+          "milestones",
+          "issues",
+          "digest-links"
+        ]
+      },
+      "scope": "Execute only the approved Milestone 1 delivery-tracking task, coordinate its governed handoffs, and create the approved GitHub milestones and issues after capability activation.",
+      "deliverable": "Canonical GitHub repository mapping, three delivery milestones, seven scoped task issues, exact read-back evidence, and governed task/gate records.",
+      "ownership_boundary": "Own github/prashant7163/tasks-list planning records and Orchestrator lifecycle artifacts; do not author backend or frontend implementation or independent assurance verdicts.",
+      "overlap_check": "No file ownership overlaps; GitHub planning records are disjoint from backend, frontend, and assurance evidence locators.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {
+        "data_allowlist": [
+          "approved specification",
+          "approved milestone plan",
+          "GitHub repository metadata",
+          "Milestone 1 readiness evidence"
+        ],
+        "tool_allowlist": [
+          "studioctl",
+          "git read-only",
+          "gh repo read",
+          "gh milestone read-write",
+          "gh issue read-write"
+        ]
+      },
+      "workspace": {
+        "isolation_kind": "git-worktree",
+        "locator": "workspaces/m1-delivery-tracking"
+      },
+      "provider_model": {
+        "provider_allowlist": [
+          "openai"
+        ],
+        "model_allowlist": [
+          "gpt-5.6-sol"
+        ]
+      },
+      "budget": {
+        "max_concurrency": 1,
+        "max_cost_units": 100,
+        "max_duration_minutes": 180
+      },
+      "lease": {
+        "lifetime_minutes": 180,
+        "handoff_condition": "Return exact GitHub read-back evidence and governed delivery-tracking result to the root Orchestrator.",
+        "cleanup_condition": "Stop at task completion, capability quarantine, approval withdrawal, or lease expiry; preserve reversible evidence."
+      },
+      "reason_trigger": "Milestone 1 requires traceable GitHub milestones and issues before backend implementation begins.",
+      "dependency_references": [
+        {
+          "artifact_id": "tasks-list",
+          "locator": "docs/project/specification.json",
+          "schema_version": "1.0.0",
+          "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"
+        },
+        {
+          "artifact_id": "tasks-list-v1-plan",
+          "locator": "docs/project/plan.json",
+          "schema_version": "1.0.0",
+          "sha256": "b6e7b2e312b3a8b66565913923d6c647473977d5e2ddfb2df7c24d8b53d57b0a"
+        },
+        {
+          "artifact_id": "m1-github-access",
+          "locator": "docs/project/evidence/m1-github-access.json",
+          "schema_version": "1.0.0",
+          "sha256": "2150d7780e9448dc4e1b040ce4d6be724db06b1acb2d3dbd651e5e7670b0efc0"
+        }
+      ],
+      "contract_references": [
+        {
+          "artifact_id": "m1-interface-contracts",
+          "locator": "docs/project/evidence/m1-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "35f4c6913a66512e7f00cb4f4bf741791a24b167c5c1c8d9ac5fde020187d630"
+        }
+      ],
+      "work_package_references": [
+        {
+          "artifact_id": "m1-delivery-tracking",
+          "locator": "docs/project/evidence/m1-work-packages.json",
+          "schema_version": "1.0.0",
+          "sha256": "3ae1f386a6e461239e34cf736d6cb47eb0df88fe2c06471128f120a25c1f4cab"
+        }
+      ],
+      "minimum_context_pack_reference": {
+        "artifact_id": "m1-minimum-context-pack",
+        "locator": "docs/project/evidence/m1-context-pack.json",
+        "schema_version": "1.0.0",
+        "sha256": "e8e1de1356654c906edb5ef35e7ecb376a06f1cf9aa912a39a7142f74021d3d7"
+      },
+      "agent_instance_id": "orchestrator-tech-lead-delivery",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-orchestrator-delivery-m1",
+        "subject_type": "agent_instance",
+        "subject_id": "orchestrator-tech-lead-delivery",
+        "subject_digest": "d6d61bf79915d546dec847321c57b0ab97fd2fb4b5d8fecc18b8fde90a7b9660",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-12T15:49:57Z",
+        "comment": "Approved in the application owner's seven-envelope yes/no batch."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "frontend-engineer",
+      "specialization": {
+        "specialization_id": "responsive-task-ordering",
+        "parameters": [
+          "independent-sorts",
+          "mouse-reorder",
+          "authoritative-reconciliation",
+          "responsive-accessibility"
+        ]
+      },
+      "scope": "Implement only the approved Milestone 3 independent tab sorting, constrained mouse drag-and-drop reorder, authoritative reconciliation, responsive behavior, and directly owned frontend/browser tests using test-first development.",
+      "deliverable": "Exact frontend ordering candidate with red-green component and browser evidence, desktop/mobile coverage, production build evidence, and a scoped commit.",
+      "ownership_boundary": "Own frontend/** changes required by frontend-engineer-responsive-ordering; consume the accepted backend contract and do not author backend or assurance evidence.",
+      "overlap_check": "No implementation overlap: frontend ownership begins only after backend-engineer-ordering completes its ordered assurance chain.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {
+        "data_allowlist": [
+          "approved M3 journeys",
+          "accepted ordering API contract",
+          "UX flow",
+          "frontend files"
+        ],
+        "tool_allowlist": [
+          "apply_patch",
+          "git scoped commit",
+          "npm",
+          "vite",
+          "vitest",
+          "playwright",
+          "local browser tests"
+        ]
+      },
+      "workspace": {
+        "isolation_kind": "git-worktree",
+        "locator": "workspaces/m3-frontend-ordering"
+      },
+      "provider_model": {
+        "provider_allowlist": [
+          "openai"
+        ],
+        "model_allowlist": [
+          "gpt-5.6-sol"
+        ]
+      },
+      "budget": {
+        "max_concurrency": 1,
+        "max_cost_units": 240,
+        "max_duration_minutes": 360
+      },
+      "lease": {
+        "lifetime_minutes": 360,
+        "handoff_condition": "Return the exact scoped commit, component/browser tests, build evidence, responsive notes, and result report to the Orchestrator.",
+        "cleanup_condition": "Stop at task completion, approval withdrawal, material deviation, or lease expiry; preserve reversible evidence."
+      },
+      "reason_trigger": "The accepted backend ordering task enables Milestone 3's dependent sorting, reorder, and responsive task experience.",
+      "dependency_references": [
+        {
+          "artifact_id": "tasks-list",
+          "locator": "docs/project/specification.json",
+          "schema_version": "1.0.0",
+          "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"
+        },
+        {
+          "artifact_id": "tasks-list-m3-run-plan-v1",
+          "locator": "docs/project/plan-m3.json",
+          "schema_version": "1.0.0",
+          "sha256": "8652d2b512295af7ad1aa545b7555ed3f6710eb58483569f08c0b94d70b693f2"
+        },
+        {
+          "artifact_id": "m3-m2-baseline",
+          "locator": "docs/project/evidence/m3-m2-baseline.json",
+          "schema_version": "1.0.0",
+          "sha256": "e81c5ac0af1cd751cf452597d08e621450a0da545b189e83129896e66217d1cc"
+        }
+      ],
+      "contract_references": [
+        {
+          "artifact_id": "m3-interface-contracts",
+          "locator": "docs/project/evidence/m3-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "2e9b8b8e4445f10e3888c44eabbb51e6f8548078d85fe6c612c4e6608d7de34b"
+        }
+      ],
+      "work_package_references": [
+        {
+          "artifact_id": "m3-work-packages",
+          "locator": "docs/project/evidence/m3-work-packages.json",
+          "schema_version": "1.0.0",
+          "sha256": "a15395db804d383900f8c68f92edf0aac30f48e36f02ed4a2456b16d5cce37f1"
+        }
+      ],
+      "minimum_context_pack_reference": {
+        "artifact_id": "m3-minimum-context-pack",
+        "locator": "docs/project/evidence/m3-context-pack.json",
+        "schema_version": "1.0.0",
+        "sha256": "0588613af7689b46b596c5d13c94003e8f5477385b4ebd8934086cf5fe4cace4"
+      },
+      "agent_instance_id": "frontend-engineer-ordering",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-frontend-ordering-m3",
+        "subject_type": "agent_instance",
+        "subject_id": "frontend-engineer-ordering",
+        "subject_digest": "120ba468a802dcc555f55c269fe5a3fbc101151e7c2d425887f56aadc6f89533",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-13T01:57:41Z",
+        "comment": "Approved in the application owner's six-envelope yes-to-all decision."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "code-reviewer",
+      "specialization": {
+        "specialization_id": "ordering-review",
+        "parameters": [
+          "transactions",
+          "allowlists",
+          "api-ui-contract",
+          "meaningful-tests"
+        ]
+      },
+      "scope": "Independently review each exact Milestone 3 task candidate and its tests after implementation without editing the reviewed candidate.",
+      "deliverable": "Independent correctness, security, maintainability, contract, accessibility, and meaningful-test review with actionable findings.",
+      "ownership_boundary": "Own only Code Review evidence; do not author implementation, build verdicts, quality verdicts, or audit verdicts.",
+      "overlap_check": "Review evidence has a dedicated locator and the reviewer identity is distinct from both implementers and the auditor.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {
+        "data_allowlist": [
+          "exact candidate diff",
+          "task brief",
+          "implementation report",
+          "approved contracts"
+        ],
+        "tool_allowlist": [
+          "git read-only",
+          "test evidence read-only",
+          "review report write"
+        ]
+      },
+      "workspace": {
+        "isolation_kind": "git-worktree",
+        "locator": "workspaces/m3-code-review"
+      },
+      "provider_model": {
+        "provider_allowlist": [
+          "openai"
+        ],
+        "model_allowlist": [
+          "gpt-5.6-sol"
+        ]
+      },
+      "budget": {
+        "max_concurrency": 1,
+        "max_cost_units": 160,
+        "max_duration_minutes": 240
+      },
+      "lease": {
+        "lifetime_minutes": 240,
+        "handoff_condition": "Return exact-candidate Code Review only to the Orchestrator.",
+        "cleanup_condition": "Stop after verdict, approval withdrawal, or lease expiry; preserve review evidence."
+      },
+      "reason_trigger": "Each code-producing Milestone 3 task requires independent Code Review before build verification.",
+      "dependency_references": [
+        {
+          "artifact_id": "tasks-list",
+          "locator": "docs/project/specification.json",
+          "schema_version": "1.0.0",
+          "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"
+        },
+        {
+          "artifact_id": "tasks-list-m3-run-plan-v1",
+          "locator": "docs/project/plan-m3.json",
+          "schema_version": "1.0.0",
+          "sha256": "8652d2b512295af7ad1aa545b7555ed3f6710eb58483569f08c0b94d70b693f2"
+        }
+      ],
+      "contract_references": [
+        {
+          "artifact_id": "m3-interface-contracts",
+          "locator": "docs/project/evidence/m3-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "2e9b8b8e4445f10e3888c44eabbb51e6f8548078d85fe6c612c4e6608d7de34b"
+        }
+      ],
+      "work_package_references": [
+        {
+          "artifact_id": "m3-work-packages",
+          "locator": "docs/project/evidence/m3-work-packages.json",
+          "schema_version": "1.0.0",
+          "sha256": "a15395db804d383900f8c68f92edf0aac30f48e36f02ed4a2456b16d5cce37f1"
+        }
+      ],
+      "minimum_context_pack_reference": {
+        "artifact_id": "m3-minimum-context-pack",
+        "locator": "docs/project/evidence/m3-context-pack.json",
+        "schema_version": "1.0.0",
+        "sha256": "0588613af7689b46b596c5d13c94003e8f5477385b4ebd8934086cf5fe4cace4"
+      },
+      "agent_instance_id": "code-reviewer-m3",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-code-reviewer-m3",
+        "subject_type": "agent_instance",
+        "subject_id": "code-reviewer-m3",
+        "subject_digest": "dcb50bbeab7addbaca07756e7f36f4dec6fa09bc7cd161bb064f341db21b7409",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-13T01:57:41Z",
+        "comment": "Approved in the application owner's six-envelope yes-to-all decision."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "build-manager",
+      "specialization": {
+        "specialization_id": "ordering-build",
+        "parameters": [
+          "maven",
+          "npm",
+          "playwright",
+          "compose"
+        ]
+      },
+      "scope": "Verify each exact reviewed Milestone 3 candidate builds reproducibly and its dependencies, migrations, browser suite, and Compose surfaces are trusted.",
+      "deliverable": "Reproducible backend, frontend, browser-test, migration, dependency, and Compose build status for each exact reviewed candidate.",
+      "ownership_boundary": "Own only build-verification evidence; do not edit the candidate or author Code Review, Quality Review, or Audit verdicts.",
+      "overlap_check": "Build evidence has a dedicated locator and follows accepted Code Review on the identical candidate.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {
+        "data_allowlist": [
+          "exact reviewed candidate",
+          "lockfiles",
+          "build logs",
+          "migration and Compose config"
+        ],
+        "tool_allowlist": [
+          "git read-only",
+          "maven wrapper",
+          "npm",
+          "playwright",
+          "docker compose",
+          "build report write"
+        ]
+      },
+      "workspace": {
+        "isolation_kind": "git-worktree",
+        "locator": "workspaces/m3-build"
+      },
+      "provider_model": {
+        "provider_allowlist": [
+          "openai"
+        ],
+        "model_allowlist": [
+          "gpt-5.6-sol"
+        ]
+      },
+      "budget": {
+        "max_concurrency": 1,
+        "max_cost_units": 160,
+        "max_duration_minutes": 300
+      },
+      "lease": {
+        "lifetime_minutes": 300,
+        "handoff_condition": "Return exact-candidate build status and logs only to the Orchestrator.",
+        "cleanup_condition": "Stop after verdict, approval withdrawal, or lease expiry; preserve build evidence."
+      },
+      "reason_trigger": "Accepted Code Review requires reproducible build and browser-suite verification before Quality Review.",
+      "dependency_references": [
+        {
+          "artifact_id": "tasks-list",
+          "locator": "docs/project/specification.json",
+          "schema_version": "1.0.0",
+          "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"
+        },
+        {
+          "artifact_id": "tasks-list-m3-run-plan-v1",
+          "locator": "docs/project/plan-m3.json",
+          "schema_version": "1.0.0",
+          "sha256": "8652d2b512295af7ad1aa545b7555ed3f6710eb58483569f08c0b94d70b693f2"
+        }
+      ],
+      "contract_references": [
+        {
+          "artifact_id": "m3-interface-contracts",
+          "locator": "docs/project/evidence/m3-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "2e9b8b8e4445f10e3888c44eabbb51e6f8548078d85fe6c612c4e6608d7de34b"
+        }
+      ],
+      "work_package_references": [
+        {
+          "artifact_id": "m3-work-packages",
+          "locator": "docs/project/evidence/m3-work-packages.json",
+          "schema_version": "1.0.0",
+          "sha256": "a15395db804d383900f8c68f92edf0aac30f48e36f02ed4a2456b16d5cce37f1"
+        }
+      ],
+      "minimum_context_pack_reference": {
+        "artifact_id": "m3-minimum-context-pack",
+        "locator": "docs/project/evidence/m3-context-pack.json",
+        "schema_version": "1.0.0",
+        "sha256": "0588613af7689b46b596c5d13c94003e8f5477385b4ebd8934086cf5fe4cace4"
+      },
+      "agent_instance_id": "build-manager-m3",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-build-manager-m3",
+        "subject_type": "agent_instance",
+        "subject_id": "build-manager-m3",
+        "subject_digest": "13939d1ea336697508ed20a58b3f77c8452dee3311b47a15378783b8ceb4fc88",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-13T01:57:41Z",
+        "comment": "Approved in the application owner's six-envelope yes-to-all decision."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "quality-engineer",
+      "specialization": {
+        "specialization_id": "ordering-quality",
+        "parameters": [
+          "sort-matrix",
+          "reorder-contention",
+          "responsive-accessibility",
+          "persistence"
+        ]
+      },
+      "scope": "Test each exact build-verified Milestone 3 candidate across the approved sorting, reorder, failure recovery, accessibility, responsive-browser, and persistence blast radius.",
+      "deliverable": "Supported-blast-radius quality report with reproducible desktop/mobile, contention, rollback, and persistence scenarios bound to the exact candidate.",
+      "ownership_boundary": "Own only Quality Review evidence; do not edit the candidate or author Code Review, Build, or Audit verdicts.",
+      "overlap_check": "Quality evidence has a dedicated locator and follows build verification on the identical candidate.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {
+        "data_allowlist": [
+          "exact build candidate",
+          "acceptance criteria",
+          "integration plan",
+          "test and runtime logs"
+        ],
+        "tool_allowlist": [
+          "git read-only",
+          "maven wrapper",
+          "npm",
+          "playwright",
+          "docker compose",
+          "browser automation",
+          "quality report write"
+        ]
+      },
+      "workspace": {
+        "isolation_kind": "git-worktree",
+        "locator": "workspaces/m3-quality"
+      },
+      "provider_model": {
+        "provider_allowlist": [
+          "openai"
+        ],
+        "model_allowlist": [
+          "gpt-5.6-sol"
+        ]
+      },
+      "budget": {
+        "max_concurrency": 1,
+        "max_cost_units": 200,
+        "max_duration_minutes": 300
+      },
+      "lease": {
+        "lifetime_minutes": 300,
+        "handoff_condition": "Return Quality Review evidence only to the Orchestrator.",
+        "cleanup_condition": "Stop after verdict, approval withdrawal, or lease expiry; preserve quality evidence."
+      },
+      "reason_trigger": "Each build-verified Milestone 3 candidate requires supported-blast-radius verification before audit.",
+      "dependency_references": [
+        {
+          "artifact_id": "tasks-list",
+          "locator": "docs/project/specification.json",
+          "schema_version": "1.0.0",
+          "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"
+        },
+        {
+          "artifact_id": "tasks-list-m3-run-plan-v1",
+          "locator": "docs/project/plan-m3.json",
+          "schema_version": "1.0.0",
+          "sha256": "8652d2b512295af7ad1aa545b7555ed3f6710eb58483569f08c0b94d70b693f2"
+        },
+        {
+          "artifact_id": "m3-integration-test-plan",
+          "locator": "docs/project/evidence/m3-integration-test-plan.json",
+          "schema_version": "1.0.0",
+          "sha256": "64cc14cb2ef9ee650407ed65ebcb9171c4951e9481efd3e5dacc8f3aac63ac42"
+        }
+      ],
+      "contract_references": [
+        {
+          "artifact_id": "m3-interface-contracts",
+          "locator": "docs/project/evidence/m3-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "2e9b8b8e4445f10e3888c44eabbb51e6f8548078d85fe6c612c4e6608d7de34b"
+        }
+      ],
+      "work_package_references": [
+        {
+          "artifact_id": "m3-work-packages",
+          "locator": "docs/project/evidence/m3-work-packages.json",
+          "schema_version": "1.0.0",
+          "sha256": "a15395db804d383900f8c68f92edf0aac30f48e36f02ed4a2456b16d5cce37f1"
+        }
+      ],
+      "minimum_context_pack_reference": {
+        "artifact_id": "m3-minimum-context-pack",
+        "locator": "docs/project/evidence/m3-context-pack.json",
+        "schema_version": "1.0.0",
+        "sha256": "0588613af7689b46b596c5d13c94003e8f5477385b4ebd8934086cf5fe4cace4"
+      },
+      "agent_instance_id": "quality-engineer-m3",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-quality-engineer-m3",
+        "subject_type": "agent_instance",
+        "subject_id": "quality-engineer-m3",
+        "subject_digest": "504c3bc8a0934f699e8e1629260cec7b690946c034a52338acf3a007435e682a",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-13T01:57:41Z",
+        "comment": "Approved in the application owner's six-envelope yes-to-all decision."
+      },
+      "replacement_for_instance_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "role_template_id": "independent-auditor",
+      "specialization": {
+        "specialization_id": "ordering-audit",
+        "parameters": [
+          "traceability",
+          "identity-independence",
+          "ordered-gates",
+          "exact-snapshot"
+        ]
+      },
+      "scope": "Independently trace each complete Milestone 3 evidence chain after implementation, Code Review, Build Verification, and Quality Review, reporting only to the Orchestrator.",
+      "deliverable": "Independent audit of scope, identities, exact candidates, ordered gates, findings, dispositions, browser/persistence evidence, and milestone evidence.",
+      "ownership_boundary": "Own only Independent Audit evidence and report only to the Orchestrator; never direct remediation to implementers.",
+      "overlap_check": "Audit evidence has a dedicated locator and the auditor identity is distinct from all producers and reviewers.",
+      "context_access_mode": "minimum_necessary",
+      "permissions": {
+        "data_allowlist": [
+          "approved specification and plan",
+          "readiness snapshot",
+          "task results",
+          "ordered gate evidence"
+        ],
+        "tool_allowlist": [
+          "studioctl read-only",
+          "git read-only",
+          "artifact read-only",
+          "audit report write"
+        ]
+      },
+      "workspace": {
+        "isolation_kind": "git-worktree",
+        "locator": "workspaces/m3-audit"
+      },
+      "provider_model": {
+        "provider_allowlist": [
+          "openai"
+        ],
+        "model_allowlist": [
+          "gpt-5.6-sol"
+        ]
+      },
+      "budget": {
+        "max_concurrency": 1,
+        "max_cost_units": 180,
+        "max_duration_minutes": 300
+      },
+      "lease": {
+        "lifetime_minutes": 300,
+        "handoff_condition": "Return the Independent Audit only to the Orchestrator.",
+        "cleanup_condition": "Stop after verdict, approval withdrawal, or lease expiry; preserve audit evidence."
+      },
+      "reason_trigger": "Each Milestone 3 task requires an identity-independent audit after all preceding assurance gates pass.",
+      "dependency_references": [
+        {
+          "artifact_id": "tasks-list",
+          "locator": "docs/project/specification.json",
+          "schema_version": "1.0.0",
+          "sha256": "b39c58f026b67708c2589b8bc962b76b5fa45cbf31094f59fe9f4ab0d8289f54"
+        },
+        {
+          "artifact_id": "tasks-list-m3-run-plan-v1",
+          "locator": "docs/project/plan-m3.json",
+          "schema_version": "1.0.0",
+          "sha256": "8652d2b512295af7ad1aa545b7555ed3f6710eb58483569f08c0b94d70b693f2"
+        },
+        {
+          "artifact_id": "m3-integration-test-plan",
+          "locator": "docs/project/evidence/m3-integration-test-plan.json",
+          "schema_version": "1.0.0",
+          "sha256": "64cc14cb2ef9ee650407ed65ebcb9171c4951e9481efd3e5dacc8f3aac63ac42"
+        }
+      ],
+      "contract_references": [
+        {
+          "artifact_id": "m3-interface-contracts",
+          "locator": "docs/project/evidence/m3-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "2e9b8b8e4445f10e3888c44eabbb51e6f8548078d85fe6c612c4e6608d7de34b"
+        }
+      ],
+      "work_package_references": [
+        {
+          "artifact_id": "m3-work-packages",
+          "locator": "docs/project/evidence/m3-work-packages.json",
+          "schema_version": "1.0.0",
+          "sha256": "a15395db804d383900f8c68f92edf0aac30f48e36f02ed4a2456b16d5cce37f1"
+        }
+      ],
+      "minimum_context_pack_reference": {
+        "artifact_id": "m3-minimum-context-pack",
+        "locator": "docs/project/evidence/m3-context-pack.json",
+        "schema_version": "1.0.0",
+        "sha256": "0588613af7689b46b596c5d13c94003e8f5477385b4ebd8934086cf5fe4cace4"
+      },
+      "agent_instance_id": "independent-auditor-m3",
+      "lifecycle": "active",
+      "approval": {
+        "schema_version": "1.0.0",
+        "approval_id": "apr-independent-auditor-m3",
+        "subject_type": "agent_instance",
+        "subject_id": "independent-auditor-m3",
+        "subject_digest": "88bff58785653af7a546aca9c55ce597bfbba019420bc966977d0e3541bdac09",
+        "decision": "approved",
+        "decided_by": "application-owner",
+        "decided_at": "2026-09-13T01:57:41Z",
+        "comment": "Approved in the application owner's six-envelope yes-to-all decision."
+      },
+      "replacement_for_instance_id": null
+    }
+  ],
+  "acceptance_criterion_ids": [
+    "task-list-views-active-default",
+    "task-list-views-completed-separate",
+    "active-priority-ordering",
+    "active-priority-drag-drop",
+    "active-priority-persistence",
+    "active-priority-drag-affordance",
+    "active-priority-empty-state",
+    "task-sorting-active",
+    "task-sorting-completed",
+    "task-sorting-presentation-only",
+    "delivery-tracking-issues",
+    "delivery-tracking-links-status",
+    "accessibility-responsive-viewports",
+    "accessibility-focus-labels"
+  ],
+  "facilitator": "orchestrator-tech-lead",
+  "validated_at": "2026-09-13T11:24:54Z",
+  "unresolved_items": [],
+  "work_packages": [
+    {
+      "work_package_id": "ux-priority-reorder-frontend",
+      "owner_instance_id": "frontend-engineer-ordering",
+      "owned_locators": [
+        "frontend/src/tasks",
+        "frontend/src/styles.css",
+        "frontend/e2e/tasks.spec.js"
+      ],
+      "dependency_work_package_ids": [],
+      "sequence": 1,
+      "deliverable": "Test-first Active priority default, preserved empty state, visible dedicated mouse grip, and frontend/browser regression coverage.",
+      "integration_references": [
+        {
+          "artifact_id": "ux-priority-reorder-interface-contracts",
+          "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+        }
+      ]
+    },
+    {
+      "work_package_id": "ux-priority-reorder-code-review",
+      "owner_instance_id": "code-reviewer-m3",
+      "owned_locators": [
+        "docs/project/evidence/ux-priority-reorder/code-review"
+      ],
+      "dependency_work_package_ids": [
+        "ux-priority-reorder-frontend"
+      ],
+      "sequence": 2,
+      "deliverable": "Independent exact-candidate correctness, accessibility, and meaningful-test review.",
+      "integration_references": [
+        {
+          "artifact_id": "ux-priority-reorder-interface-contracts",
+          "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+        }
+      ]
+    },
+    {
+      "work_package_id": "ux-priority-reorder-build",
+      "owner_instance_id": "build-manager-m3",
+      "owned_locators": [
+        "docs/project/evidence/ux-priority-reorder/build"
+      ],
+      "dependency_work_package_ids": [
+        "ux-priority-reorder-code-review"
+      ],
+      "sequence": 3,
+      "deliverable": "Reproducible frontend tests/build, browser prerequisites, and backend ordering regression evidence.",
+      "integration_references": [
+        {
+          "artifact_id": "ux-priority-reorder-interface-contracts",
+          "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+        }
+      ]
+    },
+    {
+      "work_package_id": "ux-priority-reorder-quality",
+      "owner_instance_id": "quality-engineer-m3",
+      "owned_locators": [
+        "docs/project/evidence/ux-priority-reorder/quality"
+      ],
+      "dependency_work_package_ids": [
+        "ux-priority-reorder-build"
+      ],
+      "sequence": 4,
+      "deliverable": "Desktop/mobile ordering, drag affordance, contrast, target-size, and reconciliation quality evidence.",
+      "integration_references": [
+        {
+          "artifact_id": "ux-priority-reorder-interface-contracts",
+          "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+        }
+      ]
+    },
+    {
+      "work_package_id": "ux-priority-reorder-audit",
+      "owner_instance_id": "independent-auditor-m3",
+      "owned_locators": [
+        "docs/project/evidence/ux-priority-reorder/audit"
+      ],
+      "dependency_work_package_ids": [
+        "ux-priority-reorder-code-review",
+        "ux-priority-reorder-build",
+        "ux-priority-reorder-quality"
+      ],
+      "sequence": 5,
+      "deliverable": "Independent trace of scope, identities, ordered gates, exact snapshots, and issue-close preconditions.",
+      "integration_references": [
+        {
+          "artifact_id": "ux-priority-reorder-interface-contracts",
+          "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+        }
+      ]
+    },
+    {
+      "work_package_id": "ux-priority-reorder-github",
+      "owner_instance_id": "orchestrator-tech-lead-delivery",
+      "owned_locators": [
+        "github/prashant7163/tasks-list/issues/4-7"
+      ],
+      "dependency_work_package_ids": [
+        "ux-priority-reorder-audit"
+      ],
+      "sequence": 6,
+      "deliverable": "Evidence-linked issue closure and final remote state readback.",
+      "integration_references": [
+        {
+          "artifact_id": "ux-priority-reorder-interface-contracts",
+          "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+          "schema_version": "1.0.0",
+          "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+        }
+      ]
+    }
+  ],
+  "interface_decisions": [
+    {
+      "interface_id": "frontend-ordering-and-drag-contract",
+      "owner_instance_id": "frontend-engineer-ordering",
+      "work_package_id": "ux-priority-reorder-frontend",
+      "integration_reference": {
+        "artifact_id": "ux-priority-reorder-interface-contracts",
+        "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+        "schema_version": "1.0.0",
+        "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+      },
+      "reference": {
+        "artifact_id": "ux-priority-reorder-frontend-contract",
+        "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+        "schema_version": "1.0.0",
+        "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+      },
+      "example": "Active requests priority asc; Completed requests completedAt desc; only the grip starts drag; wrapper accepts drops; success reloads authoritative state and failure restores focus."
+    },
+    {
+      "interface_id": "github-issue-reconciliation",
+      "owner_instance_id": "orchestrator-tech-lead-delivery",
+      "work_package_id": "ux-priority-reorder-github",
+      "integration_reference": {
+        "artifact_id": "ux-priority-reorder-interface-contracts",
+        "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+        "schema_version": "1.0.0",
+        "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+      },
+      "reference": {
+        "artifact_id": "ux-priority-reorder-github-contract",
+        "locator": "docs/project/evidence/ux-priority-reorder-interface-contracts.json",
+        "schema_version": "1.0.0",
+        "sha256": "7b4cc21e620d470626cd4693334f8b755d1dc0804eb1091ba39347f11288172f"
+      },
+      "example": "Issues 4 through 6 close against prior accepted evidence; issue 7 closes only after this exact candidate's complete ordered gate chain is accepted."
+    }
+  ]
+}

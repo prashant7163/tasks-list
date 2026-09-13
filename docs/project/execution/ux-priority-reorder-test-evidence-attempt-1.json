@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-test-evidence-attempt-1",
+  "milestone_id": "priority-reorder-discoverability",
+  "attempt": 1,
+  "recorded_at": "2026-09-13",
+  "scope": "Task 3 browser and exact-candidate regression verification",
+  "red_proof": {
+    "outcome": "failed_as_expected",
+    "base_commit": "2123300",
+    "base_description": "chore: ignore isolated worktrees",
+    "isolation": "Disposable detached Git worktree and separately named local Compose project on an alternate local port; no feature-branch files or services were used for the assertion.",
+    "amended_test_blob_sha1": "db6d364d5f6bd2da9fc9264ac18cfcca313238b1",
+    "command": "TASKS_E2E_BASE_URL=http://localhost:5175 npm run test:e2e -- --project=desktop-chromium --grep \"full task ordering journey\"",
+    "assertion": "Sort Active tasks by has value priority",
+    "observed_failure": "Expected priority; received createdAt.",
+    "result_counts": {
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0
+    }
+  },
+  "candidate": {
+    "implementation_commit": "8dc5e9d5730fc62f6643c254dcc23b12763556ef",
+    "implementation_tree": "25c11e7fcc3de537cb77210d1bc98689f09fe978",
+    "browser_test_blob_sha1": "db6d364d5f6bd2da9fc9264ac18cfcca313238b1",
+    "browser_test_delta_sha256": "8bdb0e27f899aa5442d2d1419aeae6ea79a71d0c55cd5436feb1ce14ad16c686",
+    "identity": "Task 2 accepted implementation commit plus the browser-test delta identified above; no production implementation files changed in Task 3."
+  },
+  "environment": {
+    "platform": "Darwin 25.2.0 arm64",
+    "node": "v25.6.1",
+    "npm": "11.9.0",
+    "browser": "Playwright Chromium",
+    "runtime_isolation": "Local disposable Compose stacks used non-production ephemeral databases and alternate loopback ports. Credentials, cookies, task content, and service logs are intentionally omitted."
+  },
+  "measurements": {
+    "method": "The browser test reads the first visible .drag-handle bounding box and computed icon foreground/handle background RGB values, then calculates WCAG relative-luminance contrast in test code.",
+    "desktop_chromium": {
+      "viewport_css_px": {
+        "width": 1280,
+        "height": 800
+      },
+      "grip_box_css_px": {
+        "width": 40,
+        "height": 40
+      },
+      "icon_foreground": "rgb(23, 62, 48)",
+      "handle_background": "rgb(232, 238, 234)",
+      "contrast_ratio": 10.0947,
+      "requirements": {
+        "minimum_target_css_px": 24,
+        "minimum_contrast_ratio": 3,
+        "cursor": "grab",
+        "card_draggable": false
+      }
+    },
+    "mobile_chromium": {
+      "viewport_css_px": {
+        "width": 412,
+        "height": 839
+      },
+      "grip_box_css_px": {
+        "width": 40,
+        "height": 40
+      },
+      "icon_foreground": "rgb(23, 62, 48)",
+      "handle_background": "rgb(232, 238, 234)",
+      "contrast_ratio": 10.0947,
+      "requirements": {
+        "minimum_target_css_px": 24,
+        "minimum_contrast_ratio": 3,
+        "cursor": "grab",
+        "card_draggable": false
+      }
+    }
+  },
+  "green_verification": [
+    {
+      "command": "cd frontend && npm test -- --run",
+      "outcome": "passed",
+      "counts": {
+        "test_files_passed": 4,
+        "tests_passed": 50,
+        "failed": 0
+      }
+    },
+    {
+      "command": "cd frontend && npm run build",
+      "outcome": "passed",
+      "details": "Vite production build completed; 25 modules transformed."
+    },
+    {
+      "command": "cd frontend && TASKS_E2E_BASE_URL=http://localhost:5176 npm run test:e2e",
+      "outcome": "passed",
+      "projects": {
+        "desktop-chromium": {
+          "passed": 2,
+          "skipped": 0
+        },
+        "mobile-chromium": {
+          "passed": 1,
+          "skipped": 1
+        }
+      },
+      "total": {
+        "passed": 3,
+        "skipped": 1,
+        "failed": 0
+      }
+    },
+    {
+      "command": "cd backend && ./mvnw -q -Dtest=TaskOrderingIntegrationTest test",
+      "outcome": "passed",
+      "counts": {
+        "tests_passed": 9,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "coverage": [
+    "Active priority/ascending default after login, reload, and later login",
+    "Three visible grips, pointer target, cursor, contrast, and non-draggable task card",
+    "Alternate Active and Completed sort directions",
+    "Desktop mouse reorder, persisted reload and later-login ordering, and rejected-reorder restoration",
+    "Completed-card focus restoration and horizontal-overflow check",
+    "Mobile layout and grip visibility"
+  ],
+  "exclusions": [
+    "Touch reorder is explicitly outside the approved scope and is skipped only for mobile-chromium rejected-reorder coverage.",
+    "This evidence does not perform Studio submission or gate transition; those remain Orchestrator-owned."
+  ],
+  "redaction": "No credentials, session identifiers, private task values, absolute temporary paths, service logs, or database contents are recorded."
+}

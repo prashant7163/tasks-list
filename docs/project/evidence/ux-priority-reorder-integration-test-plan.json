@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-integration-test-plan",
+  "milestone_id": "priority-reorder-discoverability",
+  "decision": "applicable",
+  "integration_point_ids": ["active-default-sort-request", "priority-list-empty-state", "dedicated-drag-grip-events", "authoritative-reorder-reconciliation", "desktop-mobile-browser", "github-issue-evidence"],
+  "scenarios": [
+    "Component test proves Active initially requests priority ascending while Completed initially requests completedAt descending.",
+    "Component test proves an empty Active priority list retains its empty-state message.",
+    "Component test proves only the visible labeled grip is draggable and the card and drop-zone wrapper are not drag sources.",
+    "Existing success, failure, focus restoration, and pending-action reorder tests remain green.",
+    "Browser checks prove ordering, grip visibility, at least 24 by 24 CSS-pixel target size, at least 3:1 graphic contrast, card non-draggability, and no viewport regression on desktop and mobile.",
+    "Full frontend tests, production build, and backend ordering regression tests pass on the exact candidate.",
+    "GitHub issue closures are read back after all required accepted evidence exists."
+  ]
+}

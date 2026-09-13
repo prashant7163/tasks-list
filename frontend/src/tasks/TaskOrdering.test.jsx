@@ -96,9 +96,12 @@ it('keeps allowlisted Active and Completed sorts independent with documented def
   render(<TaskPage api={api} onSessionEnded={vi.fn()} />)
 
   await screen.findByRole('tab', { name: 'Active (2)' })
-  expect(await screen.findByLabelText('Sort Active tasks by')).toHaveValue('createdAt')
-  expect(screen.getByLabelText('Active sort direction')).toHaveValue('desc')
-  expect(titles()).toEqual(['Alpha', 'zulu'])
+  expect(await screen.findByLabelText('Sort Active tasks by')).toHaveValue('priority')
+  expect(screen.getByLabelText('Active sort direction')).toHaveValue('asc')
+  expect(titles()).toEqual(['zulu', 'Alpha'])
+  expect(api.list).toHaveBeenCalledWith('ACTIVE', { key: 'priority', direction: 'asc' })
+  expect(api.list).toHaveBeenCalledWith('COMPLETED', { key: 'completedAt', direction: 'desc' })
+  expect(screen.getByText(/Drag tasks to change priority/)).toBeInTheDocument()
 
   await user.selectOptions(screen.getByLabelText('Sort Active tasks by'), 'title')
   await user.selectOptions(screen.getByLabelText('Active sort direction'), 'asc')
@@ -116,10 +119,17 @@ it('keeps allowlisted Active and Completed sorts independent with documented def
   await user.click(screen.getByRole('tab', { name: 'Active (2)' }))
   expect(screen.getByLabelText('Sort Active tasks by')).toHaveValue('title')
   expect(screen.getByLabelText('Active sort direction')).toHaveValue('asc')
-  expect(api.list).toHaveBeenCalledWith('ACTIVE', { key: 'createdAt', direction: 'desc' })
   expect(api.list).toHaveBeenCalledWith('COMPLETED', { key: 'completedAt', direction: 'desc' })
   expect(api.list).toHaveBeenCalledWith('ACTIVE', { key: 'title', direction: 'asc' })
   expect(api.list).toHaveBeenCalledWith('COMPLETED', { key: 'title', direction: 'asc' })
+})
+
+it('shows the Active empty state in the default Priority view', async () => {
+  render(<TaskPage api={fakeApi([])} onSessionEnded={vi.fn()} />)
+
+  await screen.findByRole('tab', { name: 'Active (0)' })
+  expect(await screen.findByText('No active tasks yet.')).toBeInTheDocument()
+  expect(screen.queryByRole('status', { name: 'Reorder status' })).not.toBeInTheDocument()
 })
 
 it('enables mouse reorder only for Active Priority highest-first and cancels without saving', async () => {
@@ -128,21 +138,32 @@ it('enables mouse reorder only for Active Priority highest-first and cancels wit
   render(<TaskPage api={api} onSessionEnded={vi.fn()} />)
 
   await screen.findByRole('tab', { name: 'Active (2)' })
-  await user.selectOptions(await screen.findByLabelText('Sort Active tasks by'), 'priority')
+  await user.selectOptions(await screen.findByLabelText('Sort Active tasks by'), 'createdAt')
   expect(screen.queryByText(/Drag tasks to change priority/)).not.toBeInTheDocument()
+  await user.selectOptions(screen.getByLabelText('Sort Active tasks by'), 'priority')
   await user.selectOptions(screen.getByLabelText('Active sort direction'), 'asc')
   await waitFor(() => expect(titles()).toEqual(['First', 'Second']))
 
   const first = await screen.findByRole('article', { name: 'First' })
-  const second = screen.getByRole('article', { name: 'Second' })
-  expect(first).toHaveAttribute('draggable', 'true')
+  const firstItem = first.closest('.priority-item')
+  const firstHandle = firstItem.querySelector('.drag-handle')
+  const secondItem = screen.getByRole('article', { name: 'Second' }).closest('.priority-item')
+  expect(firstHandle).toHaveAttribute('draggable', 'true')
+  expect(firstItem).not.toHaveAttribute('draggable')
+  expect(first).not.toHaveAttribute('draggable')
   expect(screen.getByText(/Drag tasks to change priority/)).toBeInTheDocument()
 
   fireEvent.dragStart(first)
+  fireEvent.dragEnter(secondItem)
+  fireEvent.drop(secondItem)
+  expect(screen.getByRole('status', { name: 'Reorder status' })).toHaveTextContent('Ready to reorder')
+  expect(api.reorder).not.toHaveBeenCalled()
+  expect(titles()).toEqual(['First', 'Second'])
+  fireEvent.dragStart(firstHandle)
   expect(screen.getByRole('status', { name: 'Reorder status' })).toHaveTextContent('Picked up First')
-  fireEvent.dragEnter(second)
+  fireEvent.dragEnter(secondItem)
   expect(screen.getByRole('status', { name: 'Reorder status' })).toHaveTextContent('Drop at position 2')
-  fireEvent.dragEnd(first)
+  fireEvent.dragEnd(firstHandle)
 
   expect(api.reorder).not.toHaveBeenCalled()
   expect(titles()).toEqual(['First', 'Second'])
@@ -155,55 +176,51 @@ it('enables mouse reorder only for Active Priority highest-first and cancels wit
 
 it('does not expose stale tasks for reorder while Priority highest-first is loading', async () => {
   const priorityLoad = deferred()
+  let deferPriority = false
   const api = fakeApi([task(1, 'First', 2), task(2, 'Second', 1)])
   const immediateList = api.list
   api.list = vi.fn((status, sort) => {
-    if (status === 'ACTIVE' && sort.key === 'priority' && sort.direction === 'asc') return priorityLoad.promise
+    if (status === 'ACTIVE' && sort.key === 'priority' && sort.direction === 'asc' && deferPriority) return priorityLoad.promise
     return immediateList(status, sort)
   })
   const user = userEvent.setup()
   render(<TaskPage api={api} onSessionEnded={vi.fn()} />)
 
   await screen.findByRole('tab', { name: 'Active (2)' })
-  await user.selectOptions(screen.getByLabelText('Active sort direction'), 'asc')
-  await waitFor(() => expect(titles()).toEqual(['First', 'Second']))
+  await waitFor(() => expect(titles()).toEqual(['Second', 'First']))
+  deferPriority = true
+  await user.selectOptions(screen.getByLabelText('Sort Active tasks by'), 'createdAt')
   await user.selectOptions(screen.getByLabelText('Sort Active tasks by'), 'priority')
 
   const staleFirst = screen.getByRole('article', { name: 'First' })
-  const staleSecond = screen.getByRole('article', { name: 'Second' })
   expect.soft(staleFirst).not.toHaveAttribute('draggable', 'true')
-  fireEvent.dragStart(staleFirst)
-  fireEvent.dragEnter(staleSecond)
-  fireEvent.drop(staleSecond)
   expect.soft(api.reorder).not.toHaveBeenCalled()
 
   priorityLoad.resolve({ tasks: [task(2, 'Second', 1), task(1, 'First', 2)], count: 2 })
   await waitFor(() => expect(titles()).toEqual(['Second', 'First']))
-  expect(screen.getByRole('article', { name: 'Second' })).toHaveAttribute('draggable', 'true')
+  expect(screen.getByRole('article', { name: 'Second' }).closest('.priority-item').querySelector('.drag-handle')).toHaveAttribute('draggable', 'true')
 })
 
 it('restores the last confirmed presentation when Priority highest-first fails to load', async () => {
   const priorityLoad = deferred()
+  let deferPriority = false
   const api = fakeApi([task(1, 'First', 2), task(2, 'Second', 1)])
   const immediateList = api.list
   api.list = vi.fn((status, sort) => {
-    if (status === 'ACTIVE' && sort.key === 'priority' && sort.direction === 'asc') return priorityLoad.promise
+    if (status === 'ACTIVE' && sort.key === 'priority' && sort.direction === 'asc' && deferPriority) return priorityLoad.promise
     return immediateList(status, sort)
   })
   const user = userEvent.setup()
   render(<TaskPage api={api} onSessionEnded={vi.fn()} />)
 
   await screen.findByRole('tab', { name: 'Active (2)' })
-  await user.selectOptions(screen.getByLabelText('Active sort direction'), 'asc')
-  await waitFor(() => expect(titles()).toEqual(['First', 'Second']))
+  await waitFor(() => expect(titles()).toEqual(['Second', 'First']))
+  deferPriority = true
+  await user.selectOptions(screen.getByLabelText('Sort Active tasks by'), 'createdAt')
   await user.selectOptions(screen.getByLabelText('Sort Active tasks by'), 'priority')
 
   const staleFirst = screen.getByRole('article', { name: 'First' })
-  const staleSecond = screen.getByRole('article', { name: 'Second' })
   expect.soft(staleFirst).not.toHaveAttribute('draggable', 'true')
-  fireEvent.dragStart(staleFirst)
-  fireEvent.dragEnter(staleSecond)
-  fireEvent.drop(staleSecond)
   expect.soft(api.reorder).not.toHaveBeenCalled()
   priorityLoad.reject(new ApiError(500, { error: 'Sort failed' }))
 
@@ -224,14 +241,14 @@ it('locks conflicting actions while reorder is pending and adopts the authoritat
   render(<TaskPage api={api} onSessionEnded={vi.fn()} />)
 
   await screen.findByRole('tab', { name: 'Active (2)' })
-  await user.selectOptions(await screen.findByLabelText('Sort Active tasks by'), 'priority')
-  await user.selectOptions(screen.getByLabelText('Active sort direction'), 'asc')
   await waitFor(() => expect(titles()).toEqual(['First', 'Second']))
   const first = screen.getByRole('article', { name: 'First' })
   const second = screen.getByRole('article', { name: 'Second' })
-  fireEvent.dragStart(first)
-  fireEvent.dragEnter(second)
-  fireEvent.drop(second)
+  const firstHandle = first.closest('.priority-item').querySelector('.drag-handle')
+  const secondItem = second.closest('.priority-item')
+  fireEvent.dragStart(firstHandle)
+  fireEvent.dragEnter(secondItem)
+  fireEvent.drop(secondItem)
 
   await waitFor(() => expect(api.reorder).toHaveBeenCalledWith([2, 1]))
   expect(screen.getByLabelText('Sort Active tasks by')).toBeDisabled()
@@ -254,12 +271,12 @@ it('reloads authoritative order after a rejected reorder and reports the rollbac
   render(<TaskPage api={api} onSessionEnded={vi.fn()} />)
 
   await screen.findByRole('tab', { name: 'Active (2)' })
-  await user.selectOptions(await screen.findByLabelText('Sort Active tasks by'), 'priority')
-  await user.selectOptions(screen.getByLabelText('Active sort direction'), 'asc')
   await waitFor(() => expect(titles()).toEqual(['First', 'Second']))
-  fireEvent.dragStart(screen.getByRole('article', { name: 'First' }))
-  fireEvent.dragEnter(screen.getByRole('article', { name: 'Second' }))
-  fireEvent.drop(screen.getByRole('article', { name: 'Second' }))
+  const first = screen.getByRole('article', { name: 'First' })
+  const second = screen.getByRole('article', { name: 'Second' })
+  fireEvent.dragStart(first.closest('.priority-item').querySelector('.drag-handle'))
+  fireEvent.dragEnter(second.closest('.priority-item'))
+  fireEvent.drop(second.closest('.priority-item'))
 
   expect(await screen.findByRole('alert')).toHaveTextContent('Priority order could not be saved. The latest order was restored.')
   await waitFor(() => expect(titles()).toEqual(['First', 'Second']))

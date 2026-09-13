@@ -64,6 +64,8 @@ const PriorityTaskList = forwardRef(function PriorityTaskList({ tasks, disabled,
     dropTargetRef.current = null
   }
 
+  if (!tasks.length) return <p className="empty-copy">No active tasks yet.</p>
+
   return (
     <div>
       <p className="reorder-help">Drag tasks to change priority. Mouse only.</p>
@@ -73,15 +75,14 @@ const PriorityTaskList = forwardRef(function PriorityTaskList({ tasks, disabled,
           <div
             key={task.id}
             className={`priority-item ${draggedId === task.id ? 'dragging' : ''} ${dropTargetId === task.id ? 'drop-target' : ''}`}
-            draggable={!disabled}
-            onDragStart={(event) => dragStart(event, task)}
             onDragEnter={() => dragEnter(task.id)}
             onDragOver={(event) => event.preventDefault()}
             onDrop={drop}
-            onDragEnd={dragEnd}
           >
-            <span className="drag-handle" aria-hidden="true">⋮⋮</span>
-            <TaskCard ref={(node) => { if (node) cards.current.set(task.id, node); else cards.current.delete(task.id) }} task={task} status="ACTIVE" disabled={disabled} dragEnabled={!disabled} {...actions} />
+            <span className="drag-handle" draggable={!disabled} aria-hidden="true" title={`Drag ${task.title} to change priority`} onDragStart={(event) => dragStart(event, task)} onDragEnd={dragEnd}>
+              <span className="drag-handle-icon">⠿</span>
+            </span>
+            <TaskCard ref={(node) => { if (node) cards.current.set(task.id, node); else cards.current.delete(task.id) }} task={task} status="ACTIVE" disabled={disabled} {...actions} />
           </div>
         ))}
       </div>

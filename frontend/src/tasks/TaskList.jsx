@@ -4,9 +4,9 @@ function date(value) {
   return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(value))
 }
 
-export const TaskCard = forwardRef(function TaskCard({ status, task, disabled, dragEnabled = false, onEdit, onDelete, onComplete, onReactivate }, ref) {
+export const TaskCard = forwardRef(function TaskCard({ status, task, disabled, onEdit, onDelete, onComplete, onReactivate }, ref) {
   return (
-    <article ref={ref} tabIndex="-1" draggable={dragEnabled || undefined} className={`task-card ${status === 'COMPLETED' ? 'completed' : ''}`} aria-label={task.title}>
+    <article ref={ref} tabIndex="-1" className={`task-card ${status === 'COMPLETED' ? 'completed' : ''}`} aria-label={task.title}>
       {status === 'ACTIVE' && (
         <label className="complete-control">
           <input type="checkbox" aria-label={`Complete ${task.title}`} disabled={disabled} onChange={() => onComplete(task)} />

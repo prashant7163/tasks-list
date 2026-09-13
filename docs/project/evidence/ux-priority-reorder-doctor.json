@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "ux-priority-reorder-doctor",
+  "milestone_id": "priority-reorder-discoverability",
+  "recorded_at": "2026-09-13T11:24:54Z",
+  "redacted": true,
+  "snapshot_digest": "07784c3dbf0be0336582d90a0907f786882026952d2b80ff38d7fbc0963de345",
+  "checks": {
+    "configuration": "pass",
+    "runtime-pin": "pass",
+    "control-plane-integrity": "pass",
+    "control-plane-projection": "pass",
+    "sensitive-reference-check": "not_applicable"
+  }
+}

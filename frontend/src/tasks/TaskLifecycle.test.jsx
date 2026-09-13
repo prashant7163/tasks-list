@@ -126,7 +126,7 @@ it('validates task fields, focuses the first error, and submits only editable fi
   await user.type(screen.getByLabelText('Description'), ' Prepare the launch checklist. ')
   await user.click(screen.getByRole('button', { name: 'Create task' }))
 
-  expect(await screen.findByRole('status')).toHaveTextContent('Task created.')
+  expect(await screen.findByRole('status', { name: 'Task status' })).toHaveTextContent('Task created.')
   expect(screen.getByRole('heading', { name: 'Plan launch' })).toBeInTheDocument()
   expect(fetch.mock.calls[5][1].body).toBe(JSON.stringify({
     title: ' Plan launch ',
@@ -155,7 +155,7 @@ it('edits an active task and reconciles the authoritative response', async () =>
   await user.click(screen.getByRole('button', { name: 'Save changes' }))
 
   expect(await screen.findByRole('heading', { name: edited.title })).toBeInTheDocument()
-  expect(screen.getByRole('status')).toHaveTextContent('Task updated.')
+  expect(screen.getByRole('status', { name: 'Task status' })).toHaveTextContent('Task updated.')
   expect(fetch.mock.calls[5]).toEqual(['/api/tasks/1', expect.objectContaining({
     method: 'PUT',
     body: JSON.stringify({ title: edited.title, description: edited.description }),
@@ -221,7 +221,7 @@ it('reports a committed mutation that could not be reconciled without false succ
   await user.click(screen.getByRole('button', { name: 'Retry' }))
 
   expect(await screen.findByRole('heading', { name: created.title })).toBeInTheDocument()
-  expect(screen.getByRole('status')).toHaveTextContent('Tasks loaded.')
+  expect(screen.getByRole('status', { name: 'Task status' })).toHaveTextContent('Tasks loaded.')
 })
 
 it('cancels deletion without a request and confirms permanent deletion', async () => {
@@ -248,7 +248,7 @@ it('cancels deletion without a request and confirms permanent deletion', async (
   await user.click(screen.getByRole('button', { name: `Delete ${active.title}` }))
   await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Delete task' }))
 
-  expect(await screen.findByRole('status')).toHaveTextContent('Task deleted.')
+  expect(await screen.findByRole('status', { name: 'Task status' })).toHaveTextContent('Task deleted.')
   expect(screen.queryByRole('heading', { name: active.title })).not.toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'New task' })).toHaveFocus()
 })
@@ -309,7 +309,7 @@ it('completes and reactivates with pending controls and updated counts', async (
   const checkbox = await screen.findByRole('checkbox', { name: `Complete ${active.title}` })
   await user.click(checkbox)
   expect(checkbox).toBeDisabled()
-  expect(screen.getByRole('status')).toHaveTextContent('Completing task…')
+  expect(screen.getByRole('status', { name: 'Task status' })).toHaveTextContent('Completing task…')
 
   fetch
     .mockResolvedValueOnce(response(200, { tasks: [], count: 0 }))
@@ -374,7 +374,7 @@ it('closes the matching edit form and focuses New task after deleting that task'
   await user.click(screen.getByRole('button', { name: `Delete ${active.title}` }))
   await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Delete task' }))
 
-  expect(await screen.findByRole('status')).toHaveTextContent('Task deleted.')
+  expect(await screen.findByRole('status', { name: 'Task status' })).toHaveTextContent('Task deleted.')
   expect(screen.queryByRole('form', { name: `Edit ${active.title}` })).not.toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'New task' })).toHaveFocus()
 })
@@ -416,7 +416,7 @@ it('focuses the selected tab after deleting another task while an edit form rema
   await user.click(screen.getByRole('button', { name: `Delete ${deleted.title}` }))
   await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Delete task' }))
 
-  expect(await screen.findByRole('status')).toHaveTextContent('Task deleted.')
+  expect(await screen.findByRole('status', { name: 'Task status' })).toHaveTextContent('Task deleted.')
   expect(screen.getByRole('form', { name: `Edit ${editing.title}` })).toBeInTheDocument()
   expect(screen.getByRole('tab', { name: 'Active (1)' })).toHaveFocus()
 })

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "ux-priority-reorder-plan-review-ready",
+  "project_id": "tasks-list",
+  "run_id": "ux-priority-reorder-discoverability",
+  "task_id": null,
+  "journal_sequence": 307,
+  "previous_checkpoint_hash": "c136db39c0ef11ebe93193d09d51dd2e7f15b86a3dd6c4df5b954b1b951436f9",
+  "checkpoint_hash": null,
+  "source_revision": "bd23c8782c62e50f5d3cc83ae33b60d47aacecfa9c7f45bcc268838d90828c59",
+  "worktree_digest": "1a6e606e14e12beb400eb32dc4b317839c1f2e41e92f84ce86602e6138cd2096",
+  "contract_version": "1.0.0",
+  "lease_generation": null,
+  "artifact_references": [
+    {
+      "artifact_id": "tasks-list",
+      "locator": "docs/project/specification-ux-priority-reorder-discoverability.json",
+      "schema_version": "1.0.0",
+      "sha256": "1ef683d741a0eac3db5687dab9b353996cdfce55b01a25fd813f198d07076f21"
+    }
+  ],
+  "current_action": "The schema-valid approved Studio specification is accepted and the self-reviewed implementation plan is ready for the application owner's exact-digest decision.",
+  "next_operation": "Obtain the application owner's explicit decision on plan SHA-256 1a6e606e14e12beb400eb32dc4b317839c1f2e41e92f84ce86602e6138cd2096; do not submit readiness or dispatch implementation before approval.",
+  "completed_work": [
+    "Resumed safely from the specification-review checkpoint after explicit application-owner approval.",
+    "Created and runtime-validated the run-specific approved ProjectSpecification with approval digest ae8d333ef932e003664ed97c40901242efa3c6653d633834cc0b01b2e00b3c14.",
+    "Submitted the approved specification to Studio as artifact 1ef683d741a0eac3db5687dab9b353996cdfce55b01a25fd813f198d07076f21.",
+    "Created and self-reviewed the detailed test-first implementation plan at commit c9e1d9cb25d3bd51181dfaf6e010f50f0d6f219a."
+  ],
+  "pending_work": [
+    "Application owner explicitly approves, requests changes to, or rejects the exact plan digest.",
+    "After approval, create and submit the schema-valid Studio milestone plan and readiness evidence.",
+    "Dispatch the frontend implementation and distinct ordered assurance roles.",
+    "Reconcile GitHub issues only after the evidence conditions in the plan are met."
+  ],
+  "idempotency_outcomes": {
+    "resume-ux-priority-reorder-spec-review-v1": "safe resume accepted",
+    "specification-ux-priority-reorder-discoverability-v1": "approved specification accepted"
+  },
+  "created_at": "2026-09-13T11:17:48Z"
+}
